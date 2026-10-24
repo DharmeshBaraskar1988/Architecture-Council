@@ -1,0 +1,8 @@
+id: adr
+name: Architecture decision records
+kind: doc_format
+summary: One short record per significant decision, with context, decision and consequences.
+applies_when: {always: true}
+team_cost: low
+sources:
+  - {url: "https://adr.github.io/", title: "Architectural Decision Records", kind: official_docs, verified: false}

@@ -1,0 +1,51 @@
+# Crawl allowlist (task 1.7). Only pages on these domains (or their subdomains) may be fetched and cited.
+# A redirect that leaves the allowlist is not followed.
+domains:
+  # Frameworks and standards
+  - learn.microsoft.com
+  - azure.microsoft.com
+  - www.microsoft.com
+  - docs.aws.amazon.com
+  - aws.amazon.com
+  - cloud.google.com
+  - 12factor.net
+  - c4model.com
+  - adr.github.io
+  - sei.cmu.edu
+  - martinfowler.com
+  - pcisecuritystandards.org
+  - eur-lex.europa.eu
+  - meity.gov.in
+  - owasp.org
+  - commission.europa.eu
+  # Solution vendors: official product, pricing and terms pages only
+  - openai.com
+  - anthropic.com
+  - claude.com
+  - elevenlabs.io
+  - heygen.com
+  - pinecone.io
+  - qdrant.tech
+  - neon.com
+  - vercel.com
+  - cloudamqp.com
+  - postgresql.org
+  - rabbitmq.com
+  - nats.io
+  - kubernetes.io
+  - vllm.ai
+  - huggingface.co
+  - pymupdf.readthedocs.io
+  - artifex.com
+  # Gate evidence for open source: repository, licence API, maintenance and security signals
+  - github.com
+  - api.github.com
+  - deps.dev
+  - securityscorecards.dev
+  - api.securityscorecards.dev
+rate_limit_per_domain_per_minute: 20
+respect_robots_txt: true
+user_agent: "council-crawler/0.1 (architecture review; official pages only)"
+timeout_seconds: 30
+# A page older than this is "stale": the fact checker does not count it until it is fetched again.
+max_age_days: 90

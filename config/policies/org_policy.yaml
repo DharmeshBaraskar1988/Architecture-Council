@@ -1,0 +1,7 @@
+# Must-follow rules for your organisation. Anything here is BINDING (skips the vote).
+# Fill in from your company standards. Empty means no binding policy.
+must_follow: []
+#  - id: cloud_azure
+#    text: "All production workloads run on Azure"
+#    applies_framework: azure_waf
+must_not_use: []

@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "council"
+version = "0.1.0"
+description = "AI Architecture Council: evidence-based multi-agent architecture decisions"
+requires-python = ">=3.10"
+dependencies = [
+  "pydantic>=2.6",       # MIT
+  "pyyaml>=6.0",         # MIT
+  "pypdf>=4.0",          # BSD-3-Clause
+  "python-docx>=1.1",    # MIT
+  "litellm>=1.40",       # MIT
+  "langgraph>=1.0",      # MIT · orchestration: order of steps, reviewer pause/resume, checkpoints
+  "edge-tts>=7.0",       # LGPL-3.0 (run as a separate program) · neural voices for the council room
+  "httpx>=0.27",         # BSD-3-Clause · crawler and gate verifier (already installed with litellm)
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+observability = ["langfuse>=2.0,<3"]   # MIT · LiteLLM's Langfuse callback; used when LANGFUSE_* keys are set
+# With the database server (Docker, later): langgraph-checkpoint-postgres (MIT), psycopg[binary] (LGPL-3.0,
+# library use), pgvector (MIT), sentence-transformers (Apache-2.0) for embeddings, docling (MIT) for PDFs.
+
+[project.scripts]
+council = "app.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

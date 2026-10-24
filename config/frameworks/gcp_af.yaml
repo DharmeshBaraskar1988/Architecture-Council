@@ -1,0 +1,9 @@
+id: gcp_af
+name: Google Cloud Well-Architected Framework
+kind: cloud_framework
+summary: Google Cloud's pillars for operational excellence, security, reliability, cost and performance.
+applies_when: {fact: cloud_provider, equals: gcp}
+not_applicable_when: {fact: cloud_provider, in: [azure, aws]}
+team_cost: low
+sources:
+  - {url: "https://cloud.google.com/architecture/framework", title: "Google Cloud Well-Architected Framework", kind: official_docs, verified: false}

@@ -1,0 +1,22 @@
+# Fact keys the fact sheet extractor may produce. Rules in frameworks/*.yaml refer to these keys.
+facts:
+  cloud_provider:      {type: enum, values: [azure, aws, gcp, other, undecided]}
+  card_payments:       {type: bool, help: "The product takes card payments"}
+  personal_data:       {type: bool, help: "Stores personal data of users"}
+  users_in_eu:         {type: bool, help: "Users or customers in the EU; a statement that users are only elsewhere makes it false"}
+  users_in_india:      {type: bool, help: "Users or customers in India"}
+  health_data:         {type: bool}
+  financial_documents: {type: bool, help: "Processes company financial documents or reports"}
+  team_size:           {type: int}
+  containerised:       {type: bool}
+  ci_cd:               {type: bool}
+  public_web_app:      {type: bool}
+  expected_daily_users: {type: int}
+  monthly_budget:      {type: text, help: "As written, with currency"}
+  timeline:            {type: text}
+  data_residency:      {type: text}
+  ai_generated_content: {type: bool, help: "Product publishes AI-generated text, audio or video"}
+  audio_or_video_output: {type: bool}
+  independent_scaling_need: {type: bool, help: "The document says parts of the system must scale, be sized or be deployed separately (background jobs alone are not this)",
+                             quote_must_mention: [scal, separate, independent, sized, own capacity]}
+  async_workflows:     {type: bool, help: "Long-running or event-driven processing"}

@@ -1,0 +1,9 @@
+id: c4_model
+name: C4 model
+kind: diagram_standard
+summary: Context, container, component and code diagrams for software architecture.
+applies_when: {always: true}
+team_cost: low
+sources:
+  - {url: "https://c4model.com/", title: "The C4 model", kind: official_docs, verified: false}
+  - {url: "https://c4model.com/introduction", title: "C4 model: introduction", kind: official_docs, verified: false}

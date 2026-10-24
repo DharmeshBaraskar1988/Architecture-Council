@@ -1,0 +1,71 @@
+capability: content_safety
+description: Screen generated text, audio scripts and images for harmful or policy-breaking content
+candidates:
+  - id: azure_ai_content_safety
+    name: Azure AI Content Safety
+    type: cloud_managed
+    provider: azure
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview
+      pricing: https://azure.microsoft.com/en-us/pricing/details/cognitive-services/content-safety/
+      terms: https://learn.microsoft.com/en-us/azure/ai-foundry/responsible-ai/content-safety/data-privacy
+      sla: https://www.microsoft.com/licensing/docs/view/Service-Level-Agreements-SLA-for-Online-Services
+  - id: amazon_bedrock_guardrails
+    name: Amazon Bedrock Guardrails
+    type: cloud_managed
+    provider: aws
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html
+      pricing: https://aws.amazon.com/bedrock/pricing/
+      terms: https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html
+      sla: https://aws.amazon.com/bedrock/sla/
+  - id: google_text_moderation
+    name: Google Cloud Natural Language text moderation
+    type: cloud_managed
+    provider: gcp
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://cloud.google.com/natural-language/docs/moderating-text
+      pricing: https://cloud.google.com/natural-language/pricing
+      terms: https://cloud.google.com/terms/data-processing-addendum
+      sla: https://cloud.google.com/natural-language/sla
+  - id: openai_moderation
+    name: OpenAI moderation endpoint
+    type: saas
+    provider: openai
+    licence: proprietary
+    lifecycle: ga
+    sla: contract
+    official_api: true
+    data_terms: ok
+    note: "Free to use with an OpenAI API account."
+    pages:
+      official: https://openai.com/api/
+      pricing: https://openai.com/api/pricing/
+      terms: https://openai.com/policies/services-agreement/
+  - id: llama_guard
+    name: Llama Guard 3 (self-hosted)
+    type: open_source
+    licence: llama3.1
+    lifecycle: ga
+    official_api: true
+    data_terms: ok
+    repo: meta-llama/PurpleLlama
+    note: "Custom Llama 3.1 Community Licence. Text only."
+    pages:
+      official: https://github.com/meta-llama/PurpleLlama/blob/main/Llama-Guard3/8B/MODEL_CARD.md
+      terms: https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/LICENSE

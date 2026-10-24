@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {"label": "Council: run tests", "type": "shell", "command": "${workspaceFolder}/backend/.venv/Scripts/python -m pytest -q", "options": {"cwd": "${workspaceFolder}/backend"}, "group": "test"},
+    {"label": "Council: validate catalogs", "type": "shell", "command": "${workspaceFolder}/backend/.venv/Scripts/python -m app.cli validate", "options": {"cwd": "${workspaceFolder}/backend"}},
+    {"label": "Council: gate report", "type": "shell", "command": "${workspaceFolder}/backend/.venv/Scripts/python -m app.cli gate", "options": {"cwd": "${workspaceFolder}/backend"}},
+    {"label": "Council: live run (needs .env keys)", "type": "shell", "command": "${workspaceFolder}/backend/.venv/Scripts/python -m app.cli run --prd \"${input:prd}\"", "options": {"cwd": "${workspaceFolder}/backend"}}
+  ],
+  "inputs": [
+    {"id": "prd", "type": "promptString", "description": "Path to your PRD (PDF, Word, HTML, Markdown or text)"}
+  ]
+}

@@ -1,0 +1,9 @@
+id: pci_dss
+name: PCI DSS
+kind: compliance
+summary: Payment card industry data security standard; hosted checkout can reduce scope (SAQ A).
+applies_when: {fact: card_payments, equals: true}
+binding_when: {fact: card_payments, equals: true, status: confirmed}
+team_cost: medium
+sources:
+  - {url: "https://www.pcisecuritystandards.org/", title: "PCI Security Standards Council", kind: official_docs, verified: false}

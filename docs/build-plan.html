@@ -1,0 +1,866 @@
+<title>Architecture Council Build Plan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Schibsted+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a technical plan read top-down — sticky section index on the left, one reading column on the right with drawn exhibits (architecture, timeline, pop-up preview) at full column width. Same drafting-paper ground and cobalt ink as the council demo. */
+:root{
+  --bg:#EDF0F3; --surface:#FFFFFF; --sunk:#F5F7F9; --ink:#16202E; --muted:#5B6676; --line:#D5DBE3; --grid:#E1E6EC;
+  --accent:#2647D9; --accent-soft:rgba(38,71,217,.10); --on-accent:#FFFFFF;
+  --good:#1F8A5B; --warn:#B8730C; --bad:#C2362B;
+  --c-mod:#5B6676; --c-str:#7A3FC4; --c-arch:#2647D9; --c-cloud:#B8730C; --c-critic:#C2362B; --c-fact:#1F8A5B;
+  --f-display:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+  --f-body:'Schibsted Grotesk',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F141C; --surface:#171E29; --sunk:#131922; --ink:#E6EAF0; --muted:#95A0B0; --line:#2A3341; --grid:#1A2230;
+  --accent:#7C93FF; --accent-soft:rgba(124,147,255,.14); --on-accent:#0F141C;
+  --good:#4CC38A; --warn:#E4A84A; --bad:#EF6B5E;
+  --c-mod:#95A0B0; --c-str:#B48CF0; --c-arch:#7C93FF; --c-cloud:#E4A84A; --c-critic:#EF6B5E; --c-fact:#4CC38A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F141C; --surface:#171E29; --sunk:#131922; --ink:#E6EAF0; --muted:#95A0B0; --line:#2A3341; --grid:#1A2230;
+  --accent:#7C93FF; --accent-soft:rgba(124,147,255,.14); --on-accent:#0F141C;
+  --good:#4CC38A; --warn:#E4A84A; --bad:#EF6B5E;
+  --c-mod:#95A0B0; --c-str:#B48CF0; --c-arch:#7C93FF; --c-cloud:#E4A84A; --c-critic:#EF6B5E; --c-fact:#4CC38A; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:15.5px/1.6 var(--f-body);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+.page{max-width:1080px;margin:0 auto;display:block;padding-block:24px 64px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{display:block;min-width:0}
+section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 28px;display:grid;gap:14px;min-width:0;scroll-margin-top:72px}
+@media (max-width:560px){section{padding:18px 16px}}
+h1,h2,h3{font-family:var(--f-display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(28px,4vw,40px);line-height:1.08}
+h2{font-size:23px;line-height:1.2}
+h3{font-size:16.5px}
+p{margin:0;max-width:70ch}
+ul,ol{margin:0;padding-left:20px;max-width:72ch}
+li+li{margin-top:3px}
+a{color:var(--accent)}
+code,.mono{font-family:var(--f-mono);font-size:.9em}
+.eyebrow{font:500 11px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lead{font-size:17px;max-width:66ch}
+.note{font-size:13px;color:var(--muted)}
+.hero{background:transparent;border:0;padding:8px 0 0;gap:16px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:2px}
+.fact b{font:700 24px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.fact span{font-size:13px;color:var(--muted)}
+.tag{display:inline-block;font:500 10.5px/1.5 var(--f-mono);letter-spacing:.05em;text-transform:uppercase;border:1px solid currentColor;border-radius:999px;padding:1px 8px;white-space:nowrap}
+.tag.p1{color:var(--accent)} .tag.later{color:var(--muted)} .tag.good{color:var(--good)} .tag.warn{color:var(--warn)} .tag.bad{color:var(--bad)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font:500 10.5px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:var(--sunk);white-space:nowrap}
+td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.diagram{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--sunk);padding:8px}
+.diagram svg{display:block;width:100%;min-width:720px;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-3px;margin-right:6px}
+.legend i.p1{border:2px solid var(--accent);background:var(--accent-soft)} .legend i.later{border:1.5px dashed var(--muted)}
+
+/* agents */
+.agents{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.agent{border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:8px;background:var(--sunk);align-content:start}
+.agent.focus{border:2px solid var(--accent);background:var(--surface)}
+.agent .top{display:flex;gap:10px;align-items:center}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font:600 14px var(--f-body);flex:none}
+.agent .nm{font-weight:600;font-size:15px;line-height:1.2}
+.agent .rl{font-size:12.5px;color:var(--muted)}
+.agent dl{margin:0;display:grid;grid-template-columns:76px minmax(0,1fr);gap:4px 10px;font-size:13px}
+.agent dt{font:500 10.5px/1.9 var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.agent dd{margin:0}
+
+/* pop-up preview */
+.cine{border:1px solid var(--line);border-radius:12px;background:var(--sunk);overflow:hidden}
+.cine-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--surface)}
+.cine-body{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);min-height:420px}
+@media (max-width:720px){.cine-body{grid-template-columns:minmax(0,1fr)}}
+.talk{padding:14px;display:grid;gap:10px;align-content:start;border-right:1px solid var(--line)}
+@media (max-width:720px){.talk{border-right:0;border-bottom:1px solid var(--line)}}
+.line{display:grid;grid-template-columns:26px minmax(0,1fr);gap:8px;font-size:13.5px}
+.line .av{width:26px;height:26px;font-size:11px}
+.line .who{font-weight:600;font-size:12.5px}
+.line .who span{font-weight:400;color:var(--muted);margin-left:4px}
+.rail{padding:14px;display:flex;flex-direction:column-reverse;gap:10px;justify-content:flex-end}
+.ecard{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px 10px 14px;display:grid;gap:4px;box-shadow:0 1px 0 var(--line)}
+.ecard::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:var(--k,var(--muted))}
+.ecard.fact{--k:var(--good)} .ecard.claim{--k:var(--c-str)} .ecard.source{--k:var(--accent)} .ecard.challenge{--k:var(--bad)} .ecard.assume{--k:var(--warn)}
+.ecard .lab{font:500 10.5px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-right:110px}
+.ecard .bd{font-size:13.5px;padding-right:96px}
+.ecard .ft{font-size:12px;color:var(--muted)}
+.stamp{position:absolute;right:10px;top:10px;font:600 10.5px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;border:2px solid currentColor;border-radius:6px;padding:6px 7px;transform:rotate(-7deg);background:var(--surface)}
+.stamp.verified{color:var(--good)} .stamp.partial{color:var(--warn)} .stamp.unverified{color:var(--muted)} .stamp.assumed{color:var(--warn);border-style:dashed} .stamp.contra{color:var(--bad)}
+.vcard{background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:8px}
+.vcard.sel{border-color:var(--good)} .vcard.cond{border-color:var(--warn)} .vcard.rej{border-color:var(--bad)}
+.vcard .r{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
+.vcard .nm{font-weight:600}
+.vcard .pct{font:700 26px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.meter{height:8px;border-radius:4px;background:var(--line);overflow:hidden;position:relative}
+.meter i{position:absolute;inset:0 auto 0 0;border-radius:4px;background:var(--k,var(--accent));transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.vcard.sel{--k:var(--good)} .vcard.cond{--k:var(--warn)} .vcard.rej{--k:var(--bad)}
+.ticks{position:relative;height:12px;font:400 10px var(--f-mono);color:var(--muted)}
+.ticks span{position:absolute;transform:translateX(-50%)}
+.vchips{display:flex;flex-wrap:wrap;gap:4px}
+.vchip{font:500 10.5px var(--f-mono);border:1px solid var(--good);color:var(--good);border-radius:6px;padding:2px 6px}
+.vchip.no{border-color:var(--bad);color:var(--bad)} .vchip.half{border-color:var(--warn);color:var(--warn)}
+.banner{font:600 12px var(--f-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--k)}
+.vcard.rej .nm{text-decoration:line-through;text-decoration-color:var(--bad)}
+.anim{animation:slide .55s cubic-bezier(.2,.8,.2,1) both}
+.anim .stamp{animation:stamp .4s cubic-bezier(.3,1.6,.5,1) .6s both}
+.anim .banner{animation:fadein .4s ease-out 1.1s both}
+.lanim{animation:fadein .35s ease-out both}
+@keyframes slide{from{opacity:0;transform:translateX(40px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes stamp{from{opacity:0;transform:rotate(-7deg) scale(2.2)}to{opacity:1;transform:rotate(-7deg) scale(1)}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.statement{border:2px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:14px 16px;display:grid;gap:6px}
+.statement p{font-size:15.5px}
+button{font:600 13.5px/1 var(--f-body);cursor:pointer;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);padding:9px 14px}
+button.ghost{background:var(--surface);color:var(--ink);border-color:var(--line)}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* formula */
+.formula{font:500 14px/1.9 var(--f-mono);background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:12px 16px;overflow-x:auto;white-space:pre}
+.bar{display:flex;align-items:center;gap:8px;min-width:150px}
+.bar .t{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden;min-width:70px}
+.bar .t i{display:block;height:100%;border-radius:4px}
+
+/* fact check columns */
+.cols3{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.col{border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:8px;align-content:start;background:var(--sunk)}
+.col h3{display:flex;gap:8px;align-items:center}
+.col ul{font-size:13.5px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+
+pre.code{margin:0;font:13px/1.6 var(--f-mono);background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;color:var(--ink)}
+pre.code .c{color:var(--muted)}
+pre.code .p1{color:var(--accent)}
+.twocode{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
+.twocode>div{display:grid;gap:6px;min-width:0}
+
+/* top tabs */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.tbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.tbar-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:16px;padding-block:8px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brand{font:700 15px var(--f-display);white-space:nowrap}
+.brand small{font:500 11px var(--f-mono);color:var(--muted);margin-left:6px}
+@media (max-width:760px){.tbar-in{flex-direction:column;align-items:stretch;gap:6px}}
+.ttabs{display:flex;flex-wrap:wrap;gap:2px;min-width:0}
+@media (max-width:760px){.ttabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin}}
+.ttab{background:transparent;color:var(--muted);border:1px solid transparent;border-radius:8px;padding:7px 9px;white-space:nowrap;font-weight:600;font-size:13.5px}
+.ttab:hover{color:var(--ink);background:var(--sunk)}
+.ttab.ph{font-family:var(--f-mono);font-weight:500;font-size:12.5px}
+.ttab[aria-selected="true"]{color:var(--ink);background:var(--accent-soft);border-color:var(--accent)}
+.tpanel{display:grid;gap:28px}
+.tpanel[hidden]{display:none}
+.tpanel:focus{outline:none}
+.pager{display:flex;justify-content:space-between;gap:8px;margin-top:28px}
+.pager button[disabled]{opacity:.4;cursor:default}
+/* tabs */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px}
+.tabbtn{background:var(--sunk);color:var(--ink);border:1px solid var(--line);display:grid;gap:4px;text-align:left;padding:10px 14px;min-width:150px}
+.tabbtn small{font:500 11px var(--f-mono);color:var(--muted)}
+.tabbtn[aria-selected="true"]{background:var(--accent-soft);border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}
+.tabpanel{display:grid;gap:14px}
+.tabpanel>h3{margin-top:8px}
+/* timeline */
+.tl{display:grid;grid-template-columns:150px repeat(12,minmax(0,1fr));gap:6px 4px;align-items:center;font-size:13px;min-width:640px}
+.tl .wk{font:500 10.5px var(--f-mono);color:var(--muted);text-align:center}
+.tl .ph{font-weight:600;grid-column:1}
+.tl .span{height:34px;border-radius:8px;border:1.5px solid var(--muted);display:flex;align-items:center;padding:0 10px;font-size:12px;color:var(--muted);overflow:hidden;white-space:nowrap}
+.tl .span.p1{border:2px solid var(--accent);background:var(--accent-soft);color:var(--ink);font-weight:600}
+.tlwrap{overflow-x:auto}
+.week{display:grid;gap:10px}
+.week h3 span{font:500 11px var(--f-mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-left:8px}
+.checks{list-style:none;padding:0;display:grid;gap:6px;font-size:14px}
+.checks li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:8px}
+.checks li::before{content:"";width:14px;height:14px;border:1.5px solid var(--accent);border-radius:4px;margin-top:4px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<header class="tbar"><div class="tbar-in">
+  <span class="brand">Architecture Council <small>build plan v1</small></span>
+  <nav class="ttabs" role="tablist" aria-label="Plan sections"><button type="button" role="tab" class="ttab" id="tab-overview" aria-controls="panel-overview" aria-selected="true" tabindex="0" data-tab="overview">Overview</button><button type="button" role="tab" class="ttab" id="tab-architecture" aria-controls="panel-architecture" aria-selected="false" tabindex="-1" data-tab="architecture">Architecture</button><button type="button" role="tab" class="ttab" id="tab-agents" aria-controls="panel-agents" aria-selected="false" tabindex="-1" data-tab="agents">Agents</button><button type="button" role="tab" class="ttab" id="tab-debate" aria-controls="panel-debate" aria-selected="false" tabindex="-1" data-tab="debate">Debate &amp; voting</button><button type="button" role="tab" class="ttab" id="tab-solutions" aria-controls="panel-solutions" aria-selected="false" tabindex="-1" data-tab="solutions">Solutions &amp; trust</button><button type="button" role="tab" class="ttab ph" id="tab-phase-1" aria-controls="panel-phase-1" aria-selected="false" tabindex="-1" data-tab="phase-1">Phase 1</button><button type="button" role="tab" class="ttab ph" id="tab-phase-2" aria-controls="panel-phase-2" aria-selected="false" tabindex="-1" data-tab="phase-2">Phase 2</button><button type="button" role="tab" class="ttab ph" id="tab-phase-3" aria-controls="panel-phase-3" aria-selected="false" tabindex="-1" data-tab="phase-3">Phase 3</button><button type="button" role="tab" class="ttab ph" id="tab-phase-4" aria-controls="panel-phase-4" aria-selected="false" tabindex="-1" data-tab="phase-4">Phase 4</button><button type="button" role="tab" class="ttab" id="tab-decisions" aria-controls="panel-decisions" aria-selected="false" tabindex="-1" data-tab="decisions">Decisions</button></nav>
+</div></header>
+<div class="page">
+  <main>
+<div role="tabpanel" class="tpanel" id="panel-overview" aria-labelledby="tab-overview" tabindex="0" ><section class="hero" id="overview">
+      <span class="eyebrow">Architecture Council · architecture and implementation plan · v1 · 24 Oct 2026</span>
+      <h1>How the council reaches one agreed answer, and what we build first</h1>
+      <p class="lead">Every stage (strategy, requirements, architecture) runs the same debate. Agents propose from facts, attack each other's proposals, get fact-checked, and vote. The result is one position with an agreement percentage. Unanimity isn't required; evidence and the vote decide, and the human reviewer has the last word. Options come from every verified source (Azure, AWS, GCP, SaaS vendors, open source, and what your company already owns), and only properly licensed, production-ready ones can be chosen for production. Phase 1 builds this loop end to end for the Strategy agent.</p>
+      <div class="facts">
+        <div class="fact"><b>4 phases</b><span>About 12 weeks to a pilot</span></div>
+        <div class="fact"><b>4 weeks</b><span>Phase 1: Strategy agent, 2 engineers</span></div>
+        <div class="fact"><b>4 voters</b><span>Plus a chair and a fact checker who don't vote</span></div>
+        <div class="fact"><b>75 · 60 · 40</b><span>Agreement % thresholds, configurable</span></div>
+      </div>
+    </section><section id="plan">
+      <span class="eyebrow">Delivery</span>
+      <h2>Implementation plan</h2>
+      <p>Four phases, each ending in something you can run and judge. Phase 1 proves the hardest part, a fair evidence-based decision, on one stage before we copy it to the others. The <a href="#phase-1" data-goto="phase-1">Phase 1 to Phase 4 tabs</a> have the full detail for each phase.</p>
+      <div class="tlwrap"><div class="tl" role="img" aria-label="Timeline: Phase 1 weeks 1 to 4, Phase 2 weeks 5 to 7, Phase 3 weeks 8 to 10, Phase 4 weeks 11 to 12">
+        <span></span><span class="wk">W1</span><span class="wk">W2</span><span class="wk">W3</span><span class="wk">W4</span><span class="wk">W5</span><span class="wk">W6</span><span class="wk">W7</span><span class="wk">W8</span><span class="wk">W9</span><span class="wk">W10</span><span class="wk">W11</span><span class="wk">W12</span>
+        <span class="ph">Phase 1 · Strategy</span><span class="span p1" style="grid-column:2/6">Strategy agent, solution gate, debate, vote</span>
+        <span class="ph">Phase 2 · Design</span><span class="span" style="grid-column:6/9">Requirements, architecture, pricing, views</span>
+        <span class="ph">Phase 3 · Live room</span><span class="span" style="grid-column:9/12">Web room, voices, live pop-ups</span>
+        <span class="ph">Phase 4 · Pilot</span><span class="span" style="grid-column:12/14">Pilot</span>
+      </div></div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Phase</th><th>Delivers</th><th>Gate to move on</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag p1">1 · Strategy</span></td><td>Stage 0 end to end from a real PRD: fact sheet, solution catalog with production gate, Strategist and panel, fact check, voting with %, build approach and delivery path, position statement, ADR, replay viewer</td><td>You review 3 sample runs and agree the decisions are fair and well evidenced</td></tr>
+          <tr><td><span class="tag later">2 · Design</span></td><td>Stages 1–3 on the same engines; Architect and Platform &amp; Cost lead; cost per unit from Azure, AWS and GCP price APIs; POC-to-production checklist; audience views; live web search; PDF/Word export</td><td>Golden sessions pass; every number explainable</td></tr>
+          <tr><td><span class="tag later">3 · Live room</span></td><td>Web council room, human interjections, agent voices, cinematic pop-ups live, C4 diagram</td><td>First spoken word under 3 s; pop-up within 1 s of the claim</td></tr>
+          <tr><td><span class="tag later">4 · Pilot</span></td><td>Deployed (our own platform choice goes through the council too); 5 real reviews; monthly catalog re-verification; decision database grows from real approvals</td><td>Reviewers would use it again</td></tr>
+        </tbody></table></div>
+    </section></div>
+<div role="tabpanel" class="tpanel" id="panel-architecture" aria-labelledby="tab-architecture" tabindex="0" hidden><section id="architecture">
+      <span class="eyebrow">Structure</span>
+      <h2>System architecture</h2>
+      <p>Five layers. Agents never talk to the UI directly: every claim, verdict and vote becomes an event, and the event stream drives both the decision ledger and the cinematic pop-ups. Phase 1 builds every highlighted box. The live room, voices and exports come later.</p>
+      <div class="diagram"><svg id="arch" viewBox="0 0 960 600" role="img" aria-label="Five layers: experience, orchestration, agents, knowledge, outputs; Phase 1 components highlighted"></svg></div>
+      <div class="legend"><span><i class="p1"></i>Built in Phase 1</span><span><i class="later"></i>Later phases</span><span>Arrows: each layer calls only the layer below and reports up through events</span></div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Layer</th><th>Responsibility</th><th>Key rule</th></tr></thead>
+        <tbody>
+          <tr><td>Experience</td><td>Shows the debate, the pop-ups and the human gates</td><td>Renders events only; holds no logic</td></tr>
+          <tr><td>Orchestration</td><td>Runs stages and rounds, collects votes, computes agreement %</td><td>LangGraph decides the order of steps, pauses at human gates and checkpoints each session; every decision comes from plain, tested functions, so the same inputs give the same decision</td></tr>
+          <tr><td>Agents</td><td>Propose, challenge, rebut and vote, each in a fixed role</td><td>Every turn is structured JSON with citations</td></tr>
+          <tr><td>Knowledge</td><td>Facts, framework rules, sources and past decisions</td><td>Agents may cite only what was retrieved here</td></tr>
+          <tr><td>Outputs</td><td>Ledger, position statements, ADRs</td><td>Append-only; every number traceable to an event</td></tr>
+        </tbody></table></div>
+    </section><section id="io">
+      <span class="eyebrow">Contracts</span>
+      <h2>Inputs and outputs of Stage 0</h2>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Kind</th><th>Item</th><th>Format</th><th>Comes from / goes to</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="8"><span class="tag">Input</span></td><td>Product document (PRD)</td><td>PDF, DOCX, Markdown</td><td>Uploaded by the reviewer</td></tr>
+          <tr><td>Org policy (must-follows)</td><td><code>config/policies/org_policy.yaml</code></td><td>Set once per organisation</td></tr>
+          <tr><td>Framework catalog</td><td><code>config/frameworks/*.yaml</code></td><td>Curated by us; applies-when rules, costs, sources</td></tr>
+          <tr><td>Solution catalog</td><td><code>config/solutions/*.yaml</code></td><td>Per capability: candidates on Azure, AWS, GCP, SaaS, open source</td></tr>
+          <tr><td>Existing stack and licences</td><td><code>config/policies/existing_stack.yaml</code></td><td>Tools and contracts the company already has</td></tr>
+          <tr><td>Source allowlist</td><td><code>config/sources.yaml</code></td><td>Sites the crawler may fetch</td></tr>
+          <tr><td>Decision database</td><td>Postgres <code>decisions</code> table</td><td>Earlier approved sessions (samples at first)</td></tr>
+          <tr><td>Session settings</td><td>POC or production, priority weights, budget</td><td>Reviewer</td></tr>
+          <tr><td rowspan="7"><span class="tag p1">Output</span></td><td>Fact sheet</td><td><code>fact_sheet.json</code></td><td>All agents; Stage 1 reuses it</td></tr>
+          <tr><td>Applicability matrix</td><td><code>applicability.json</code></td><td>Shortlist for the debate</td></tr>
+          <tr><td>Solution gate results</td><td><code>solution_gate.json</code></td><td>Production-eligible, POC-only or rejected, with evidence links</td></tr>
+          <tr><td>Debate event log</td><td><code>debate_log.jsonl</code></td><td>Replay viewer and pop-ups; audit trail</td></tr>
+          <tr><td>Decision board</td><td><code>strategy_decision.json</code></td><td>Votes, V, E, A, outcome per framework; build approach; delivery path</td></tr>
+          <tr><td>Strategy ADR</td><td><code>strategy_adr.md</code></td><td>The document; position statement on top</td></tr>
+          <tr><td>Decision record</td><td>Row in <code>decisions</code></td><td>Precedent for future sessions</td></tr>
+        </tbody></table></div>
+      <div class="twocode">
+        <div><span class="eyebrow">Argument card · one agent turn</span>
+<pre class="code">{
+  "agent": "strategist",
+  "round": "R2",
+  "framework": "evolutionary_architecture",
+  "stance": "adopt",
+  "claim": "Start as one deployable; split later.",
+  "facts": ["F-03"],            <span class="c">// team of 6, PRD p.2</span>
+  "citations": [
+    {"kind": "source", "url_id": "src-114"},
+    {"kind": "precedent", "decision_id": "dec-atlas-02"}
+  ],
+  "benefit": "Less to operate while traffic is unproven",
+  "cost": "Later extraction work",
+  "rejected_alternative": {
+    "name": "microservices_first",
+    "reason": "Team too small to run many services"
+  }
+}</pre></div>
+        <div><span class="eyebrow">Event · what the pop-up renders</span>
+<pre class="code">{
+  "type": "factcheck.verdict",
+  "session": "ses-8812",
+  "stage": "strategy",
+  "target": "card-2-cit-0",
+  "verdict": "partly_supports",
+  "weight": 1.2,               <span class="c">// 2 × 0.6 context × 1</span>
+  "note": "Scale differs from ShopSphere",
+  "source": {
+    "site": "shopify.engineering",
+    "fetched": "2026-10-12"
+  },
+  "at": "2026-10-24T06:40:12Z"
+}</pre>
+          <p class="note">Other events: <code>fact.extracted</code>, <code>shortlist.ready</code>, <code>card.proposed</code>, <code>challenge.raised</code>, <code>rebuttal.made</code>, <code>vote.cast</code>, <code>consensus.result</code>, <code>stage.decided</code>, <code>reviewer.signed</code>.</p></div>
+      </div>
+    </section><section id="directory">
+      <span class="eyebrow">Repository</span>
+      <h2>Working directory</h2>
+      <p>One Python backend split by responsibility. Config holds everything people will tune (personas, thresholds, frameworks) so it changes without code. Lines in blue are built in Phase 1.</p>
+<pre class="code"><span class="p1">council/</span>
+├─ <span class="p1">README.md</span>                  <span class="c">how to run a session in 3 commands</span>
+├─ <span class="p1">docker-compose.yml</span>         <span class="c">api + postgres/pgvector (+ frontend later)</span>
+├─ <span class="p1">.env.example</span>               <span class="c">API keys: anthropic, openai, optional gemini/groq</span>
+├─ <span class="p1">config/</span>                    <span class="c">WHY: behaviour people tune, no code changes</span>
+│  ├─ <span class="p1">personas.yaml</span>           <span class="c">agents: role, model, voice, rules, voter yes/no</span>
+│  ├─ <span class="p1">consensus.yaml</span>          <span class="c">thresholds 75/60/40, V/E split, round caps</span>
+│  ├─ <span class="p1">evidence_weights.yaml</span>   <span class="c">source strength table</span>
+│  ├─ <span class="p1">sources.yaml</span>            <span class="c">crawl allowlist</span>
+│  ├─ <span class="p1">policies/org_policy.yaml</span> <span class="c">must-follows (binding)</span>
+│  ├─ <span class="p1">policies/existing_stack.yaml</span> <span class="c">tools and licences already owned (reuse first)</span>
+│  ├─ <span class="p1">license_policy.yaml</span>     <span class="c">allowed, review-needed and blocked licences</span>
+│  ├─ <span class="p1">solutions/</span>              <span class="c">one file per capability: candidates across Azure, AWS, GCP, SaaS, OSS</span>
+│  └─ <span class="p1">frameworks/</span>             <span class="c">one file per framework: applies_when, requires, cost, sources</span>
+├─ backend/app/
+│  ├─ <span class="p1">main.py</span>
+│  ├─ <span class="p1">api/</span>                    <span class="c">IN: upload, settings, reviewer actions · OUT: REST + event stream</span>
+│  ├─ <span class="p1">orchestrator/</span>           <span class="c">stage state machine, gates, budgets</span>
+│  ├─ <span class="p1">debate/</span>                 <span class="c">rounds R0–R7, challenger assignment, caps</span>
+│  ├─ <span class="p1">consensus/</span>              <span class="c">V, E, A, outcomes, override rules (pure functions)</span>
+│  ├─ <span class="p1">agents/</span>                 <span class="c">runtime (LiteLLM), prompts/, schemas/ for argument cards</span>
+│  ├─ <span class="p1">factcheck/</span>              <span class="c">quote matcher, citation resolver, support judge, verdicts</span>
+│  ├─ <span class="p1">catalog/</span>                <span class="c">production gate: licence, GA/SLA, maintenance, data terms</span>
+│  ├─ <span class="p1">knowledge/</span>              <span class="c">PRD ingest, fact sheet, retriever, crawler, decision_db</span>
+│  ├─ <span class="p1">events/</span>                 <span class="c">event schema + bus; feeds ledger and pop-ups</span>
+│  ├─ <span class="p1">ledger/</span>                 <span class="c">append-only decisions store</span>
+│  ├─ <span class="p1">docs/</span>                   <span class="c">ADR templates and generator</span>
+│  ├─ pricing/                <span class="c">Phase 2: Azure, AWS, GCP price APIs; cost per unit; budget</span>
+│  ├─ views/                  <span class="c">Phase 2: manager, architect, engineering, FinOps, security views</span>
+│  └─ voice/                  <span class="c">Phase 3: TTS interface</span>
+├─ <span class="p1">viewer/</span>                    <span class="c">Phase 1: replay page with pop-ups + reviewer gate form</span>
+├─ frontend/                  <span class="c">Phase 3: live council room (Next.js)</span>
+├─ <span class="p1">data/</span>
+│  ├─ <span class="p1">samples/prds/</span>           <span class="c">S1 financial briefing, S2 ShopSphere, S3 to choose</span>
+│  ├─ <span class="p1">golden/</span>                 <span class="c">expected outcomes per sample</span>
+│  └─ <span class="p1">runs/&lt;session&gt;/</span>         <span class="c">OUT: fact_sheet, debate_log, decision, ADR</span>
+├─ <span class="p1">evals/</span>                     <span class="c">runner + metrics: citation validity, stability, cost</span>
+├─ <span class="p1">tests/</span>                     <span class="c">unit tests: consensus, factcheck, schemas</span>
+└─ infra/                     <span class="c">Phase 4: Azure Container Apps, Postgres, CI</span></pre>
+    </section></div>
+<div role="tabpanel" class="tpanel" id="panel-agents" aria-labelledby="tab-agents" tabindex="0" hidden><section id="agents">
+      <span class="eyebrow">Roles</span>
+      <h2>Agents and their work</h2>
+      <p>Six agents, each with one job and a model from a different provider where it matters, so they don't share blind spots. A proposer and its challenger never run on the same provider. Four agents vote. The chair and the fact checker stay neutral.</p>
+      <div class="agents" id="agentcards"></div>
+      <p class="note">Models are set in <code>config/personas.yaml</code>. Phase 1 can run on two providers. The Strategist is built in depth; the other panelists reuse the same agent runtime with their own persona prompts.</p>
+    </section></div>
+<div role="tabpanel" class="tpanel" id="panel-debate" aria-labelledby="tab-debate" tabindex="0" hidden><section id="flow">
+      <span class="eyebrow">Process</span>
+      <h2>How the debate runs</h2>
+      <p>Stage 0 (Strategy) shown below. Every later stage uses the same rounds with a different lead agent. Each round has a cap, so a debate always ends.</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Round</th><th>Who</th><th>Input</th><th>Output</th><th>On screen</th></tr></thead>
+        <tbody>
+          <tr><td><b>R0 · Fact sheet</b></td><td>Moderator</td><td>PRD, org policy, session settings</td><td>Facts with page refs, each confirmed or assumed</td><td>Fact cards fly in, stamped Confirmed or Assumed</td></tr>
+          <tr><td><b>R1 · Shortlist</b></td><td>Strategist</td><td>Fact sheet, framework catalog, solution catalog</td><td>Each framework marked binding, candidate or not applicable; candidate solutions per capability with their gate result</td><td>Not-applicable cards fade out with their reason; POC-only solutions get an amber tag</td></tr>
+          <tr><td><b>R2 · Proposals</b></td><td>All 4 voters, blind</td><td>Shortlist, sources, precedents</td><td>Argument cards: claim, fact, evidence, benefit, cost, rejected alternative</td><td>One card per argument, colour-coded by agent</td></tr>
+          <tr><td><b>R3 · Fact check</b></td><td>Fact checker</td><td>Every citation in every card</td><td>Verdict per citation and an evidence weight</td><td>Stamps land: Verified, Partly supports, Unverified, Contradicted</td></tr>
+          <tr><td><b>R4 · Challenge</b></td><td>Assigned challenger + Critic</td><td>Argument cards with verdicts</td><td>Typed challenges: fact, relevance, evidence, cost, alternative</td><td>Challenge card attaches to its target with a red edge</td></tr>
+          <tr><td><b>R5 · Rebuttal</b></td><td>Original proposer</td><td>Challenges</td><td>Rebuttal with new evidence, or a concession</td><td>Rebuttal card; conceded cards grey out</td></tr>
+          <tr><td><b>R6 · Vote</b></td><td>4 voters, blind</td><td>All surviving cards and weights</td><td>Stance, confidence 1–5, the argument that convinced them</td><td>Vote chips flip in; agreement meter fills to its %</td></tr>
+          <tr><td><b>R7 · Converge</b></td><td>Moderator</td><td>Votes, evidence balance</td><td>Outcome per framework; one compromise and re-vote if needed; position statement</td><td>Selected, Conditional or Rejected banner; the statement card</td></tr>
+          <tr><td><b>Gate</b></td><td>Human reviewer</td><td>Decision board and statement</td><td>Approve, or override with a written reason</td><td>Sign-off; record saved to the decision database</td></tr>
+        </tbody></table></div>
+      <p class="note">Caps: 2 challenge–rebuttal cycles per framework, 1 re-vote, a per-stage token budget. A repeated argument doesn't count as a new one.</p>
+    </section><section id="popups">
+      <span class="eyebrow">Experience</span>
+      <h2>Cinematic evidence pop-ups</h2>
+      <p>While an agent speaks on the left, the evidence for what they just said slides in on the right. The fact checker's stamp lands a beat later, so the room sees, live, which claims stand on facts and which don't. Votes end in a meter and a Selected or Rejected banner. Press play to watch a sample sequence.</p>
+      <div class="cine">
+        <div class="cine-bar"><span class="eyebrow">Stage 0 · Evolutionary architecture vs microservices-first · sample</span>
+          <span style="display:flex;gap:8px"><button type="button" id="play">▶ Play sequence</button><button type="button" class="ghost" id="skip">Show final</button></span></div>
+        <div class="cine-body"><div class="talk" id="talk" aria-live="polite"></div><div class="rail" id="rail"></div></div>
+      </div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Card</th><th>Appears when</th><th>Shows</th><th>Stamp</th></tr></thead>
+        <tbody>
+          <tr><td>Fact</td><td>A PRD fact is used</td><td>Quote and page number</td><td>Confirmed or Assumed</td></tr>
+          <tr><td>Source</td><td>A crawled page is cited</td><td>Site, summary or a quote under 15 words, fetch date, context note</td><td>Verified, Partly supports, Unverified, Contradicted, Outdated</td></tr>
+          <tr><td>Precedent</td><td>A past decision is cited</td><td>Project, decision, outcome, context match %</td><td>Matching context, or Different context</td></tr>
+          <tr><td>Argument</td><td>An agent proposes</td><td>Claim, linked facts and sources</td><td>Evidence weight once checked</td></tr>
+          <tr><td>Challenge</td><td>An agent objects</td><td>Type of challenge and its evidence</td><td>Weight 0 if it has no evidence</td></tr>
+          <tr><td>Vote</td><td>Voting closes</td><td>Chips per voter, vote % and evidence %, agreement meter</td><td>Selected, Selected with condition, Rejected, Reviewer decides, Parked</td></tr>
+        </tbody></table></div>
+      <p class="note">Choreography: card enters in 550 ms, stamp lands 600 ms later, cards stack newest on top and stay as an evidence trail. Motion is switched off for viewers who prefer reduced motion. In Phase 1 the pop-ups play in a replay viewer from the saved event log; in Phase 3 they run live in the council room.</p>
+    </section><section id="consensus">
+      <span class="eyebrow">Decision rule</span>
+      <h2>Voting and the agreement percentage</h2>
+      <p>Agreement doesn't mean everyone said yes. It combines how the agents voted with how strong the surviving evidence is, so four agents repeating a weak argument can't outvote one verified fact.</p>
+      <div class="formula">Vote support   V = Σ(confidence × stance) ÷ Σ confidence      stance: adopt 1 · adopt with condition 0.5 · reject 0
+Evidence       E = W_for ÷ (W_for + W_against)              W = Σ strength × relevance × verified
+Agreement      A = 0.6 × V + 0.4 × E</div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Evidence source</th><th>Strength</th><th>Verified factor</th></tr></thead>
+        <tbody>
+          <tr><td>Org policy, confirmed compliance fact</td><td>Binding: skips the vote</td><td rowspan="5">Verified 1 · Partly supports 0.5 · Unverified 0 · Contradicted: argument removed and flagged</td></tr>
+          <tr><td>PRD fact (confirmed, page cited)</td><td class="num">3</td></tr>
+          <tr><td>Decision database precedent</td><td class="num">3 × context match</td></tr>
+          <tr><td>Official standard or vendor docs</td><td class="num">3</td></tr>
+          <tr><td>Engineering case study</td><td class="num">2 × context match</td></tr>
+          <tr><td>Reasoning with no source</td><td class="num">0</td><td>Shown, never counted</td></tr>
+        </tbody></table></div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Agreement</th><th>Outcome</th><th>What happens next</th></tr></thead>
+        <tbody>
+          <tr><td class="num">75–100%</td><td><span class="tag good">Selected</span></td><td>Adopted; goes to the reviewer for sign-off</td></tr>
+          <tr><td class="num">60–74%</td><td><span class="tag warn">Selected with condition</span></td><td>Moderator writes the guardrail (a revisit trigger) from the strongest objection</td></tr>
+          <tr><td class="num">40–59%</td><td><span class="tag">Reviewer decides</span></td><td>One compromise and re-vote; if still here, the reviewer chooses with both sides shown</td></tr>
+          <tr><td class="num">0–39%</td><td><span class="tag bad">Rejected</span></td><td>Recorded with the reasons, so it isn't proposed again without new facts</td></tr>
+        </tbody></table></div>
+      <h3>Rules that override the percentage</h3>
+      <ul>
+        <li><b>Binding:</b> org policy or a confirmed compliance fact (card payments → PCI DSS) means Selected at 100%. Agents vote only on how to apply it.</li>
+        <li><b>Assumed key fact:</b> if the decision depends on an assumption, it's <b>Parked</b> and the question goes to the gray area.</li>
+        <li><b>Unanswered strong objection:</b> caps the outcome at Reviewer decides, whatever the %.</li>
+        <li><b>Untested consensus:</b> if nobody challenged, the Critic must argue the opposite before the vote closes.</li>
+        <li><b>Human override:</b> the reviewer can change any outcome. The reason is recorded next to the agents' %.</li>
+      </ul>
+      <p class="note">Thresholds and the 0.6 / 0.4 split live in <code>config/consensus.yaml</code>. We tune them on golden sessions in Phase 1.</p>
+    </section><section id="board">
+      <span class="eyebrow">Result</span>
+      <h2>What's selected, what's rejected</h2>
+      <p>The end of Stage 0 for the sample ShopSphere PRD: every framework on one board with its percentage, then one statement the whole panel signs up to.</p>
+      <div class="tablewrap"><table id="boardtable">
+        <thead><tr><th>Framework</th><th>Vote V</th><th>Evidence E</th><th>Agreement A</th><th>Outcome</th><th>Why</th></tr></thead>
+        <tbody></tbody></table></div>
+      <div class="statement">
+        <span class="eyebrow">Position statement · Stage 0 · one single point</span>
+        <p>ShopSphere will be built to the Azure Well-Architected Framework and PCI DSS, keeping card data out of scope with a hosted checkout. It follows Twelve-Factor practices and starts as a modular monolith that evolves by the strangler fig pattern. Payments are extracted as a service if sale-day volume passes the agreed threshold. Managed, GA services come first; open source is used where its licence and maturity pass the gate. The production architecture is designed first, and the POC is its first slice. Multi-region is parked until recovery targets are confirmed.</p>
+        <span class="note">Overall stage agreement: 84% (weighted by each framework's impact). Pending reviewer sign-off.</span>
+      </div>
+    </section><section id="stages">
+      <span class="eyebrow">Reuse</span>
+      <h2>The same loop at every stage</h2>
+      <p>One debate engine and one consensus engine serve every stage. Each stage changes only what's being voted on, who leads, and what single point it must end with.</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Stage</th><th>Voted on</th><th>Lead</th><th>Single-point output</th><th>Phase</th></tr></thead>
+        <tbody>
+          <tr><td><b>0 · Strategy</b></td><td>Each framework, the build approach and the delivery path</td><td>Strategist</td><td>Strategy position statement</td><td><span class="tag p1">Phase 1</span></td></tr>
+          <tr><td><b>1 · Requirements</b></td><td>Each NFR target, scope line, KPI, gray-area assumption</td><td>Critic (gray areas), Cloud &amp; Cost (targets)</td><td>Requirements baseline</td><td><span class="tag later">Phase 2</span></td></tr>
+          <tr><td><b>2 · Architecture</b></td><td>One option per topic and capability, drawn from the solution catalog across providers, gate-checked and priced per unit</td><td>Architect, Cloud &amp; Cost</td><td>Architecture position per topic + C4 diagram</td><td><span class="tag later">Phase 2</span></td></tr>
+          <tr><td><b>3 · Document</b></td><td>Final document as a whole</td><td>Moderator</td><td>Signed ADR set</td><td><span class="tag later">Phase 2</span></td></tr>
+        </tbody></table></div>
+      <p class="note">From Stage 1 on, the Strategist acts as strategy guardian: any proposal that conflicts with the adopted strategy gets an automatic challenge.</p>
+    </section></div>
+<div role="tabpanel" class="tpanel" id="panel-solutions" aria-labelledby="tab-solutions" tabindex="0" hidden><section id="solutions">
+      <span class="eyebrow">Options</span>
+      <h2>Solution catalog and the production gate</h2>
+      <p>For every capability a project needs, the council compares what already exists before anyone writes code: managed services on Azure, AWS and GCP, SaaS vendor APIs, free and open-source tools, and what your company already owns. Each candidate must pass a production gate. Only Production-eligible candidates can be selected for the production design; POC-only candidates may be used in the POC slice, with a swap plan.</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Candidate type</th><th>Examples</th><th>Strengths</th><th>Watch for</th></tr></thead>
+        <tbody>
+          <tr><td><b>Already owned</b></td><td>Existing cloud account, licences, internal platforms</td><td>No new contract; known to the team</td><td>Is it actually fit for this requirement?</td></tr>
+          <tr><td><b>Cloud managed service</b></td><td>Azure, AWS, GCP native services</td><td>SLA, scaling, compliance certifications</td><td>Preview vs GA, region availability, lock-in</td></tr>
+          <tr><td><b>SaaS vendor API</b></td><td>Specialist APIs (voice, avatar, payments)</td><td>Best-in-class quality, fast start</td><td>Data-use terms, pricing at volume, vendor risk</td></tr>
+          <tr><td><b>Open source, self-hosted</b></td><td>Libraries, models, servers</td><td>No licence fee, full control, no lock-in</td><td>Licence type, maintenance, the team must run it</td></tr>
+        </tbody></table></div>
+      <h3>Production gate checks</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Check</th><th>How it's verified</th><th>Source</th><th>If it fails</th></tr></thead>
+        <tbody>
+          <tr><td>Licence allows commercial use</td><td>SPDX licence id compared with <code>license_policy.yaml</code>; model licences checked separately from code</td><td>Licence file, GitHub licence API, vendor terms</td><td>Blocked licence: Rejected · review-needed (GPL, AGPL): POC-only until legal approves · non-commercial: POC-only</td></tr>
+          <tr><td>Generally available, supported</td><td>Lifecycle status on the official page; published SLA</td><td>Vendor docs and SLA pages</td><td>Preview or no SLA: POC-only</td></tr>
+          <tr><td>Actively maintained (open source)</td><td>Release in the last 12 months, active maintainers, security advisories handled</td><td>Repository data, OpenSSF Scorecard, deps.dev</td><td>Stale or unhandled advisories: POC-only</td></tr>
+          <tr><td>Data terms and security</td><td>No training on customer data; certifications (SOC 2, ISO 27001); encryption</td><td>Vendor trust centre and data-use terms</td><td>Unclear terms: review needed</td></tr>
+          <tr><td>Available where you need it</td><td>Region and data-residency support</td><td>Official region lists</td><td>Not in required region: Rejected for production</td></tr>
+          <tr><td>Official use</td><td>Used through a published API under its terms</td><td>Vendor terms</td><td>Unofficial use (for example edge-tts calling the Edge Read Aloud service): POC-only</td></tr>
+          <tr><td>Price known</td><td>Pricing meter and free tier recorded; Phase 2 pulls live prices</td><td>Azure Retail Prices API, AWS Price List API, Google Cloud Billing Catalog API</td><td>No public price: marked Quote needed</td></tr>
+        </tbody></table></div>
+      <h3>Example: one capability across providers</h3>
+      <p>Text to speech, as needed by your financial-briefing example. Gate results here show how the logic works; the real ones come from live checks at build time.</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Candidate</th><th>Type</th><th>Gate result</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td>Azure AI Speech</td><td>Cloud managed</td><td><span class="tag good">Production-eligible</span></td><td>GA, SLA, official API, regions listed</td></tr>
+          <tr><td>Amazon Polly</td><td>Cloud managed</td><td><span class="tag good">Production-eligible</span></td><td>GA, SLA, official API</td></tr>
+          <tr><td>Google Cloud Text-to-Speech</td><td>Cloud managed</td><td><span class="tag good">Production-eligible</span></td><td>GA, SLA, official API</td></tr>
+          <tr><td>ElevenLabs</td><td>SaaS vendor</td><td><span class="tag warn">Review needed</span></td><td>Official API; data-use and volume terms to confirm for your contract</td></tr>
+          <tr><td>Kokoro-82M</td><td>Open source model</td><td><span class="tag good">Production-eligible</span></td><td>Apache-2.0 licence; the team must host and monitor it</td></tr>
+          <tr><td>edge-tts</td><td>Open-source client</td><td><span class="tag warn">POC-only</span></td><td>Calls a consumer service without an official API agreement</td></tr>
+        </tbody></table></div>
+      <p class="note">Where a capability has no native service on a cloud (for example, avatar video on some providers), the catalog records "No native service" so the gap is visible instead of silently skipped.</p>
+    </section><section id="views">
+      <span class="eyebrow">Outputs</span>
+      <h2>Views for each audience</h2>
+      <p>Your manager, your solution architect and your developers ask different questions about the same design. The council generates one view for each from the same decision record, following the viewpoint approach of ISO/IEC/IEEE 42010 and the arc42 template. Built in Phase 2.</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>View</th><th>For</th><th>Answers</th></tr></thead>
+        <tbody>
+          <tr><td><b>Business</b></td><td>Manager, sponsor</td><td>What we build, cost per unit and per month, timeline, top risks, POC vs production</td></tr>
+          <tr><td><b>Solution</b></td><td>Solution architect</td><td>How many ways it can be done, options compared across providers, managed vs custom, trade-offs, C4 diagram</td></tr>
+          <tr><td><b>Engineering</b></td><td>Developers</td><td>Stack, services, APIs, repository layout, what is POC-only and its swap plan</td></tr>
+          <tr><td><b>FinOps</b></td><td>Finance, cost owners</td><td>Each price meter, cost per document, session or user; cost at 1×, 10× and 100× volume</td></tr>
+          <tr><td><b>Security and compliance</b></td><td>Security, legal</td><td>Data flows, residency, licences, gate results, controls, what was fact-checked</td></tr>
+        </tbody></table></div>
+      <p class="note">Production-first rule: every view describes the production target, then marks which parts the POC covers and what changes at each step from POC to pilot to production.</p>
+    </section><section id="factcheck">
+      <span class="eyebrow">Trust</span>
+      <h2>Fact check: what's checked, what isn't, known issues</h2>
+      <p>The fact checker is mostly code. An LLM judge is used only for one question: does this source actually support this claim? Everything not checked is labelled on screen, so nobody mistakes an opinion for a fact.</p>
+      <div class="cols3">
+        <div class="col"><h3><span class="dot" style="background:var(--good)"></span>Checked</h3><ul>
+          <li><b>PRD quotes:</b> exact text match on the cited page</li>
+          <li><b>Citations:</b> URL was retrieved by us; quote found in the stored page; fetch date recorded</li>
+          <li><b>Support:</b> LLM judge rates supports, partly, or contradicts</li>
+          <li><b>Recency:</b> flags pages older than the catalog's limit or marked deprecated</li>
+          <li><b>Precedents:</b> context match % (scale, team, domain, cloud)</li>
+          <li><b>Applicability:</b> framework rule fired on a real fact</li>
+          <li><b>Numbers:</b> scores, % and costs recomputed by code, never by an LLM</li>
+          <li><b>Production gate:</b> licence (SPDX id vs our licence policy), GA vs preview, published SLA, maintenance activity, data-use terms, region availability</li>
+        </ul></div>
+        <div class="col"><h3><span class="dot" style="background:var(--muted)"></span>Not checked, labelled</h3><ul>
+          <li><b>Judgments</b> ("this is simpler"): labelled Judgment, weight 0 unless backed</li>
+          <li><b>Forecasts</b> (future traffic, growth): labelled Assumption, sent to gray area</li>
+          <li><b>Whether a case study generalises:</b> only context match is shown</li>
+          <li><b>Vendor claims beyond official docs:</b> not used as evidence</li>
+          <li><b>Negotiated prices or discounts:</b> list prices only, marked Estimate</li>
+          <li><b>Team skill claims:</b> taken from the PRD or reviewer, not verified</li>
+        </ul></div>
+        <div class="col"><h3><span class="dot" style="background:var(--warn)"></span>Known issues and fixes</h3><ul>
+          <li><b>Misquoting:</b> exact-match check; failed match becomes Unverified</li>
+          <li><b>Invented URLs:</b> only URLs returned by our retriever are accepted</li>
+          <li><b>Paywalled or blocked pages:</b> Unverified, never strong</li>
+          <li><b>Conflicting sources:</b> both shown; official and newer ranks higher</li>
+          <li><b>Agents converging too fast:</b> blind proposals, blind votes, mandatory counter-case</li>
+          <li><b>Instructions hidden in crawled pages:</b> treated as data, stripped before prompts</li>
+          <li><b>Ambiguous PRD:</b> fact marked Assumed, decision Parked</li>
+          <li><b>Licence or terms change after selection:</b> catalog re-verified monthly; affected decisions flagged for review</li>
+          <li><b>Model weights with use limits:</b> the model licence is checked separately from the code licence</li>
+        </ul></div>
+      </div>
+    </section></div>
+<div role="tabpanel" class="tpanel" id="panel-phase-1" aria-labelledby="tab-phase-1" tabindex="0" hidden><section id="sec-phase-1"><span class="eyebrow">Phase 1 · Weeks 1–4</span><h2>Strategy agent and Stage 0</h2><p>Everything needed to start: goal, stack, agents and time per agent, day-by-day plan, tasks and done-when criteria.</p><div class="facts">
+<div class="fact"><b>4 weeks</b><span>20 working days</span></div>
+<div class="fact"><b>1.5 people</b><span>One full time, one half time</span></div>
+<div class="fact"><b>6 agents</b><span>Strategist built in depth</span></div>
+<div class="fact"><b>3 samples</b><span>S1 financial briefing, S2 ShopSphere, S3 real</span></div></div>
+<h3>Goal</h3>
+<p>Give the system one PRD and get back a fair, fact-checked architecture strategy: which frameworks to follow, the build approach, and the delivery path. Each has an agreement percentage, plus one position statement and an ADR, in under 5 minutes.</p>
+<h3>What Phase 1 achieves</h3>
+<ul>
+<li>A fact sheet where every fact is quoted from the PRD with its page</li>
+<li>A framework catalog and a solution catalog across Azure, AWS, GCP, SaaS and open source, each candidate gate-checked</li>
+<li>The Strategy agent and its panel debating with evidence, challenges and rebuttals</li>
+<li>Votes turned into agreement percentages and one position statement, signed by you</li>
+<li>A replay viewer that shows the debate with cinematic evidence pop-ups</li>
+</ul>
+<h3>How you'll run it at the end of Phase 1</h3>
+<pre class="code">council run --prd data/samples/prds/s1_financial_briefing.pdf --mode production
+<span class="c"># writes data/runs/&lt;id&gt;/: fact_sheet.json, solution_gate.json, debate_log.jsonl,</span>
+<span class="c">#   strategy_decision.json, strategy_adr.md</span>
+council view &lt;id&gt;      <span class="c"># opens the replay viewer with pop-ups and the sign-off form</span></pre>
+<h3>Stack</h3>
+<div class="tablewrap"><table><thead><tr><th>Part</th><th>Choice</th><th>Why</th><th>Licence</th></tr></thead><tbody><tr><td><b>Language and packaging</b></td><td>Python 3.12, uv</td><td>Best ecosystem for LLM, parsing and data work</td><td><span class="mono">PSF, MIT/Apache</span></td></tr><tr><td><b>Orchestration</b></td><td>LangGraph</td><td>Order of steps, reviewer pause and resume (interrupt), checkpoints per session, parallel blind proposals</td><td><span class="mono">MIT</span></td></tr><tr><td><b>API and events</b></td><td>FastAPI, Pydantic v2, WebSocket event stream</td><td>Typed contracts for every argument card and event</td><td><span class="mono">MIT</span></td></tr><tr><td><b>LLM gateway</b></td><td>LiteLLM</td><td>One interface for every provider; swap models in config</td><td><span class="mono">MIT</span></td></tr><tr><td><b>Models</b></td><td>Claude (Strategist, chair), OpenAI GPT (Architect), Gemini (Platform &amp; Cost), Llama via Groq (Critic)</td><td>Four providers, four sets of blind spots; Phase 1 can start on two</td><td><span class="mono">Provider API terms</span></td></tr><tr><td><b>Database and vectors</b></td><td>PostgreSQL 16 + pgvector</td><td>Facts, catalog, decisions and embeddings in one place</td><td><span class="mono">PostgreSQL licence</span></td></tr><tr><td><b>Embeddings</b></td><td>sentence-transformers with bge-small-en-v1.5</td><td>Free, runs locally, good enough for retrieval</td><td><span class="mono">Apache-2.0 · MIT</span></td></tr><tr><td><b>Document parsing</b></td><td>Docling (PDF), python-docx (Word), Markdown reader</td><td>Keeps page numbers and tables for fact citations</td><td><span class="mono">MIT</span></td></tr><tr><td><b>Crawler</b></td><td>Crawl4AI</td><td>Fetches allowlisted official pages to clean Markdown</td><td><span class="mono">Apache-2.0</span></td></tr><tr><td><b>Gate data</b></td><td>GitHub licence API, OpenSSF Scorecard, deps.dev</td><td>Licence id, maintenance and security signals for open source</td><td><span class="mono">Public APIs</span></td></tr><tr><td><b>Templates</b></td><td>Jinja2</td><td>Position statement and strategy ADR from the ledger</td><td><span class="mono">BSD-3</span></td></tr><tr><td><b>Observability</b></td><td>Langfuse (self-hosted)</td><td>Every prompt, token and cost per run</td><td><span class="mono">MIT</span></td></tr><tr><td><b>Viewer</b></td><td>Plain HTML and JavaScript (from the demo)</td><td>Replays the event log with cinematic pop-ups; no framework yet</td><td><span class="mono">Our code</span></td></tr><tr><td><b>Testing and CI</b></td><td>pytest, GitHub Actions, Docker Compose</td><td>Golden runs on every prompt change</td><td><span class="mono">MIT · Apache-2.0</span></td></tr></tbody></table></div>
+<p class="note">Every library here allows commercial use. We avoid AGPL tools such as PyMuPDF, so our own build passes the same gate the council applies to others. The only running cost is model API usage.</p>
+<h3>Agents we create and how long each takes</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Agent or part</th><th>First working version</th><th>Reliable version</th><th>What takes the time</th></tr></thead>
+<tbody>
+<tr><td><b>Shared agent runtime</b></td><td class="num">1 day</td><td class="num">2 days</td><td>Schema validation, retries on bad JSON, cost logging, provider fallbacks</td></tr>
+<tr><td><b>Tara · Strategist</b> (Phase 1 focus)</td><td class="num">1 day</td><td class="num">5 days</td><td>Rule matching against the catalog, build approach and delivery path, rejected alternatives, tuning on 3 samples until outputs are stable</td></tr>
+<tr><td><b>Mira · Moderator</b></td><td class="num">1 day</td><td class="num">3 days</td><td>Fact sheet with exact-quote checks; round control lives in the debate engine</td></tr>
+<tr><td><b>Ada · Architect</b></td><td class="num">½ day</td><td class="num">1 day</td><td>Persona prompt on the shared runtime; tuning its challenges</td></tr>
+<tr><td><b>Kabir · Platform &amp; Cost</b></td><td class="num">½ day</td><td class="num">1½ days</td><td>Reading gate results and existing stack; cost and lock-in challenges</td></tr>
+<tr><td><b>Rex · Critic</b></td><td class="num">½ day</td><td class="num">1½ days</td><td>Mandatory counter-case when everyone agrees; typed challenges</td></tr>
+<tr><td><b>Vera · Fact checker</b></td><td class="num">1 day</td><td class="num">4 days</td><td>Mostly code: citation resolver, quote match, support judge, gate checks, weights</td></tr>
+<tr><td><b>Total</b></td><td class="num">about 5½ days</td><td class="num">about 18 days</td><td>Fits inside 4 weeks next to the engines, catalog and viewer</td></tr>
+</tbody></table></div>
+<p class="note">Can an agent be built in one day? A first version that answers, yes: a prompt plus the runtime. An agent you can trust, no: most of the time goes into making it cite facts, follow the schema every time, and give the same answer on the same document. That's why Phase 1 is 4 weeks, not 4 days.</p>
+<h3>Day-by-day plan</h3>
+<div class="tablewrap"><table><thead><tr><th>Day</th><th>Engineer A · backend and AI (full time)</th><th>Engineer B · full stack (half time)</th><th>Tasks</th><th>End-of-day output</th></tr></thead><tbody><tr><th colspan="5" style="text-transform:none;letter-spacing:0;font:600 13px var(--f-body);color:var(--ink)">Week 1 · Foundations · demo: a fact sheet from a real PRD</th></tr><tr><td class="num">D1</td><td>Repository, Docker Compose with Postgres + pgvector, config skeleton, CI</td><td>Collect S1 and S2 sample PRDs</td><td class="num">1.1</td><td><code>make up</code> runs</td></tr><tr><td class="num">D2</td><td>Agent runtime: LiteLLM, Pydantic schemas, retries, Langfuse logging</td><td>Write expected outcomes for S1 and S2 (golden)</td><td class="num">1.2</td><td>One valid argument card from each provider</td></tr><tr><td class="num">D3</td><td>Event schema, event bus, <code>debate_log.jsonl</code> writer, session state</td><td>—</td><td class="num">1.5</td><td>A dummy run replays from its log</td></tr><tr><td class="num">D4</td><td>PRD ingestion: Docling and python-docx, page-aware chunks, embeddings</td><td>Pick and prepare S3</td><td class="num">1.3</td><td>Chunks searchable with page numbers</td></tr><tr><td class="num">D5</td><td>Fact sheet extractor (Mira) with exact-quote check; run on S1 and S2</td><td>Review fact sheets against the PRDs</td><td class="num">1.4</td><td><code>fact_sheet.json</code> for 2 samples</td></tr><tr><th colspan="5" style="text-transform:none;letter-spacing:0;font:600 13px var(--f-body);color:var(--ink)">Week 2 · Knowledge and production gate · demo: gate report for 10 capabilities</th></tr><tr><td class="num">D6</td><td>Framework catalog schema; first 7 frameworks</td><td>—</td><td class="num">1.6</td><td>Catalog loads and validates</td></tr><tr><td class="num">D7</td><td>Remaining frameworks; <code>license_policy.yaml</code>; <code>existing_stack.yaml</code> schema</td><td>Gather official, pricing and licence pages</td><td class="num">1.6</td><td>14 frameworks with sources</td></tr><tr><td class="num">D8</td><td>Crawler on the allowlist; store pages with fetch date; embed</td><td>Check crawled pages are clean</td><td class="num">1.7</td><td>Every catalog source resolves</td></tr><tr><td class="num">D9</td><td>Solution catalog schema; capabilities 1–5</td><td>Capabilities 6–10 data entry</td><td class="num">1.9</td><td>10 capabilities × candidates</td></tr><tr><td class="num">D10</td><td>Production gate checks; <code>solution_gate.json</code>; decision database table and samples</td><td>Spot-check gate results by hand</td><td class="num">1.8, 1.10</td><td>Every candidate has a gate result</td></tr><tr><th colspan="5" style="text-transform:none;letter-spacing:0;font:600 13px var(--f-body);color:var(--ink)">Week 3 · Agents · demo: four agents propose on a sample</th></tr><tr><td class="num">D11</td><td>Strategist v1: rule-based shortlist (R1) and proposal prompt (R2)</td><td>Viewer skeleton from a sample log</td><td class="num">1.11</td><td>Shortlist + first cards on S1</td></tr><tr><td class="num">D12</td><td>Strategist: build approach, delivery path, rejected alternatives</td><td>Viewer: transcript and card rail</td><td class="num">1.11</td><td>Full Strategist output on S1</td></tr><tr><td class="num">D13</td><td>Panel personas: Architect, Platform &amp; Cost, Critic; blind parallel proposals</td><td>—</td><td class="num">1.12</td><td>Cards from 4 agents</td></tr><tr><td class="num">D14</td><td>Critic counter-case; existing-stack reuse; tune on S1</td><td>Viewer: stamps and vote meter</td><td class="num">1.12, 1.13</td><td>Reuse options appear when owned</td></tr><tr><td class="num">D15</td><td>Tune on S2 and S3; snapshot outputs for regression</td><td>Review agent outputs with you</td><td class="num">1.11–1.13</td><td>Stable proposals on 3 samples</td></tr><tr><th colspan="5" style="text-transform:none;letter-spacing:0;font:600 13px var(--f-body);color:var(--ink)">Week 4 · Debate and decision · demo: full Stage 0 replay with sign-off</th></tr><tr><td class="num">D16</td><td>Debate engine: challenger assignment, typed challenges, rebuttal or concede, caps</td><td>Viewer: challenge and rebuttal cards</td><td class="num">1.14</td><td>Every framework challenged</td></tr><tr><td class="num">D17</td><td>Fact checker: resolver, quote match, support judge, recency, weights</td><td>Viewer: cinematic timing</td><td class="num">1.15</td><td>Verdicts on every citation</td></tr><tr><td class="num">D18</td><td>Consensus engine with unit tests; re-vote; overrides; ADR and statement templates</td><td>Reviewer gate form</td><td class="num">1.16, 1.17</td><td>Decision board, statement, ADR</td></tr><tr><td class="num">D19</td><td>Wire sign-off to the decision database; end-to-end runs</td><td>Viewer polish and replay controls</td><td class="num">1.18</td><td>Signed record saved</td></tr><tr><td class="num">D20</td><td>Golden runs ×3 per sample, evals report, fixes</td><td>Phase 1 demo to you, manager and architect</td><td class="num">1.19</td><td>All acceptance criteria met</td></tr></tbody></table></div>
+<h3>Task list</h3>
+      <div class="week"><h3>Week 1 · Foundations<span>facts before opinions</span></h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>#</th><th>Task</th><th>Output</th><th>Done when</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1.1</td><td>Repository, Docker Compose, Postgres + pgvector, config skeleton</td><td>Running stack</td><td><code>make up</code> works on a clean laptop</td></tr>
+          <tr><td class="num">1.2</td><td>Agent runtime: LiteLLM wrapper, JSON-schema validation, retries, cost and token logging</td><td><code>agents/runtime.py</code></td><td>Every model returns a valid argument card or a logged failure</td></tr>
+          <tr><td class="num">1.3</td><td>PRD ingestion: parse PDF/DOCX/MD, chunk with page numbers, embed</td><td><code>knowledge/ingest.py</code></td><td>Any chunk traces back to its page</td></tr>
+          <tr><td class="num">1.4</td><td>Fact sheet extractor with exact-quote check; confirmed vs assumed</td><td><code>fact_sheet.json</code></td><td>90% or more of facts pass the quote match on 3 samples</td></tr>
+          <tr><td class="num">1.5</td><td>Event schema and bus; write <code>debate_log.jsonl</code></td><td><code>events/</code></td><td>Every step of a run is replayable from the log</td></tr>
+        </tbody></table></div></div>
+
+      <div class="week"><h3>Week 2 · Knowledge and the production gate<span>what agents may cite and choose</span></h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>#</th><th>Task</th><th>Output</th><th>Done when</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1.6</td><td>Framework catalog: about 14 entries (Azure, AWS and GCP Well-Architected; Twelve-Factor; C4; ADR; ATAM; evolutionary/strangler fig; microservices; event-driven; PCI DSS; GDPR; India DPDP Act; OWASP ASVS)</td><td><code>config/frameworks/</code></td><td>Each has applies-when rules, cost, and at least one official source</td></tr>
+          <tr><td class="num">1.7</td><td>Crawl official pages for frameworks and solutions; store text, URL, fetch date</td><td><code>knowledge/crawler.py</code></td><td>Each catalog source resolves to a stored page</td></tr>
+          <tr><td class="num">1.8</td><td>Decision database table, seeded with clearly marked sample precedents</td><td><code>decisions</code> table</td><td>Precedent search returns matches with a context %</td></tr>
+          <tr><td class="num">1.9</td><td><b>Solution catalog:</b> about 10 capabilities needed by the samples (document extraction, LLM, embeddings, vector search, speech, avatar video, content safety, queue, database, hosting), each with candidates on Azure, AWS, GCP, SaaS and open source</td><td><code>config/solutions/</code></td><td>Every candidate has its official page, pricing page and licence or terms page</td></tr>
+          <tr><td class="num">1.10</td><td><b>Production gate:</b> licence check against <code>license_policy.yaml</code>, GA vs preview, SLA, maintenance signals, data-use terms, region availability</td><td><code>catalog/gate.py</code> + <code>solution_gate.json</code></td><td>Every candidate gets Production-eligible, POC-only or Rejected with evidence links</td></tr>
+        </tbody></table></div></div>
+
+      <div class="week"><h3>Week 3 · The Strategy agent and the panel<span>the core of Phase 1</span></h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>#</th><th>Task</th><th>Output</th><th>Done when</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1.11</td><td><b>Strategist agent:</b> shortlist by rules (R1); propose frameworks, build approach and delivery path with rejected alternatives (R2); draft statement</td><td><code>agents/prompts/strategist.md</code></td><td>Every claim links a fact; binding frameworks always found; only gate-passing solutions proposed for production</td></tr>
+          <tr><td class="num">1.12</td><td>Panel personas: Architect, Platform &amp; Cost, Critic as configs on the same runtime; blind proposals</td><td><code>personas.yaml</code></td><td>Each produces cards in its own role on a different provider</td></tr>
+          <tr><td class="num">1.13</td><td>Existing-stack input: what the company already owns counts as a fact and lowers cost and lock-in concerns</td><td><code>policies/existing_stack.yaml</code></td><td>Reuse options appear when the stack lists a matching tool</td></tr>
+        </tbody></table></div></div>
+
+      <div class="week"><h3>Week 4 · Debate, fact check, vote, viewer<span>reaching one point</span></h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>#</th><th>Task</th><th>Output</th><th>Done when</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1.14</td><td>Debate engine as LangGraph nodes: challenger assignment, typed challenges, rebuttal or concede, caps</td><td><code>debate/</code>, <code>orchestrator/graph.py</code></td><td>Every framework gets at least one challenge; runs always terminate</td></tr>
+          <tr><td class="num">1.15</td><td>Fact checker: citation resolver, quote match, support judge, recency, verdicts and weights</td><td><code>factcheck/</code></td><td>No unverified citation is ever weighted as strong</td></tr>
+          <tr><td class="num">1.16</td><td>Consensus engine: V, E, A, outcomes, override rules, one compromise re-vote</td><td><code>consensus/</code> + unit tests</td><td>Hand-worked examples give identical numbers</td></tr>
+          <tr><td class="num">1.17</td><td>Outputs: decision board, position statement, strategy ADR, decision record</td><td><code>data/runs/&lt;id&gt;/</code></td><td>ADR readable without the transcript</td></tr>
+          <tr><td class="num">1.18</td><td>Replay viewer with cinematic pop-ups and the reviewer gate (approve or override with reason)</td><td><code>viewer/</code></td><td>A run replays from its log; sign-off writes to the database</td></tr>
+          <tr><td class="num">1.19</td><td>Golden runs and evals on the 3 sample PRDs</td><td><code>evals/report.md</code></td><td>Acceptance criteria below all met</td></tr>
+        </tbody></table></div></div>
+
+
+<h3>Steps we follow every day</h3>
+<ol>
+<li><b>Build in thin slices.</b> Each day ends with something that runs on a real sample PRD.</li>
+<li><b>Run the golden samples on every change.</b> Prompts live in git; a prompt change that moves an outcome must be explained.</li>
+<li><b>Code decides numbers.</b> Percentages, weights and gate results come from tested functions, never from a model.</li>
+<li><b>Weekly demo with a gate.</b> We don't start the next week's work until that week's demo works.</li>
+<li><b>Cost cap.</b> Set a spending limit per provider for Phase 1 and check Langfuse daily.</li>
+<li><b>Our own tools pass our own gate.</b> Every library in the stack above has a licence that allows commercial use.</li>
+</ol>
+<h3>Done when</h3>
+      <ul class="checks">
+        <li>Fact sheet: 90% or more of facts carry a page reference that passes the exact-quote check</li>
+        <li>Binding frameworks (PCI DSS for card payments, the stated cloud's framework) found in 3 of 3 samples</li>
+        <li>Every framework decision has at least one challenge, a verdict on every citation, V, E, A and an outcome by the rules</li>
+        <li>Zero unverified or invented citations counted as strong evidence</li>
+        <li>Stability: the same PRD run 3 times gives the same outcome on every binding or clear (≥ 75% or &lt; 40%) framework</li>
+        <li>One position statement and an ADR per run; the decision record saved after sign-off</li>
+        <li>Every catalog candidate has a gate result with evidence links; zero preview, non-commercial or unofficial services marked Production-eligible</li>
+        <li>The strategy names a build approach and a delivery path; every POC-only part has a swap plan to a production-eligible option</li>
+        <li>A run finishes in under 5 minutes; cost per run measured and reported</li>
+      </ul>
+<h3>Not in Phase 1</h3>
+<p>Requirements and architecture stages, cost-per-unit pricing, audience views, live web search, voices, the live council room, PDF or Word export, cloud deployment.</p>
+<h3>Risks in Phase 1</h3>
+<div class="tablewrap"><table><thead><tr><th>Risk</th><th>What we do</th></tr></thead><tbody>
+<tr><td>Agents agree too easily</td><td>Blind proposals and votes, different providers, mandatory counter-case</td></tr>
+<tr><td>Catalog data entry takes longer</td><td>Limit to capabilities the 3 samples need; Engineer B helps in Week 2</td></tr>
+<tr><td>Outputs change between runs</td><td>Low temperature, fixed rules for shortlist and numbers, snapshot tests</td></tr>
+<tr><td>Free-tier rate limits slow tests</td><td>Cache model responses during development; paid keys for golden runs</td></tr>
+<tr><td>Sample PRDs are too clean</td><td>S3 should be a real, messy document</td></tr>
+</tbody></table></div></section></div>
+<div role="tabpanel" class="tpanel" id="panel-phase-2" aria-labelledby="tab-phase-2" tabindex="0" hidden><section id="sec-phase-2"><span class="eyebrow">Phase 2 · Weeks 5–7</span><h2>Requirements, architecture and documents</h2><p>The same engines run Stages 1 to 3, with pricing per unit and audience views.</p><div class="facts"><div class="fact"><b>3 weeks</b><span>Duration</span></div></div>
+<h3>Goal</h3><p>Run Stages 1 to 3 (requirements, architecture, document) on the same debate and consensus engines built in Phase 1.</p>
+<h3>What we achieve</h3><ul><li>Requirements baseline: functional and non-functional requirements, scope, KPIs, green and gray areas, all voted</li><li>Architecture positions per topic, with options drawn from the solution catalog across providers</li><li>Cost per document, session or user, and per month at 1×, 10× and 100× volume</li><li>POC-to-production graduation checklist</li><li>Five audience views and a full ADR set exported to PDF and Word</li></ul>
+<h3>Stack added</h3><ul><li>Pricing adapters: Azure Retail Prices API, AWS Price List API, Google Cloud Billing Catalog API</li><li>A web search API for gaps the knowledge base can't cover</li><li>Pandoc and mermaid-cli for document and diagram export</li></ul>
+<h3>Agent work</h3><ul><li>Rex leads gray areas in Stage 1; Kabir sets measurable targets</li><li>Ada and Kabir lead Stage 2 topics</li><li>Tara becomes strategy guardian: auto-challenges anything that conflicts with the adopted strategy</li><li>About 6 days of prompt and tuning work in total</li></ul>
+<h3>Steps</h3><div class="tablewrap"><table><thead><tr><th>Week</th><th>Work</th><th>Output</th></tr></thead><tbody><tr><td class='num'>W5</td><td>Requirements stage: extraction, gray-area votes, reviewer confirmation</td><td>Requirements baseline</td></tr><tr><td class='num'>W6</td><td>Architecture topics; pricing adapters; cost per unit</td><td>Topic positions with prices</td></tr><tr><td class='num'>W7</td><td>Document stage; views generator; exports</td><td>Signed ADR set and 5 views</td></tr></tbody></table></div>
+<h3>Done when</h3><ul><li>Golden sessions pass end to end on 3 samples</li><li>Every number in every view traces to an event</li><li>Cost per unit matches a hand calculation within 5%</li></ul>
+<p class="note"><b>Gate to the next phase:</b> Your manager and solution architect can each read their own view and find their questions answered.</p></section></div>
+<div role="tabpanel" class="tpanel" id="panel-phase-3" aria-labelledby="tab-phase-3" tabindex="0" hidden><section id="sec-phase-3"><span class="eyebrow">Phase 3 · Weeks 8–10</span><h2>Live council room</h2><p>Watch, listen and interject while agents debate, with live evidence pop-ups.</p><div class="facts"><div class="fact"><b>3 weeks</b><span>Duration</span></div></div>
+<h3>Goal</h3><p>Turn the replay into a live council room where you watch, listen and interject while the agents debate.</p>
+<h3>What we achieve</h3><ul><li>Live web room streaming each turn as it happens</li><li>Agent voices, one per agent</li><li>Cinematic pop-ups live, within a second of each claim</li><li>Human interjection at any time, routed to the right agent</li><li>Live C4 diagram updated as decisions land</li></ul>
+<h3>Stack added</h3><ul><li>Next.js and React frontend with WebSockets</li><li>Production text-to-speech chosen through our own gate (edge-tts for demos only)</li><li>Mermaid for live diagrams</li></ul>
+<h3>Agent work</h3><ul><li>No new agents; Mira learns to route interjections and pause rounds</li><li>About 2 days of prompt work</li></ul>
+<h3>Steps</h3><div class="tablewrap"><table><thead><tr><th>Week</th><th>Work</th><th>Output</th></tr></thead><tbody><tr><td class='num'>W8</td><td>Web room, streaming transcript, gates in the browser</td><td>Live session without voice</td></tr><tr><td class='num'>W9</td><td>Voices and live pop-ups with timing</td><td>Spoken debate with evidence</td></tr><tr><td class='num'>W10</td><td>Interjections, diagram, polish</td><td>Full live room</td></tr></tbody></table></div>
+<h3>Done when</h3><ul><li>First spoken word within 3 seconds of a turn starting</li><li>Pop-up within 1 second of its claim</li><li>A reviewer can run a session without help</li></ul>
+<p class="note"><b>Gate to the next phase:</b> Five internal people run a session each and would use it again.</p></section></div>
+<div role="tabpanel" class="tpanel" id="panel-phase-4" aria-labelledby="tab-phase-4" tabindex="0" hidden><section id="sec-phase-4"><span class="eyebrow">Phase 4 · Weeks 11–12</span><h2>Pilot</h2><p>Real reviews with real reviewers, and a knowledge base that stays fresh.</p><div class="facts"><div class="fact"><b>2 weeks</b><span>Duration</span></div></div>
+<h3>Goal</h3><p>Run the council on real projects with real reviewers, and keep its knowledge fresh.</p>
+<h3>What we achieve</h3><ul><li>Deployed product, with our own platform choice decided by the council</li><li>Sign-in, access control, monitoring and cost alerts</li><li>5 real architecture reviews completed</li><li>Monthly re-verification of the catalog and gate results</li><li>A decision database that grows from real approvals</li></ul>
+<h3>Stack added</h3><ul><li>Hosting, database and monitoring chosen by Stage 2 on our own PRD</li><li>Scheduled jobs for crawling and gate re-checks</li></ul>
+<h3>Agent work</h3><ul><li>No new agents; tune based on reviewer feedback</li><li>About 3 days of tuning</li></ul>
+<h3>Steps</h3><div class="tablewrap"><table><thead><tr><th>Week</th><th>Work</th><th>Output</th></tr></thead><tbody><tr><td class='num'>W11</td><td>Deploy, sign-in, monitoring, first 2 reviews</td><td>Pilot environment</td></tr><tr><td class='num'>W12</td><td>3 more reviews, feedback, fixes, catalog refresh</td><td>Pilot report</td></tr></tbody></table></div>
+<h3>Done when</h3><ul><li>5 reviews signed off</li><li>Reviewers rate the documents useful</li><li>Running cost per session within the set budget</li></ul>
+<p class="note"><b>Gate to the next phase:</b> Decision on rollout, based on the pilot report.</p></section></div>
+<div role="tabpanel" class="tpanel" id="panel-decisions" aria-labelledby="tab-decisions" tabindex="0" hidden><section id="decisions">
+      <span class="eyebrow">Record</span>
+      <h2>Decisions so far</h2>
+      <p>What we have agreed while shaping the product, so the idea and strategy are written down before building. Each item can be reopened with a reason.</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>#</th><th>Decision</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td class="num">D-01</td><td>A council of AI agents on different model providers debates each project; a neutral chair and a fact checker don't vote; the human reviewer has the final say</td><td>Different models have different blind spots; people stay accountable</td></tr>
+          <tr><td class="num">D-02</td><td>Evidence over opinion: only retrieved sources can be cited; unsourced reasoning carries zero weight</td><td>Decisions must be checkable</td></tr>
+          <tr><td class="num">D-03</td><td>Agreement % = 0.6 × vote + 0.4 × evidence; thresholds 75 / 60 / 40, with binding, parked and unanswered-objection rules</td><td>Agreement without forcing unanimity</td></tr>
+          <tr><td class="num">D-04</td><td>The same debate loop runs at every stage, and each stage ends in one position statement</td><td>One engine, consistent outcomes</td></tr>
+          <tr><td class="num">D-05</td><td>Production first: design the production target; the POC is its first slice, with a graduation checklist</td><td>Manager's guidance: avoid throwaway POCs</td></tr>
+          <tr><td class="num">D-06</td><td>Provider-neutral: compare Azure, AWS, GCP, SaaS vendors, open source and what the company already owns</td><td>Solution architect's question: how many ways, what already exists</td></tr>
+          <tr><td class="num">D-07</td><td>Production gate: only verified, properly licensed, GA and supported options can be selected for production</td><td>Avoid legal and support surprises</td></tr>
+          <tr><td class="num">D-08</td><td>Cost is shown per unit of work (document, session, user) and per month at volume</td><td>"How much for one document?"</td></tr>
+          <tr><td class="num">D-09</td><td>One view per audience, generated from the same decision record</td><td>Manager, architect and developers need different answers</td></tr>
+          <tr><td class="num">D-10</td><td>Phase 1 builds the Strategy stage end to end in 4 weeks</td><td>Prove a fair decision on one stage before copying it</td></tr>
+          <tr><td class="num">D-11</td><td>Our own build uses free and open tools where they pass the gate; edge-tts only for demos</td><td>Low cost without production risk</td></tr>
+          <tr><td class="num">D-12</td><td>LangGraph (MIT) orchestrates each stage: order of steps, human gates with pause and resume, checkpoints; agents, fact checks and the consensus maths stay plain, tested functions</td><td>Gates and resume-after-restart are the hardest parts to hand-write; keeping logic outside the graph keeps decisions testable and the orchestrator swappable</td></tr>
+        </tbody></table></div>
+      <p class="note">Open: threshold tuning on golden runs; your extra points for the Strategy agent; approval of the framework and capability lists.</p>
+    </section><section id="needs">
+      <span class="eyebrow">Before we start</span>
+      <h2>What we need from you</h2>
+      <ul class="checks">
+        <li>Two or three real or realistic PRDs to use as samples (we can draft one if needed)</li>
+        <li>Your organisation's must-follow policies, if any (cloud, compliance, standards)</li>
+        <li>Tools, cloud accounts and licences your company already has, so the council can reuse them first</li>
+        <li>Your company's licence rules for open source (for example, whether GPL or AGPL need legal review)</li>
+        <li>Approval of the framework list for the catalog, or additions</li>
+        <li>Agreement on the thresholds (75 / 60 / 40) and the 60/40 vote–evidence split as a starting point</li>
+        <li>API keys for at least two model providers</li>
+        <li>The additional points you mentioned for the Strategy agent, so we fold them into tasks 1.9–1.13</li>
+      </ul>
+      <p class="note">Sample data on this page (ShopSphere, precedents, percentages, gate results) is illustrative. Framework names refer to real public standards; their official pages are what the crawler fetches.</p>
+    </section></div>
+
+    <div class="pager"><button type="button" class="ghost" id="prev">← Previous</button><button type="button" id="next">Next →</button></div>
+  </main>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- architecture diagram ---------- */
+(function(){
+  const bands = [
+    {n:'Experience', s:'what people see', items:[['Replay viewer','Debate with pop-ups',1],['Evidence pop-ups','Cards, stamps, meters',1],['Reviewer gate','Approve or override',1],['Council room','Live stage, voices',0]]},
+    {n:'Orchestration', s:'LangGraph + plain code', items:[['Session orchestrator','LangGraph: gates, resume',1],['Debate engine','Rounds R0–R7, caps',1],['Consensus engine','V, E, agreement %',1],['Event stream','Feeds ledger and UI',1]]},
+    {n:'Agents', s:'one role each', items:[['Moderator','Chair, no vote',1],['Strategist','Leads Stage 0',1],['Architect','Design voter',1],['Platform & Cost','Clouds, vendors',1],['Critic','Challenges all',1],['Fact checker','Facts, licences',1]]},
+    {n:'Knowledge', s:'only citable sources', items:[['PRD facts','Page-cited',1],['Frameworks','When they apply',1],['Solutions','Clouds, SaaS, OSS',1],['Crawled pages','Official sources',1],['Decisions DB','Past decisions',1],['Web search','Fills gaps',0]]},
+    {n:'Outputs', s:'append-only', items:[['Decision ledger','Every vote and verdict',1],['Position + ADR','One single point',1],['Exports','PDF, Word, Markdown',0]]}
+  ];
+  const X0 = 176, X1 = 936, BH = 84, GAP = 24, Y0 = 20;
+  let svg = `<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>`;
+  bands.forEach((b,bi) => {
+    const y = Y0 + bi*(BH+GAP);
+    svg += `<rect x="16" y="${y}" width="928" height="${BH}" rx="12" fill="var(--surface)" stroke="var(--line)"/>`;
+    svg += `<text x="32" y="${y+BH/2-2}" font-family="var(--f-display)" font-size="15" font-weight="600" fill="var(--ink)">${b.n}</text>`;
+    svg += `<text x="32" y="${y+BH/2+16}" font-family="var(--f-mono)" font-size="11" fill="var(--muted)">${b.s}</text>`;
+    const n = b.items.length, g = 12, w = (X1-X0-(n-1)*g)/n;
+    b.items.forEach(([t,s,p],i) => {
+      const x = X0 + i*(w+g), by = y+14, h = BH-28;
+      svg += `<rect x="${x.toFixed(1)}" y="${by}" width="${w.toFixed(1)}" height="${h}" rx="8" fill="${p?'var(--accent-soft)':'none'}" stroke="${p?'var(--accent)':'var(--muted)'}" stroke-width="${p?2:1.25}" ${p?'':'stroke-dasharray="5 4"'}/>`;
+      svg += `<text x="${(x+w/2).toFixed(1)}" y="${by+24}" text-anchor="middle" font-family="var(--f-body)" font-size="13" font-weight="600" fill="var(--ink)">${esc(t)}</text>`;
+      svg += `<text x="${(x+w/2).toFixed(1)}" y="${by+41}" text-anchor="middle" font-family="var(--f-body)" font-size="11.5" fill="var(--muted)">${esc(s)}</text>`;
+    });
+    if(bi < bands.length-1){
+      const yb = y+BH, xa = 160;
+      svg += `<line x1="${xa}" y1="${yb+3}" x2="${xa}" y2="${yb+GAP-3}" stroke="var(--muted)" stroke-width="1.25" marker-start="url(#ar)" marker-end="url(#ar)"/>`;
+    }
+  });
+  $('arch').innerHTML = svg;
+  $('arch').setAttribute('viewBox', `0 0 960 ${Y0 + bands.length*(BH+GAP) - GAP + 20}`);
+})();
+
+/* ---------- agent cards ---------- */
+const AG = [
+  {k:'str', n:'Tara', r:'Strategist', c:'var(--c-str)', focus:1, model:'Claude', vote:'Yes', when:'Leads Stage 0; strategy guardian in later stages',
+   does:'Matches PRD facts to framework rules, proposes the build approach (managed, assemble, self-host, reuse) and the delivery path (production target with a POC slice), writes argument cards with rejected alternatives, drafts the position statement',
+   inp:'Fact sheet, framework catalog, solution catalog, existing stack, org policy, precedents', out:'Applicability matrix, build approach, delivery path, argument cards, draft statement', never:'Argues without a fact; hides a rejected option'},
+  {k:'mod', n:'Mira', r:'Moderator (chair)', c:'var(--c-mod)', model:'Claude Haiku + code', vote:'No', when:'Every stage',
+   does:'Builds the fact sheet, assigns challengers, enforces caps, calls votes, writes compromises and the final statement',
+   inp:'Session state, consensus rules', out:'Fact sheet, round prompts, outcomes, statement', never:'Takes sides or votes'},
+  {k:'arch', n:'Ada', r:'Architect', c:'var(--c-arch)', model:'GPT', vote:'Yes', when:'Votes in Stage 0; leads Stage 2',
+   does:'Challenges strategy on design fit; later proposes components and patterns', inp:'Shortlist, cards, sources', out:'Cards, challenges, votes', never:'Proposes without tying to a requirement'},
+  {k:'cloud', n:'Kabir', r:'Platform & Cost', c:'var(--c-cloud)', model:'Gemini', vote:'Yes', when:'Votes in Stage 0; leads platform choice, cost, scaling',
+   does:'Compares the same capability across Azure, AWS, GCP, SaaS vendors, open source and what the company already owns; challenges cost, lock-in and team burden; later sizes resources and cost per unit', inp:'Solution catalog with gate verdicts, budget, existing stack', out:'Platform options, cost challenges, votes', never:'Picks a provider by habit, or quotes a price the pricing service did not compute'},
+  {k:'critic', n:'Rex', r:'Critic', c:'var(--c-critic)', model:'Open model (Llama via Groq)', vote:'Yes', when:'Every stage',
+   does:'Challenges every proposal, argues the opposite when all agree, owns the gray area', inp:'All cards and verdicts', out:'Typed challenges, counter-case, gray-area items', never:'Stays silent on a unanimous proposal'},
+  {k:'fact', n:'Vera', r:'Fact checker', c:'var(--c-fact)', model:'Code + small judge model', vote:'No', when:'Every round with a citation',
+   does:'Resolves citations, matches quotes, judges support, checks recency and context, runs the production gate (licence, GA and SLA, maintenance, data terms), assigns weights', inp:'Citations, stored pages, PRD, solution catalog', out:'Verdicts, weights and gate results (the stamps)', never:'Gives an opinion on the decision'}
+];
+$('agentcards').innerHTML = AG.map(a => `<div class="agent ${a.focus?'focus':''}">
+  <div class="top"><div class="av" style="background:${a.c}">${a.n[0]}</div><div><div class="nm">${a.n} · ${a.r}</div><div class="rl">${a.focus?'<span class="tag p1">Phase 1 focus</span> ':''}${esc(a.model)} · votes: ${a.vote}</div></div></div>
+  <dl><dt>Works</dt><dd>${esc(a.when)}</dd><dt>Does</dt><dd>${esc(a.does)}</dd><dt>Input</dt><dd>${esc(a.inp)}</dd><dt>Output</dt><dd>${esc(a.out)}</dd><dt>Never</dt><dd>${esc(a.never)}</dd></dl></div>`).join('') +
+  `<div class="agent"><div class="top"><div class="av" style="background:var(--ink);color:var(--bg)">Y</div><div><div class="nm">You · Human reviewer</div><div class="rl">Final authority · not counted in %</div></div></div>
+  <dl><dt>Works</dt><dd>At every gate, and any time by interjecting</dd><dt>Does</dt><dd>Confirms assumptions, decides split outcomes, approves or overrides with a reason</dd><dt>Output</dt><dd>Signed decisions in the database</dd></dl></div>`;
+
+/* ---------- decision board ---------- */
+const BOARD = [
+  ['PCI DSS (SAQ A scope)', null, null, 100, 'sel', 'Binding: card payments confirmed, PRD p.4'],
+  ['Azure Well-Architected Framework', 100, 100, 100, 'sel', 'Team already on Azure, PRD p.3; official docs'],
+  ['Twelve-Factor App', 90, 86, 88, 'sel', 'Containers and CI/CD in scope; Critic’s objection answered'],
+  ['Evolutionary architecture (strangler fig)', 76, 71, 74, 'cond', 'Critic’s payments objection answered by a revisit trigger'],
+  ['Multi-region active-active', null, null, null, 'park', 'Depends on assumed recovery targets'],
+  ['Build approach: managed services first', 85, 80, 83, 'sel', 'Team of 6; GA services with SLAs beat self-hosting; open source where licence and maturity pass the gate'],
+  ['Delivery path: production target, POC as first slice', 100, 92, 97, 'sel', 'Manager and architect requirement; POC-only parts listed with a swap plan'],
+  ['Microservices from day one', 19, 25, 21, 'rej', 'Team of 6 and cost outweigh independent scaling'],
+  ['AWS Well-Architected Framework', null, null, 0, 'na', 'Not applicable: cloud is Azure; filtered in R1']
+];
+const OUT = {sel:['good','Selected'], cond:['warn','Selected with condition'], rej:['bad','Rejected'], park:['','Parked'], na:['later','Not applicable']};
+const col = {sel:'var(--good)', cond:'var(--warn)', rej:'var(--bad)', park:'var(--muted)', na:'var(--muted)'};
+$('boardtable').querySelector('tbody').innerHTML = BOARD.map(([n,v,e,a,o,w]) => `<tr><td><b>${esc(n)}</b></td>
+  <td class="num">${v==null?'–':v+'%'}</td><td class="num">${e==null?'–':e+'%'}</td>
+  <td>${a==null?'<span class="note">–</span>':`<div class="bar"><span class="t"><i style="width:${a}%;background:${col[o]}"></i></span><span class="num">${a}%</span></div>`}</td>
+  <td><span class="tag ${OUT[o][0]}">${OUT[o][1]}</span></td><td class="note" style="font-size:13px">${esc(w)}</td></tr>`).join('');
+
+/* ---------- cinematic pop-up preview ---------- */
+const P = {Mira:'var(--c-mod)', Tara:'var(--c-str)', Ada:'var(--c-arch)', Kabir:'var(--c-cloud)', Rex:'var(--c-critic)', Vera:'var(--c-fact)'};
+const R = {Mira:'Moderator', Tara:'Strategist', Ada:'Architect', Kabir:'Cloud & Cost', Rex:'Critic', Vera:'Fact checker'};
+const SEQ = [
+  {who:'Mira', say:'Fact sheet ready: 14 facts, 11 confirmed, 3 assumed. Proposals are blind.', card:{t:'fact', lab:'Fact · PRD p.2', bd:'“The engineering team has six developers.”', ft:'Exact quote found in ShopSphere_PRD.pdf', st:['verified','Confirmed']}},
+  {who:'Tara', say:'I propose evolutionary architecture: one deployable now, split later with the strangler fig pattern.', card:{t:'claim', lab:'Argument · for · Tara', bd:'Small team cannot run many services. Start modular, extract when needed.', ft:'Links fact F-03 and 2 sources', st:null}},
+  {who:'Vera', say:'Shopify source retrieved. It supports the claim, but at a much larger scale.', card:{t:'source', lab:'Source · shopify.engineering', bd:'Summary: kept a modular monolith and enforced component boundaries.', ft:'Fetched 12 Oct 2026 · context match 60%', st:['partial','Partly supports']}},
+  {who:'Rex', say:'Challenge. Payments may need isolation before the team grows.', card:{t:'challenge', lab:'Challenge · relevance · Rex', bd:'Payments may need their own service early.', ft:'No fact or source attached yet', st:['unverified','Weight 0']}},
+  {who:'Tara', say:'Rebuttal. A hosted checkout keeps card data off our servers, so isolation can wait.', card:{t:'source', lab:'Source · pcisecuritystandards.org', bd:'Summary: fully hosted payment pages keep merchants eligible for SAQ A.', ft:'Official standard · fetched 12 Oct 2026', st:['verified','Verified']}},
+  {who:'Rex', say:'Then I add this: sale-day payment peaks could be five times normal.', card:{t:'assume', lab:'Assumption · Rex', bd:'Sale-day payment volume up to 5× normal.', ft:'Not in the PRD · sent to the gray area', st:['assumed','Assumed']}},
+  {who:'Mira', say:'Votes are in. Evolutionary architecture: 74 percent. Selected with a condition.', vote:{n:'Evolutionary architecture', v:76, e:71, a:74, cls:'cond', out:'Selected with condition', chips:[['Tara','adopt · 5',''],['Ada','adopt · 4',''],['Kabir','adopt · 4',''],['Rex','reject · 4','no']], note:'Condition: extract payments if sale-day volume passes the agreed threshold'}},
+  {who:'Mira', say:'Microservices from day one: 21 percent. Rejected, with reasons recorded.', vote:{n:'Microservices from day one', v:19, e:25, a:21, cls:'rej', out:'Rejected', chips:[['Tara','reject · 5','no'],['Ada','reject · 4','no'],['Kabir','reject · 4','no'],['Rex','adopt · 3','']], note:'Team size (PRD fact) and running cost outweigh independent scaling'}}
+];
+function cardHTML(s, anim){
+  if(s.vote){ const v = s.vote;
+    return `<div class="vcard ${v.cls} ${anim?'anim':''}"><div class="r"><span class="nm">${esc(v.n)}</span><span class="pct">${v.a}%</span></div>
+      <div class="meter"><i style="width:${anim?0:v.a}%" data-w="${v.a}"></i></div>
+      <div class="ticks"><span style="left:40%">40</span><span style="left:60%">60</span><span style="left:75%">75</span></div>
+      <div class="vchips">${v.chips.map(c=>`<span class="vchip ${c[2]}">${c[0]} ${c[1]}</span>`).join('')}</div>
+      <div class="r note"><span>Vote ${v.v}% · Evidence ${v.e}% → 0.6V + 0.4E</span></div>
+      <span class="banner">${esc(v.out)}</span><span class="note">${esc(v.note)}</span></div>`; }
+  const c = s.card;
+  return `<div class="ecard ${c.t} ${anim?'anim':''}"><span class="lab">${esc(c.lab)}</span><span class="bd">${esc(c.bd)}</span><span class="ft">${esc(c.ft)}</span>${c.st?`<span class="stamp ${c.st[0]}">${esc(c.st[1])}</span>`:''}</div>`;
+}
+function lineHTML(s, anim){
+  return `<div class="line ${anim?'lanim':''}"><div class="av" style="background:${P[s.who]}">${s.who[0]}</div><div><div class="who">${s.who}<span>${R[s.who]}</span></div>${esc(s.say)}</div></div>`;
+}
+let timers = [];
+function showFinal(){
+  timers.forEach(clearTimeout); timers = [];
+  $('talk').innerHTML = SEQ.map(s => lineHTML(s,false)).join('');
+  $('rail').innerHTML = SEQ.map(s => cardHTML(s,false)).join('');
+  $('play').textContent = '▶ Play sequence';
+}
+function play(){
+  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ showFinal(); return; }
+  timers.forEach(clearTimeout); timers = [];
+  $('talk').innerHTML = ''; $('rail').innerHTML = '';
+  $('play').textContent = '↻ Replay';
+  SEQ.forEach((s,i) => timers.push(setTimeout(() => {
+    $('talk').insertAdjacentHTML('beforeend', lineHTML(s,true));
+    $('rail').insertAdjacentHTML('beforeend', cardHTML(s,true));
+    if(s.vote){ const bars = $('rail').querySelectorAll('.meter i'); const m = bars[bars.length-1];
+      timers.push(setTimeout(() => { m.style.width = m.dataset.w + '%'; }, 450)); }
+  }, i*2100)));
+}
+$('play').onclick = play;
+const TABS = [...document.querySelectorAll('.ttab')].map(t => t.dataset.tab);
+function openTab(k, opts){
+  opts = opts || {};
+  if(!TABS.includes(k)) k = TABS[0];
+  document.querySelectorAll('.ttab').forEach(t => { const on = t.dataset.tab===k; t.setAttribute('aria-selected', on); t.tabIndex = on?0:-1; if(on){ if(opts.focus) t.focus(); try{ t.scrollIntoView({block:'nearest', inline:'nearest'}); }catch(e){} } });
+  document.querySelectorAll('.tpanel').forEach(pn => pn.hidden = pn.id !== 'panel-'+k);
+  const i = TABS.indexOf(k);
+  $('prev').disabled = i===0; $('next').disabled = i===TABS.length-1;
+  $('prev').textContent = i>0 ? '← ' + document.getElementById('tab-'+TABS[i-1]).textContent : '← Previous';
+  $('next').textContent = i<TABS.length-1 ? document.getElementById('tab-'+TABS[i+1]).textContent + ' →' : 'Next →';
+  if(opts.scroll) window.scrollTo({top:0, behavior:'auto'});
+  try{ history.replaceState(null, '', '#'+k); }catch(e){}
+}
+document.querySelectorAll('.ttab').forEach(t => {
+  t.onclick = () => openTab(t.dataset.tab, {scroll:true});
+  t.onkeydown = e => { const i = TABS.indexOf(t.dataset.tab);
+    if(e.key==='ArrowRight'){ e.preventDefault(); openTab(TABS[(i+1)%TABS.length], {focus:true, scroll:true}); }
+    if(e.key==='ArrowLeft'){ e.preventDefault(); openTab(TABS[(i-1+TABS.length)%TABS.length], {focus:true, scroll:true}); } };
+});
+document.querySelectorAll('[data-goto]').forEach(a => a.onclick = e => { e.preventDefault(); openTab(a.dataset.goto, {scroll:true}); });
+$('prev').onclick = () => { const i = TABS.indexOf(document.querySelector('.ttab[aria-selected="true"]').dataset.tab); if(i>0) openTab(TABS[i-1], {scroll:true}); };
+$('next').onclick = () => { const i = TABS.indexOf(document.querySelector('.ttab[aria-selected="true"]').dataset.tab); if(i<TABS.length-1) openTab(TABS[i+1], {scroll:true}); };
+let start = 'overview';
+try{ const h = location.hash.slice(1); if(TABS.includes(h)) start = h; }catch(e){}
+openTab(start);
+$('skip').onclick = showFinal;
+showFinal();
+</script>

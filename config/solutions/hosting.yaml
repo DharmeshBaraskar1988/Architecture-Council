@@ -1,0 +1,71 @@
+capability: hosting
+description: Run the product's containers and web app without managing servers
+candidates:
+  - id: azure_container_apps
+    name: Azure Container Apps
+    type: cloud_managed
+    provider: azure
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://learn.microsoft.com/en-us/azure/container-apps/overview
+      pricing: https://azure.microsoft.com/en-us/pricing/details/container-apps/
+      terms: https://learn.microsoft.com/en-us/azure/security/fundamentals/protection-customer-data
+      sla: https://www.microsoft.com/licensing/docs/view/Service-Level-Agreements-SLA-for-Online-Services
+  - id: aws_fargate
+    name: AWS Fargate (Amazon ECS)
+    type: cloud_managed
+    provider: aws
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html
+      pricing: https://aws.amazon.com/fargate/pricing/
+      terms: https://aws.amazon.com/service-terms/
+      sla: https://aws.amazon.com/compute/sla/
+  - id: google_cloud_run
+    name: Google Cloud Run
+    type: cloud_managed
+    provider: gcp
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://cloud.google.com/run/docs/overview/what-is-cloud-run
+      pricing: https://cloud.google.com/run/pricing
+      terms: https://cloud.google.com/terms/data-processing-addendum
+      sla: https://cloud.google.com/run/sla
+  - id: vercel
+    name: Vercel (web front end)
+    type: saas
+    provider: vercel
+    licence: proprietary
+    lifecycle: ga
+    sla: contract
+    official_api: true
+    data_terms: ok
+    note: "Front end and serverless functions only; uptime SLA on the Enterprise plan."
+    pages:
+      official: https://vercel.com/docs
+      pricing: https://vercel.com/pricing
+      terms: https://vercel.com/legal/terms
+  - id: kubernetes
+    name: Kubernetes (self-managed)
+    type: open_source
+    licence: Apache-2.0
+    lifecycle: ga
+    official_api: true
+    data_terms: ok
+    repo: kubernetes/kubernetes
+    note: "Highest operating effort: the team runs the cluster."
+    pages:
+      official: https://kubernetes.io/docs/concepts/overview/
+      terms: https://github.com/kubernetes/kubernetes/blob/master/LICENSE

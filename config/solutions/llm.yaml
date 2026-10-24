@@ -1,0 +1,98 @@
+capability: llm
+description: Large language model for drafting, summarising and reasoning over text
+candidates:
+  - id: azure_openai
+    name: Azure OpenAI in Azure AI Foundry
+    type: cloud_managed
+    provider: azure
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://learn.microsoft.com/en-us/azure/ai-foundry/openai/overview
+      pricing: https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/
+      terms: https://learn.microsoft.com/en-us/azure/ai-foundry/responsible-ai/openai/data-privacy
+      sla: https://www.microsoft.com/licensing/docs/view/Service-Level-Agreements-SLA-for-Online-Services
+  - id: amazon_bedrock
+    name: Amazon Bedrock
+    type: cloud_managed
+    provider: aws
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html
+      pricing: https://aws.amazon.com/bedrock/pricing/
+      terms: https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html
+      sla: https://aws.amazon.com/bedrock/sla/
+  - id: vertex_ai_gemini
+    name: Gemini on Vertex AI
+    type: cloud_managed
+    provider: gcp
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://cloud.google.com/vertex-ai/generative-ai/docs/overview
+      pricing: https://cloud.google.com/vertex-ai/generative-ai/pricing
+      terms: https://cloud.google.com/vertex-ai/generative-ai/docs/data-governance
+      sla: https://cloud.google.com/vertex-ai/sla
+  - id: openai_api
+    name: OpenAI API
+    type: saas
+    provider: openai
+    licence: proprietary
+    lifecycle: ga
+    sla: contract
+    official_api: true
+    data_terms: ok
+    note: "API data is not used for training by default. Uptime commitments come with Scale Tier or enterprise agreements."
+    pages:
+      official: https://openai.com/api/
+      pricing: https://openai.com/api/pricing/
+      terms: https://openai.com/policies/services-agreement/
+  - id: anthropic_api
+    name: Claude API (Anthropic)
+    type: saas
+    provider: anthropic
+    licence: proprietary
+    lifecycle: ga
+    sla: contract
+    official_api: true
+    data_terms: ok
+    note: "Commercial API inputs and outputs are not used for training by default. Uptime commitments come with enterprise agreements."
+    pages:
+      official: https://www.anthropic.com/api
+      pricing: https://www.anthropic.com/pricing
+      terms: https://www.anthropic.com/legal/commercial-terms
+  - id: qwen3_vllm
+    name: Qwen3 open-weight model served with vLLM
+    type: open_source
+    licence: Apache-2.0
+    lifecycle: ga
+    official_api: true
+    data_terms: ok
+    model: Qwen/Qwen3-32B
+    repo: vllm-project/vllm
+    note: "Self-hosted: needs GPUs and the team to run them; data never leaves the company."
+    pages:
+      official: https://huggingface.co/Qwen/Qwen3-32B
+      terms: https://github.com/vllm-project/vllm/blob/main/LICENSE
+  - id: llama_3_3
+    name: Llama 3.3 70B (self-hosted)
+    type: open_source
+    licence: llama3.3
+    lifecycle: ga
+    official_api: true
+    data_terms: ok
+    repo: meta-llama/llama-models
+    note: "Custom Llama 3.3 Community Licence: commercial use allowed with conditions (attribution, acceptable use policy, 700M-user limit)."
+    pages:
+      official: https://github.com/meta-llama/llama-models/blob/main/models/llama3_3/MODEL_CARD.md
+      terms: https://github.com/meta-llama/llama-models/blob/main/models/llama3_3/LICENSE

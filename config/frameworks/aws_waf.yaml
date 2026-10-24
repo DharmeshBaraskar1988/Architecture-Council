@@ -1,0 +1,9 @@
+id: aws_waf
+name: AWS Well-Architected Framework
+kind: cloud_framework
+summary: Six pillars (operational excellence, security, reliability, performance efficiency, cost optimization, sustainability) for AWS workloads.
+applies_when: {fact: cloud_provider, equals: aws}
+not_applicable_when: {fact: cloud_provider, in: [azure, gcp]}
+team_cost: low
+sources:
+  - {url: "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html", title: "AWS Well-Architected Framework", kind: official_docs, verified: false}

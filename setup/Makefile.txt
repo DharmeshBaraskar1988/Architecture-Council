@@ -1,0 +1,13 @@
+# Works on macOS/Linux and in Git Bash or WSL on Windows. Windows PowerShell users: see README.
+.PHONY: install test up down facts
+install:
+	cd backend && python -m pip install -e ".[dev]"
+test:
+	cd backend && python -m pytest -q
+up:
+	docker compose up -d
+down:
+	docker compose down
+facts:
+	@test -n "$(PRD)" || (echo "usage: make facts PRD=path/to/your_prd.md" && exit 1)
+	cd backend && python -m app.cli facts --prd "$(abspath $(PRD))"

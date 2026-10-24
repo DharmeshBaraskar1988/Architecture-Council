@@ -1,0 +1,643 @@
+{
+ "strategist": [
+  {
+   "subject": "dpdp_india",
+   "stance": "adopt",
+   "claim": "Personal data of users in India puts the product under the DPDP Act.",
+   "facts": [
+    "F-03",
+    "F-05"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-dpdp_india-1"
+    }
+   ],
+   "benefit": "Legal compliance from day one.",
+   "cost": "Consent and retention work.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "azure_waf",
+   "stance": "adopt",
+   "claim": "The company already runs on Azure, so its Well-Architected Framework is the baseline.",
+   "facts": [
+    "F-01"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-azure_waf-1"
+    }
+   ],
+   "benefit": "Reviews use the provider's own checklists.",
+   "cost": "Review time per workload.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "twelve_factor",
+   "stance": "adopt",
+   "claim": "Containers and CI/CD are already in place, which Twelve-Factor assumes.",
+   "facts": [
+    "F-13",
+    "F-14"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-twelve_factor-1"
+    }
+   ],
+   "benefit": "Portable, repeatable deployments.",
+   "cost": "Config and logging discipline.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "evolutionary_architecture",
+   "stance": "adopt",
+   "claim": "Start as one deployable and extract parts only when a real need appears.",
+   "facts": [
+    "F-02",
+    "F-09"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-evolutionary_architecture-1"
+    }
+   ],
+   "benefit": "Less to operate at 150 daily users.",
+   "cost": "Later extraction work.",
+   "condition": null,
+   "rejected_alternative": {
+    "name": "microservices_first",
+    "reason": "A team of five cannot run many services."
+   }
+  },
+  {
+   "subject": "event_driven",
+   "stance": "adopt_with_condition",
+   "claim": "Video rendering is long-running, so it runs as background jobs on a queue.",
+   "facts": [
+    "F-10",
+    "F-08"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-event_driven-1"
+    }
+   ],
+   "benefit": "Users are not blocked while media renders.",
+   "cost": "A queue to run and monitor.",
+   "condition": "Limit events to the media pipeline; keep the rest request-response.",
+   "rejected_alternative": null
+  },
+  {
+   "subject": "c4_model",
+   "stance": "adopt",
+   "claim": "C4 diagrams give the reviewers one shared picture of the system.",
+   "facts": [
+    "F-02"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-c4_model-1"
+    }
+   ],
+   "benefit": "Cheap, readable diagrams.",
+   "cost": "Keeping diagrams current.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "adr",
+   "stance": "adopt",
+   "claim": "Each council decision is recorded as an ADR.",
+   "facts": [
+    "F-15"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-adr-1"
+    }
+   ],
+   "benefit": "Decisions survive team changes.",
+   "cost": "A few minutes per decision.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "atam",
+   "stance": "reject",
+   "claim": "A full ATAM workshop is too heavy for a three-month pilot.",
+   "facts": [
+    "F-15",
+    "F-02"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-atam-1"
+    }
+   ],
+   "benefit": "Saves workshop days.",
+   "cost": "Fewer explicit trade-off scenarios.",
+   "condition": null,
+   "rejected_alternative": {
+    "name": "lightweight risk review",
+    "reason": "Gives most of the value in an hour."
+   }
+  },
+  {
+   "subject": "build_approach",
+   "stance": "adopt_with_condition",
+   "claim": "Assemble from Azure managed AI services, the company's existing cloud.",
+   "facts": [
+    "F-01",
+    "F-12"
+   ],
+   "citations": [],
+   "benefit": "Data stays in India on a platform the team knows.",
+   "cost": "Per-call pricing at volume.",
+   "condition": "Production use waits until each service passes the production gate.",
+   "rejected_alternative": {
+    "name": "self-host open-source models",
+    "reason": "A team of five should not run GPU servers."
+   }
+  },
+  {
+   "subject": "delivery_path",
+   "stance": "adopt",
+   "claim": "Design the production target first; the POC is its first slice: one document to summary and audio.",
+   "facts": [
+    "F-15",
+    "F-07"
+   ],
+   "citations": [],
+   "benefit": "No throwaway POC.",
+   "cost": "Production design work up front.",
+   "condition": null,
+   "rejected_alternative": null
+  }
+ ],
+ "architect": [
+  {
+   "subject": "dpdp_india",
+   "stance": "adopt",
+   "claim": "Personal data must be mapped through every flow, including generated media.",
+   "facts": [
+    "F-05",
+    "F-07"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-dpdp_india-1"
+    }
+   ],
+   "benefit": "Clear data flows for audits.",
+   "cost": "Data mapping effort.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "azure_waf",
+   "stance": "adopt",
+   "claim": "Azure is the existing platform; its reliability and security pillars fit.",
+   "facts": [
+    "F-01"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-azure_waf-1"
+    }
+   ],
+   "benefit": "Proven design guidance.",
+   "cost": "Some pillars are heavy for a pilot.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "twelve_factor",
+   "stance": "adopt",
+   "claim": "Containerised services fit Twelve-Factor directly.",
+   "facts": [
+    "F-13"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-twelve_factor-1"
+    }
+   ],
+   "benefit": "Clean separation of config and code.",
+   "cost": "Minor refactoring.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "evolutionary_architecture",
+   "stance": "adopt",
+   "claim": "A modular monolith with a separate media worker fits the scale.",
+   "facts": [
+    "F-09",
+    "F-10"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-evolutionary_architecture-1"
+    }
+   ],
+   "benefit": "Simple to run.",
+   "cost": "Module boundaries need discipline.",
+   "condition": null,
+   "rejected_alternative": {
+    "name": "microservices_first",
+    "reason": "A team of five cannot run many services."
+   }
+  },
+  {
+   "subject": "event_driven",
+   "stance": "adopt",
+   "claim": "Rendering jobs and notifications are naturally event-driven.",
+   "facts": [
+    "F-10"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-event_driven-1"
+    }
+   ],
+   "benefit": "Decoupled long-running work.",
+   "cost": "Harder end-to-end tracing.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "c4_model",
+   "stance": "adopt",
+   "claim": "Context and container diagrams are enough at this size.",
+   "facts": [
+    "F-02"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-c4_model-1"
+    }
+   ],
+   "benefit": "Shared understanding.",
+   "cost": "Little.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "adr",
+   "stance": "adopt",
+   "claim": "ADRs keep the reasons behind each choice.",
+   "facts": [
+    "F-15"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-adr-1"
+    }
+   ],
+   "benefit": "Traceable decisions.",
+   "cost": "Little.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "atam",
+   "stance": "adopt_with_condition",
+   "claim": "Run a short ATAM-style session on latency and cost only.",
+   "facts": [
+    "F-11"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-atam-1"
+    }
+   ],
+   "benefit": "Explicit trade-offs on the two risks that matter.",
+   "cost": "Half a day.",
+   "condition": "Timebox to half a day.",
+   "rejected_alternative": null
+  }
+ ],
+ "platform_cost": [
+  {
+   "subject": "dpdp_india",
+   "stance": "adopt",
+   "claim": "Residency in India limits which regions and services can be used.",
+   "facts": [
+    "F-12"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-dpdp_india-1"
+    }
+   ],
+   "benefit": "Avoids a costly migration later.",
+   "cost": "Fewer region choices.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "azure_waf",
+   "stance": "adopt",
+   "claim": "Its cost-optimisation pillar keeps spend inside the monthly budget.",
+   "facts": [
+    "F-11",
+    "F-01"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-azure_waf-1"
+    }
+   ],
+   "benefit": "Budget alerts and right-sizing.",
+   "cost": "Ongoing reviews.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "twelve_factor",
+   "stance": "adopt",
+   "claim": "Stateless services scale down to cut idle cost.",
+   "facts": [
+    "F-13"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-twelve_factor-1"
+    }
+   ],
+   "benefit": "Pay for what runs.",
+   "cost": "Little.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "evolutionary_architecture",
+   "stance": "adopt",
+   "claim": "One deployable is the cheapest thing to run for 150 users.",
+   "facts": [
+    "F-09"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-evolutionary_architecture-1"
+    }
+   ],
+   "benefit": "Lowest hosting and ops cost.",
+   "cost": "Later extraction.",
+   "condition": null,
+   "rejected_alternative": {
+    "name": "microservices_first",
+    "reason": "A team of five cannot run many services."
+   }
+  },
+  {
+   "subject": "event_driven",
+   "stance": "adopt_with_condition",
+   "claim": "A managed queue is cheap; a self-run broker is not.",
+   "facts": [
+    "F-10"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-event_driven-1"
+    }
+   ],
+   "benefit": "Low cost at this volume.",
+   "cost": "Lock-in to the queue service.",
+   "condition": "Use a managed queue, not a self-hosted broker.",
+   "rejected_alternative": null
+  },
+  {
+   "subject": "c4_model",
+   "stance": "adopt",
+   "claim": "Diagrams cost almost nothing to keep.",
+   "facts": [
+    "F-02"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-c4_model-1"
+    }
+   ],
+   "benefit": "Cheap clarity.",
+   "cost": "Little.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "adr",
+   "stance": "adopt",
+   "claim": "ADRs record why each paid service was chosen.",
+   "facts": [
+    "F-11"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-adr-1"
+    }
+   ],
+   "benefit": "Cost decisions stay explainable.",
+   "cost": "Little.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "atam",
+   "stance": "reject",
+   "claim": "A workshop costs more than this pilot's risks justify.",
+   "facts": [
+    "F-15"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-atam-1"
+    }
+   ],
+   "benefit": "Saves time.",
+   "cost": "Fewer recorded trade-offs.",
+   "condition": null,
+   "rejected_alternative": null
+  }
+ ],
+ "critic": [
+  {
+   "subject": "dpdp_india",
+   "stance": "adopt_with_condition",
+   "claim": "The DPDP rules on AI-generated content are not settled yet.",
+   "facts": [
+    "F-05",
+    "F-07"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-dpdp_india-1"
+    }
+   ],
+   "benefit": "Compliance.",
+   "cost": "Rules may change.",
+   "condition": "Re-check when DPDP rules are notified.",
+   "rejected_alternative": null
+  },
+  {
+   "subject": "azure_waf",
+   "stance": "adopt",
+   "claim": "Following Azure's framework is safe, but it must not become a reason to skip simpler options.",
+   "facts": [
+    "F-01"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-azure_waf-1"
+    }
+   ],
+   "benefit": "Known baseline.",
+   "cost": "Can push heavy patterns.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "twelve_factor",
+   "stance": "adopt",
+   "claim": "Low risk for containerised services.",
+   "facts": [
+    "F-13"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-twelve_factor-1"
+    }
+   ],
+   "benefit": "Few downsides.",
+   "cost": "Little.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "evolutionary_architecture",
+   "stance": "adopt_with_condition",
+   "claim": "Video rendering may need to scale apart from the rest, which this fact sheet only assumes.",
+   "facts": [
+    "F-18"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-evolutionary_architecture-1"
+    }
+   ],
+   "benefit": "Keeps the option open.",
+   "cost": "A wrong assumption means early extraction.",
+   "condition": "Revisit if rendering queues back up in the pilot.",
+   "rejected_alternative": null
+  },
+  {
+   "subject": "event_driven",
+   "stance": "reject",
+   "claim": "Events everywhere add tracing cost the team does not need; a simple job queue is enough.",
+   "facts": [
+    "F-10",
+    "F-02"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-event_driven-1"
+    }
+   ],
+   "benefit": "Less complexity.",
+   "cost": "None, if only the queue is used.",
+   "condition": null,
+   "rejected_alternative": {
+    "name": "simple job queue",
+    "reason": "Covers the one long-running flow."
+   }
+  },
+  {
+   "subject": "c4_model",
+   "stance": "adopt",
+   "claim": "Low risk.",
+   "facts": [
+    "F-02"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-c4_model-1"
+    }
+   ],
+   "benefit": "Shared picture.",
+   "cost": "Little.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "adr",
+   "stance": "adopt",
+   "claim": "Low risk.",
+   "facts": [
+    "F-15"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-adr-1"
+    }
+   ],
+   "benefit": "Records reasons.",
+   "cost": "Little.",
+   "condition": null,
+   "rejected_alternative": null
+  },
+  {
+   "subject": "atam",
+   "stance": "adopt",
+   "claim": "Without a structured review, the AI quality risk goes unexamined.",
+   "facts": [
+    "F-07",
+    "F-99"
+   ],
+   "citations": [
+    {
+     "kind": "source",
+     "ref": "src-atam-1"
+    }
+   ],
+   "benefit": "Risks are made explicit.",
+   "cost": "Workshop time.",
+   "condition": null,
+   "rejected_alternative": null
+  }
+ ]
+}

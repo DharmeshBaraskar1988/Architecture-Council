@@ -1,0 +1,8 @@
+id: owasp_asvs
+name: OWASP ASVS
+kind: security_standard
+summary: Application Security Verification Standard; requirements for web application security testing.
+applies_when: {fact: public_web_app, equals: true}
+team_cost: medium
+sources:
+  - {url: "https://owasp.org/www-project-application-security-verification-standard/", title: "OWASP ASVS", kind: official_docs, verified: false}

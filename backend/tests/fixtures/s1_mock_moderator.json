@@ -1,0 +1,20 @@
+[
+  {"key": "cloud_provider", "value": "azure", "quote": "Kestrel Holdings already runs its applications on Azure.", "page": 2, "stated": true},
+  {"key": "team_size", "value": 5, "quote": "The engineering team has five developers and one designer.", "page": 2, "stated": true},
+  {"key": "users_in_india", "value": true, "quote": "All users are based in India.", "page": 2, "stated": true},
+  {"key": "users_in_eu", "value": false, "quote": "All users are based in India.", "page": 2, "stated": true},
+  {"key": "personal_data", "value": true, "quote": "the system stores each user's name and email", "page": 2, "stated": true},
+  {"key": "financial_documents", "value": true, "quote": "Kestrel Holdings publishes annual reports and quarterly results as long PDF documents.", "page": 1, "stated": true},
+  {"key": "ai_generated_content", "value": true, "quote": "BriefCast turns a financial document into an AI-generated summary", "page": 1, "stated": true},
+  {"key": "audio_or_video_output", "value": true, "quote": "an audio briefing and an avatar video", "page": 1, "stated": true},
+  {"key": "expected_daily_users", "value": 150, "quote": "used by about 150 analysts and investor relations staff each day", "page": 2, "stated": true},
+  {"key": "async_workflows", "value": true, "quote": "jobs run in the background and users are notified when they finish", "page": 3, "stated": true},
+  {"key": "monthly_budget", "value": "₹2,00,000", "quote": "The monthly cloud budget for the pilot is ₹2,00,000.", "page": 4, "stated": true},
+  {"key": "data_residency", "value": "India", "quote": "Documents and briefings must stay in India.", "page": 4, "stated": true},
+  {"key": "containerised", "value": true, "quote": "Services are packaged as containers", "page": 4, "stated": true},
+  {"key": "ci_cd", "value": true, "quote": "deployed through GitHub Actions", "page": 4, "stated": true},
+  {"key": "timeline", "value": "three months", "quote": "The pilot should be live within three months.", "page": 4, "stated": true},
+  {"key": "public_web_app", "value": false, "quote": "The tool is not exposed to the public internet", "page": 4, "stated": true},
+  {"key": "card_payments", "value": false, "stated": false, "note": "No payments are mentioned; assumed none."},
+  {"key": "independent_scaling_need", "value": false, "stated": false, "note": "No part is said to need separate scaling; assumed not."}
+]

@@ -1,0 +1,8 @@
+# Expected Stage 0 results for S2 (ShopSphere). Used by evals.
+fact_sheet:
+  must_confirm: [card_payments, personal_data, users_in_india, users_in_eu, team_size, public_web_app, containerised, ci_cd]
+  values: {card_payments: true, users_in_india: true, users_in_eu: false, team_size: 6, expected_daily_users: 50000}
+shortlist:
+  binding: [pci_dss, dpdp_india]
+  not_applicable: [aws_waf, gcp_af, gdpr]
+decisions: {}

@@ -1,0 +1,1235 @@
+{
+  "samples": {
+    "s1": {
+      "runs": [
+        {
+          "run": "20261024-230519-15fc",
+          "quote_match": {
+            "ok": true,
+            "pct": 100,
+            "confirmed": 16,
+            "stated": 16
+          },
+          "fact_expectations": {
+            "ok": true,
+            "misses": []
+          },
+          "binding_found": {
+            "ok": true,
+            "missing": []
+          },
+          "shortlist": {
+            "ok": true,
+            "differences": []
+          },
+          "finished": {
+            "ok": true
+          },
+          "every_framework_challenged": {
+            "ok": true,
+            "unchallenged": []
+          },
+          "verdict_on_every_citation": {
+            "ok": true,
+            "citations": 119,
+            "missing": 0
+          },
+          "v_e_a_outcome": {
+            "ok": true,
+            "missing": []
+          },
+          "no_unverified_weighted": {
+            "ok": true,
+            "bad": [],
+            "verdicts": {
+              "verified": 217,
+              "partly_supports": 4,
+              "unverified": 78,
+              "contradicted": 0
+            }
+          },
+          "statement_and_adr": {
+            "ok": true
+          },
+          "signed_record": {
+            "ok": true,
+            "decision": "approve",
+            "rows": 11
+          },
+          "build_delivery_swap": {
+            "ok": true,
+            "missing_subjects": [],
+            "poc_without_swap": []
+          },
+          "time_and_cost": {
+            "ok": true,
+            "seconds": 238,
+            "cost_usd": 0.326,
+            "calls": 40,
+            "failed_calls": 10
+          },
+          "outcomes": {
+            "adr": {
+              "outcome": "reviewer_decides",
+              "agreement": 55.0,
+              "binding": false
+            },
+            "atam": {
+              "outcome": "rejected",
+              "agreement": 25.0,
+              "binding": false
+            },
+            "azure_waf": {
+              "outcome": "selected",
+              "agreement": 77.8,
+              "binding": false
+            },
+            "c4_model": {
+              "outcome": "reviewer_decides",
+              "agreement": 55.5,
+              "binding": false
+            },
+            "dpdp_india": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "event_driven": {
+              "outcome": "reviewer_decides",
+              "agreement": 52.9,
+              "binding": false
+            },
+            "evolutionary_architecture": {
+              "outcome": "selected",
+              "agreement": 88.0,
+              "binding": false
+            },
+            "microservices_first": {
+              "outcome": "parked",
+              "agreement": null,
+              "binding": false
+            },
+            "twelve_factor": {
+              "outcome": "selected_with_condition",
+              "agreement": 72.1,
+              "binding": false
+            },
+            "build_approach": {
+              "outcome": "reviewer_decides",
+              "agreement": 40.0,
+              "binding": false
+            },
+            "delivery_path": {
+              "outcome": "selected_with_condition",
+              "agreement": 70.0,
+              "binding": false
+            }
+          }
+        },
+        {
+          "run": "20261024-230917-0f76",
+          "quote_match": {
+            "ok": true,
+            "pct": 100,
+            "confirmed": 16,
+            "stated": 16
+          },
+          "fact_expectations": {
+            "ok": true,
+            "misses": []
+          },
+          "binding_found": {
+            "ok": true,
+            "missing": []
+          },
+          "shortlist": {
+            "ok": true,
+            "differences": []
+          },
+          "finished": {
+            "ok": true
+          },
+          "every_framework_challenged": {
+            "ok": true,
+            "unchallenged": []
+          },
+          "verdict_on_every_citation": {
+            "ok": true,
+            "citations": 124,
+            "missing": 0
+          },
+          "v_e_a_outcome": {
+            "ok": true,
+            "missing": []
+          },
+          "no_unverified_weighted": {
+            "ok": true,
+            "bad": [],
+            "verdicts": {
+              "verified": 218,
+              "partly_supports": 2,
+              "unverified": 78,
+              "contradicted": 1
+            }
+          },
+          "statement_and_adr": {
+            "ok": true
+          },
+          "signed_record": {
+            "ok": true,
+            "decision": "approve",
+            "rows": 11
+          },
+          "build_delivery_swap": {
+            "ok": true,
+            "missing_subjects": [],
+            "poc_without_swap": []
+          },
+          "time_and_cost": {
+            "ok": true,
+            "seconds": 271,
+            "cost_usd": 0.248,
+            "calls": 40,
+            "failed_calls": 10
+          },
+          "outcomes": {
+            "adr": {
+              "outcome": "selected",
+              "agreement": 84.4,
+              "binding": false
+            },
+            "atam": {
+              "outcome": "reviewer_decides",
+              "agreement": 58.0,
+              "binding": false
+            },
+            "azure_waf": {
+              "outcome": "reviewer_decides",
+              "agreement": 54.0,
+              "binding": false
+            },
+            "c4_model": {
+              "outcome": "reviewer_decides",
+              "agreement": 54.6,
+              "binding": false
+            },
+            "dpdp_india": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "event_driven": {
+              "outcome": "reviewer_decides",
+              "agreement": 50.0,
+              "binding": false
+            },
+            "evolutionary_architecture": {
+              "outcome": "selected",
+              "agreement": 80.0,
+              "binding": false
+            },
+            "microservices_first": {
+              "outcome": "parked",
+              "agreement": null,
+              "binding": false
+            },
+            "twelve_factor": {
+              "outcome": "selected",
+              "agreement": 75.0,
+              "binding": false
+            },
+            "build_approach": {
+              "outcome": "selected_with_condition",
+              "agreement": 73.3,
+              "binding": false
+            },
+            "delivery_path": {
+              "outcome": "reviewer_decides",
+              "agreement": 50.0,
+              "binding": false
+            }
+          }
+        },
+        {
+          "run": "20261024-231348-c549",
+          "quote_match": {
+            "ok": true,
+            "pct": 100,
+            "confirmed": 16,
+            "stated": 16
+          },
+          "fact_expectations": {
+            "ok": true,
+            "misses": []
+          },
+          "binding_found": {
+            "ok": true,
+            "missing": []
+          },
+          "shortlist": {
+            "ok": true,
+            "differences": []
+          },
+          "finished": {
+            "ok": true
+          },
+          "every_framework_challenged": {
+            "ok": true,
+            "unchallenged": []
+          },
+          "verdict_on_every_citation": {
+            "ok": true,
+            "citations": 118,
+            "missing": 0
+          },
+          "v_e_a_outcome": {
+            "ok": true,
+            "missing": []
+          },
+          "no_unverified_weighted": {
+            "ok": true,
+            "bad": [],
+            "verdicts": {
+              "verified": 213,
+              "partly_supports": 5,
+              "unverified": 78,
+              "contradicted": 2
+            }
+          },
+          "statement_and_adr": {
+            "ok": true
+          },
+          "signed_record": {
+            "ok": true,
+            "decision": "approve",
+            "rows": 11
+          },
+          "build_delivery_swap": {
+            "ok": true,
+            "missing_subjects": [],
+            "poc_without_swap": []
+          },
+          "time_and_cost": {
+            "ok": false,
+            "seconds": 315,
+            "cost_usd": 0.254,
+            "calls": 43,
+            "failed_calls": 12
+          },
+          "outcomes": {
+            "adr": {
+              "outcome": "reviewer_decides",
+              "agreement": 47.1,
+              "binding": false
+            },
+            "atam": {
+              "outcome": "rejected",
+              "agreement": 35.1,
+              "binding": false
+            },
+            "azure_waf": {
+              "outcome": "reviewer_decides",
+              "agreement": 74.5,
+              "binding": false
+            },
+            "c4_model": {
+              "outcome": "reviewer_decides",
+              "agreement": 51.3,
+              "binding": false
+            },
+            "dpdp_india": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "event_driven": {
+              "outcome": "reviewer_decides",
+              "agreement": 47.8,
+              "binding": false
+            },
+            "evolutionary_architecture": {
+              "outcome": "selected",
+              "agreement": 85.0,
+              "binding": false
+            },
+            "microservices_first": {
+              "outcome": "parked",
+              "agreement": null,
+              "binding": false
+            },
+            "twelve_factor": {
+              "outcome": "selected_with_condition",
+              "agreement": 68.5,
+              "binding": false
+            },
+            "build_approach": {
+              "outcome": "selected_with_condition",
+              "agreement": 70.0,
+              "binding": false
+            },
+            "delivery_path": {
+              "outcome": "reviewer_decides",
+              "agreement": 50.0,
+              "binding": false
+            }
+          }
+        }
+      ],
+      "stability": {
+        "ok": false,
+        "clear_subjects": [
+          "adr",
+          "atam",
+          "azure_waf",
+          "dpdp_india",
+          "evolutionary_architecture",
+          "twelve_factor"
+        ],
+        "unstable": [
+          "adr: reviewer_decides 55.0 / selected 84.4 / reviewer_decides 47.1",
+          "atam: rejected 25.0 / reviewer_decides 58.0 / rejected 35.1",
+          "azure_waf: selected 77.8 / reviewer_decides 54.0 / reviewer_decides 74.5",
+          "twelve_factor: selected_with_condition 72.1 / selected 75.0 / selected_with_condition 68.5"
+        ]
+      }
+    },
+    "s2": {
+      "runs": [
+        {
+          "run": "20261024-223717-6949",
+          "quote_match": {
+            "ok": true,
+            "pct": 100,
+            "confirmed": 11,
+            "stated": 11
+          },
+          "fact_expectations": {
+            "ok": true,
+            "misses": []
+          },
+          "binding_found": {
+            "ok": true,
+            "missing": []
+          },
+          "shortlist": {
+            "ok": true,
+            "differences": []
+          },
+          "finished": {
+            "ok": true
+          },
+          "every_framework_challenged": {
+            "ok": true,
+            "unchallenged": []
+          },
+          "verdict_on_every_citation": {
+            "ok": true,
+            "citations": 112,
+            "missing": 0
+          },
+          "v_e_a_outcome": {
+            "ok": true,
+            "missing": []
+          },
+          "no_unverified_weighted": {
+            "ok": true,
+            "bad": [],
+            "verdicts": {
+              "verified": 216,
+              "partly_supports": 8,
+              "unverified": 57,
+              "contradicted": 3
+            }
+          },
+          "statement_and_adr": {
+            "ok": true
+          },
+          "signed_record": {
+            "ok": true,
+            "decision": "approve",
+            "rows": 11
+          },
+          "build_delivery_swap": {
+            "ok": true,
+            "missing_subjects": [],
+            "poc_without_swap": []
+          },
+          "time_and_cost": {
+            "ok": true,
+            "seconds": 279,
+            "cost_usd": 0.299,
+            "calls": 40,
+            "failed_calls": 10
+          },
+          "outcomes": {
+            "adr": {
+              "outcome": "selected_with_condition",
+              "agreement": 60.4,
+              "binding": false
+            },
+            "atam": {
+              "outcome": "rejected",
+              "agreement": 35.5,
+              "binding": false
+            },
+            "azure_waf": {
+              "outcome": "reviewer_decides",
+              "agreement": 46.0,
+              "binding": false
+            },
+            "c4_model": {
+              "outcome": "reviewer_decides",
+              "agreement": 52.9,
+              "binding": false
+            },
+            "dpdp_india": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "evolutionary_architecture": {
+              "outcome": "selected",
+              "agreement": 86.7,
+              "binding": false
+            },
+            "owasp_asvs": {
+              "outcome": "reviewer_decides",
+              "agreement": 73.3,
+              "binding": false
+            },
+            "pci_dss": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "twelve_factor": {
+              "outcome": "reviewer_decides",
+              "agreement": 53.3,
+              "binding": false
+            },
+            "build_approach": {
+              "outcome": "selected",
+              "agreement": 80.0,
+              "binding": false
+            },
+            "delivery_path": {
+              "outcome": "selected_with_condition",
+              "agreement": 70.0,
+              "binding": false
+            }
+          }
+        },
+        {
+          "run": "20261024-224200-3598",
+          "quote_match": {
+            "ok": true,
+            "pct": 100,
+            "confirmed": 11,
+            "stated": 11
+          },
+          "fact_expectations": {
+            "ok": true,
+            "misses": []
+          },
+          "binding_found": {
+            "ok": true,
+            "missing": []
+          },
+          "shortlist": {
+            "ok": true,
+            "differences": []
+          },
+          "finished": {
+            "ok": true
+          },
+          "every_framework_challenged": {
+            "ok": true,
+            "unchallenged": []
+          },
+          "verdict_on_every_citation": {
+            "ok": true,
+            "citations": 110,
+            "missing": 0
+          },
+          "v_e_a_outcome": {
+            "ok": true,
+            "missing": []
+          },
+          "no_unverified_weighted": {
+            "ok": true,
+            "bad": [],
+            "verdicts": {
+              "verified": 184,
+              "partly_supports": 1,
+              "unverified": 76,
+              "contradicted": 3
+            }
+          },
+          "statement_and_adr": {
+            "ok": true
+          },
+          "signed_record": {
+            "ok": true,
+            "decision": "approve",
+            "rows": 11
+          },
+          "build_delivery_swap": {
+            "ok": true,
+            "missing_subjects": [],
+            "poc_without_swap": []
+          },
+          "time_and_cost": {
+            "ok": true,
+            "seconds": 233,
+            "cost_usd": 0.224,
+            "calls": 40,
+            "failed_calls": 10
+          },
+          "outcomes": {
+            "adr": {
+              "outcome": "reviewer_decides",
+              "agreement": 73.5,
+              "binding": false
+            },
+            "atam": {
+              "outcome": "rejected",
+              "agreement": 28.0,
+              "binding": false
+            },
+            "azure_waf": {
+              "outcome": "reviewer_decides",
+              "agreement": 77.5,
+              "binding": false
+            },
+            "c4_model": {
+              "outcome": "selected",
+              "agreement": 77.5,
+              "binding": false
+            },
+            "dpdp_india": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "evolutionary_architecture": {
+              "outcome": "reviewer_decides",
+              "agreement": 60.0,
+              "binding": false
+            },
+            "owasp_asvs": {
+              "outcome": "selected_with_condition",
+              "agreement": 65.0,
+              "binding": false
+            },
+            "pci_dss": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "twelve_factor": {
+              "outcome": "selected_with_condition",
+              "agreement": 62.5,
+              "binding": false
+            },
+            "build_approach": {
+              "outcome": "selected",
+              "agreement": 84.0,
+              "binding": false
+            },
+            "delivery_path": {
+              "outcome": "reviewer_decides",
+              "agreement": 50.0,
+              "binding": false
+            }
+          }
+        },
+        {
+          "run": "20261024-224554-4450",
+          "quote_match": {
+            "ok": true,
+            "pct": 100,
+            "confirmed": 11,
+            "stated": 11
+          },
+          "fact_expectations": {
+            "ok": true,
+            "misses": []
+          },
+          "binding_found": {
+            "ok": true,
+            "missing": []
+          },
+          "shortlist": {
+            "ok": true,
+            "differences": []
+          },
+          "finished": {
+            "ok": true
+          },
+          "every_framework_challenged": {
+            "ok": true,
+            "unchallenged": []
+          },
+          "verdict_on_every_citation": {
+            "ok": true,
+            "citations": 100,
+            "missing": 0
+          },
+          "v_e_a_outcome": {
+            "ok": true,
+            "missing": []
+          },
+          "no_unverified_weighted": {
+            "ok": true,
+            "bad": [],
+            "verdicts": {
+              "verified": 173,
+              "partly_supports": 1,
+              "unverified": 60,
+              "contradicted": 0
+            }
+          },
+          "statement_and_adr": {
+            "ok": true
+          },
+          "signed_record": {
+            "ok": true,
+            "decision": "approve",
+            "rows": 11
+          },
+          "build_delivery_swap": {
+            "ok": true,
+            "missing_subjects": [],
+            "poc_without_swap": []
+          },
+          "time_and_cost": {
+            "ok": true,
+            "seconds": 229,
+            "cost_usd": 0.211,
+            "calls": 39,
+            "failed_calls": 11
+          },
+          "outcomes": {
+            "adr": {
+              "outcome": "selected",
+              "agreement": 86.7,
+              "binding": false
+            },
+            "atam": {
+              "outcome": "reviewer_decides",
+              "agreement": 46.0,
+              "binding": false
+            },
+            "azure_waf": {
+              "outcome": "reviewer_decides",
+              "agreement": 70.8,
+              "binding": false
+            },
+            "c4_model": {
+              "outcome": "selected",
+              "agreement": 85.3,
+              "binding": false
+            },
+            "dpdp_india": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "evolutionary_architecture": {
+              "outcome": "selected_with_condition",
+              "agreement": 60.0,
+              "binding": false
+            },
+            "owasp_asvs": {
+              "outcome": "selected_with_condition",
+              "agreement": 63.3,
+              "binding": false
+            },
+            "pci_dss": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "twelve_factor": {
+              "outcome": "reviewer_decides",
+              "agreement": 47.8,
+              "binding": false
+            },
+            "build_approach": {
+              "outcome": "selected_with_condition",
+              "agreement": 73.3,
+              "binding": false
+            },
+            "delivery_path": {
+              "outcome": "reviewer_decides",
+              "agreement": 43.3,
+              "binding": false
+            }
+          }
+        }
+      ],
+      "stability": {
+        "ok": false,
+        "clear_subjects": [
+          "adr",
+          "atam",
+          "azure_waf",
+          "build_approach",
+          "c4_model",
+          "dpdp_india",
+          "evolutionary_architecture",
+          "pci_dss"
+        ],
+        "unstable": [
+          "adr: selected_with_condition 60.4 / reviewer_decides 73.5 / selected 86.7",
+          "atam: rejected 35.5 / rejected 28.0 / reviewer_decides 46.0",
+          "build_approach: selected 80.0 / selected 84.0 / selected_with_condition 73.3",
+          "c4_model: reviewer_decides 52.9 / selected 77.5 / selected 85.3",
+          "evolutionary_architecture: selected 86.7 / reviewer_decides 60.0 / selected_with_condition 60.0"
+        ]
+      }
+    },
+    "s3": {
+      "runs": [
+        {
+          "run": "20261024-224943-e6da",
+          "quote_match": {
+            "ok": true,
+            "pct": 100,
+            "confirmed": 18,
+            "stated": 18
+          },
+          "fact_expectations": {
+            "ok": true,
+            "misses": []
+          },
+          "binding_found": {
+            "ok": true,
+            "missing": []
+          },
+          "shortlist": {
+            "ok": true,
+            "differences": []
+          },
+          "finished": {
+            "ok": true
+          },
+          "every_framework_challenged": {
+            "ok": true,
+            "unchallenged": []
+          },
+          "verdict_on_every_citation": {
+            "ok": true,
+            "citations": 158,
+            "missing": 0
+          },
+          "v_e_a_outcome": {
+            "ok": true,
+            "missing": []
+          },
+          "no_unverified_weighted": {
+            "ok": true,
+            "bad": [],
+            "verdicts": {
+              "verified": 280,
+              "partly_supports": 2,
+              "unverified": 87,
+              "contradicted": 4
+            }
+          },
+          "statement_and_adr": {
+            "ok": true
+          },
+          "signed_record": {
+            "ok": true,
+            "decision": "approve",
+            "rows": 13
+          },
+          "build_delivery_swap": {
+            "ok": true,
+            "missing_subjects": [],
+            "poc_without_swap": []
+          },
+          "time_and_cost": {
+            "ok": true,
+            "seconds": 291,
+            "cost_usd": 0.374,
+            "calls": 41,
+            "failed_calls": 10
+          },
+          "outcomes": {
+            "adr": {
+              "outcome": "selected",
+              "agreement": 83.3,
+              "binding": false
+            },
+            "atam": {
+              "outcome": "rejected",
+              "agreement": 13.3,
+              "binding": false
+            },
+            "aws_waf": {
+              "outcome": "selected_with_condition",
+              "agreement": 60.8,
+              "binding": false
+            },
+            "c4_model": {
+              "outcome": "selected_with_condition",
+              "agreement": 69.5,
+              "binding": false
+            },
+            "dpdp_india": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "event_driven": {
+              "outcome": "reviewer_decides",
+              "agreement": 55.5,
+              "binding": false
+            },
+            "evolutionary_architecture": {
+              "outcome": "selected",
+              "agreement": 78.7,
+              "binding": false
+            },
+            "gdpr": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "owasp_asvs": {
+              "outcome": "reviewer_decides",
+              "agreement": 54.6,
+              "binding": false
+            },
+            "pci_dss": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "twelve_factor": {
+              "outcome": "reviewer_decides",
+              "agreement": 52.9,
+              "binding": false
+            },
+            "build_approach": {
+              "outcome": "selected",
+              "agreement": 80.0,
+              "binding": false
+            },
+            "delivery_path": {
+              "outcome": "rejected",
+              "agreement": 30.0,
+              "binding": false
+            }
+          }
+        },
+        {
+          "run": "20261024-225435-4100",
+          "quote_match": {
+            "ok": true,
+            "pct": 100,
+            "confirmed": 17,
+            "stated": 17
+          },
+          "fact_expectations": {
+            "ok": true,
+            "misses": []
+          },
+          "binding_found": {
+            "ok": true,
+            "missing": []
+          },
+          "shortlist": {
+            "ok": true,
+            "differences": []
+          },
+          "finished": {
+            "ok": true
+          },
+          "every_framework_challenged": {
+            "ok": true,
+            "unchallenged": []
+          },
+          "verdict_on_every_citation": {
+            "ok": true,
+            "citations": 163,
+            "missing": 0
+          },
+          "v_e_a_outcome": {
+            "ok": true,
+            "missing": []
+          },
+          "no_unverified_weighted": {
+            "ok": true,
+            "bad": [],
+            "verdicts": {
+              "verified": 310,
+              "partly_supports": 5,
+              "unverified": 91,
+              "contradicted": 0
+            }
+          },
+          "statement_and_adr": {
+            "ok": true
+          },
+          "signed_record": {
+            "ok": true,
+            "decision": "approve",
+            "rows": 13
+          },
+          "build_delivery_swap": {
+            "ok": true,
+            "missing_subjects": [],
+            "poc_without_swap": []
+          },
+          "time_and_cost": {
+            "ok": true,
+            "seconds": 295,
+            "cost_usd": 0.397,
+            "calls": 42,
+            "failed_calls": 10
+          },
+          "outcomes": {
+            "adr": {
+              "outcome": "reviewer_decides",
+              "agreement": 56.7,
+              "binding": false
+            },
+            "atam": {
+              "outcome": "reviewer_decides",
+              "agreement": 43.2,
+              "binding": false
+            },
+            "aws_waf": {
+              "outcome": "reviewer_decides",
+              "agreement": 48.2,
+              "binding": false
+            },
+            "c4_model": {
+              "outcome": "reviewer_decides",
+              "agreement": 55.7,
+              "binding": false
+            },
+            "dpdp_india": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "event_driven": {
+              "outcome": "reviewer_decides",
+              "agreement": 52.2,
+              "binding": false
+            },
+            "evolutionary_architecture": {
+              "outcome": "reviewer_decides",
+              "agreement": 85.0,
+              "binding": false
+            },
+            "gdpr": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "owasp_asvs": {
+              "outcome": "reviewer_decides",
+              "agreement": 51.3,
+              "binding": false
+            },
+            "pci_dss": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "twelve_factor": {
+              "outcome": "reviewer_decides",
+              "agreement": 48.7,
+              "binding": false
+            },
+            "build_approach": {
+              "outcome": "reviewer_decides",
+              "agreement": 43.3,
+              "binding": false
+            },
+            "delivery_path": {
+              "outcome": "selected_with_condition",
+              "agreement": 70.0,
+              "binding": false
+            }
+          }
+        },
+        {
+          "run": "20261024-225930-6f57",
+          "quote_match": {
+            "ok": true,
+            "pct": 100,
+            "confirmed": 17,
+            "stated": 17
+          },
+          "fact_expectations": {
+            "ok": true,
+            "misses": []
+          },
+          "binding_found": {
+            "ok": true,
+            "missing": []
+          },
+          "shortlist": {
+            "ok": true,
+            "differences": []
+          },
+          "finished": {
+            "ok": true
+          },
+          "every_framework_challenged": {
+            "ok": true,
+            "unchallenged": []
+          },
+          "verdict_on_every_citation": {
+            "ok": true,
+            "citations": 155,
+            "missing": 0
+          },
+          "v_e_a_outcome": {
+            "ok": true,
+            "missing": []
+          },
+          "no_unverified_weighted": {
+            "ok": true,
+            "bad": [],
+            "verdicts": {
+              "verified": 258,
+              "partly_supports": 7,
+              "unverified": 94,
+              "contradicted": 0
+            }
+          },
+          "statement_and_adr": {
+            "ok": true
+          },
+          "signed_record": {
+            "ok": true,
+            "decision": "approve",
+            "rows": 13
+          },
+          "build_delivery_swap": {
+            "ok": true,
+            "missing_subjects": [],
+            "poc_without_swap": []
+          },
+          "time_and_cost": {
+            "ok": true,
+            "seconds": 281,
+            "cost_usd": 0.275,
+            "calls": 41,
+            "failed_calls": 10
+          },
+          "outcomes": {
+            "adr": {
+              "outcome": "selected_with_condition",
+              "agreement": 64.9,
+              "binding": false
+            },
+            "atam": {
+              "outcome": "selected_with_condition",
+              "agreement": 60.0,
+              "binding": false
+            },
+            "aws_waf": {
+              "outcome": "selected_with_condition",
+              "agreement": 67.0,
+              "binding": false
+            },
+            "c4_model": {
+              "outcome": "selected_with_condition",
+              "agreement": 61.3,
+              "binding": false
+            },
+            "dpdp_india": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "event_driven": {
+              "outcome": "reviewer_decides",
+              "agreement": 51.2,
+              "binding": false
+            },
+            "evolutionary_architecture": {
+              "outcome": "reviewer_decides",
+              "agreement": 81.8,
+              "binding": false
+            },
+            "gdpr": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "owasp_asvs": {
+              "outcome": "reviewer_decides",
+              "agreement": 50.0,
+              "binding": false
+            },
+            "pci_dss": {
+              "outcome": "selected",
+              "agreement": 100.0,
+              "binding": true
+            },
+            "twelve_factor": {
+              "outcome": "reviewer_decides",
+              "agreement": 58.6,
+              "binding": false
+            },
+            "build_approach": {
+              "outcome": "selected_with_condition",
+              "agreement": 73.3,
+              "binding": false
+            },
+            "delivery_path": {
+              "outcome": "selected_with_condition",
+              "agreement": 67.0,
+              "binding": false
+            }
+          }
+        }
+      ],
+      "stability": {
+        "ok": false,
+        "clear_subjects": [
+          "adr",
+          "atam",
+          "build_approach",
+          "delivery_path",
+          "dpdp_india",
+          "evolutionary_architecture",
+          "gdpr",
+          "pci_dss"
+        ],
+        "unstable": [
+          "adr: selected 83.3 / reviewer_decides 56.7 / selected_with_condition 64.9",
+          "atam: rejected 13.3 / reviewer_decides 43.2 / selected_with_condition 60.0",
+          "build_approach: selected 80.0 / reviewer_decides 43.3 / selected_with_condition 73.3",
+          "delivery_path: rejected 30.0 / selected_with_condition 70.0 / selected_with_condition 67.0",
+          "evolutionary_architecture: selected 78.7 / reviewer_decides 85.0 / reviewer_decides 81.8"
+        ]
+      }
+    }
+  },
+  "gate": {
+    "ok": false,
+    "candidates": 55,
+    "counts": {
+      "production_eligible": 36,
+      "no_native_service": 2,
+      "poc_only": 17
+    },
+    "not_final": [],
+    "no_evidence_links": [
+      "openai_moderation",
+      "openai_embeddings",
+      "openai_api"
+    ],
+    "wrongly_eligible": []
+  }
+}

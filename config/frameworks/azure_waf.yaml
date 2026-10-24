@@ -1,0 +1,9 @@
+id: azure_waf
+name: Azure Well-Architected Framework
+kind: cloud_framework
+summary: Five pillars (reliability, security, cost optimization, operational excellence, performance efficiency) for Azure workloads.
+applies_when: {fact: cloud_provider, equals: azure}
+not_applicable_when: {fact: cloud_provider, in: [aws, gcp]}
+team_cost: low
+sources:
+  - {url: "https://learn.microsoft.com/en-us/azure/well-architected/", title: "Azure Well-Architected Framework", kind: official_docs, verified: false}

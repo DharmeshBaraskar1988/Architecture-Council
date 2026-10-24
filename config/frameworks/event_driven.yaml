@@ -1,0 +1,8 @@
+id: event_driven
+name: Event-driven architecture
+kind: pattern
+summary: Components communicate through events and queues; suits long-running and asynchronous work.
+applies_when: {fact: async_workflows, equals: true}
+team_cost: medium
+sources:
+  - {url: "https://martinfowler.com/articles/201701-event-driven.html", title: "What do you mean by Event-Driven?", kind: official_docs, verified: false}

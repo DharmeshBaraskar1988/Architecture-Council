@@ -1,0 +1,72 @@
+# Agents of the council. Models are LiteLLM model names; change them here, not in code.
+# Rule: a proposer and its challenger never run on the same provider.
+agents:
+  moderator:
+    name: Mira
+    role: Moderator (chair)
+    specialty: "Reading the product document into checked facts, chairing the rounds, proposing compromises, and writing the position statement, without taking sides."
+    works_on: "R0 fact sheet, R7 compromise and position statement"
+    votes: false
+    model: anthropic/claude-haiku-5-5
+    fallback_model: openai/gpt-4.1-mini
+    duties: [build_fact_sheet, assign_challengers, enforce_caps, call_votes, write_statement]
+    never: [take_sides, vote]
+  strategist:
+    name: Tara
+    role: Strategist
+    specialty: "Architecture strategy: which frameworks to follow, how to build (managed, assembled, self-hosted or reused) and how to deliver from POC to production."
+    works_on: "R1 shortlist, R2 proposals incl. build approach and delivery path, R4 challenges, R5 rebuttals, R6 vote"
+    votes: true
+    model: anthropic/claude-sonnet-5-5
+    fallback_model: openai/gpt-4.1
+    leads: [strategy]
+    focus: "Which frameworks to follow, the build approach and the delivery path, each tied to PRD facts."
+    duties: [shortlist_frameworks, propose_build_approach, propose_delivery_path, write_argument_cards, draft_statement]
+    never: [argue_without_fact, hide_rejected_option]
+  architect:
+    name: Ada
+    role: Architect
+    specialty: "System design: structure, data flows, scaling and whether each framework fits this system and team."
+    works_on: "R2 proposals, R4 challenges, R5 rebuttals, R6 vote"
+    votes: true
+    model: openai/gpt-4.1
+    fallback_model: gemini/gemini-3.7-flash
+    duties: [challenge_design_fit, vote]
+    focus: "Design fit: does each framework suit the system's structure, data flows, scale and team?"
+    never: [propose_without_requirement]
+  platform_cost:
+    name: Kabir
+    role: Platform & Cost
+    specialty: "Cloud platforms and cost: running cost, operating effort, vendor lock-in, and reusing what the company already owns."
+    works_on: "R2 proposals, R4 challenges, R5 rebuttals, R6 vote"
+    votes: true
+    model: gemini/gemini-3.7-flash
+    # Gemini free tier: 20 requests a day per model, so a second Gemini model before OpenAI
+    fallback_model: [gemini/gemini-3.8-flash, openai/gpt-4.1-mini]
+    duties: [compare_providers, challenge_cost_and_lock_in, vote]
+    focus: "Running cost, operating effort, lock-in, and reuse of what the company already owns."
+    never: [pick_provider_by_habit, quote_uncomputed_price]
+  critic:
+    name: Rex
+    role: Critic
+    specialty: "Risk and weak evidence: finding where a choice could be wrong, and arguing the opposite whenever everyone agrees."
+    works_on: "R2 proposals, R4 challenges and counter-cases, R5 rebuttals, R6 vote"
+    votes: true
+    # Ollama cloud free plan (NVIDIA family, used by no other voter). Groq's free tier caps output at
+    # 1,000 tokens a minute, too little for R4/R5 answers, so it is only the second choice.
+    model: ollama_chat/nemotron-3-super
+    fallback_model: [groq/qwen/qwen3.8-27b, openai/gpt-4.1-mini]
+    duties: [challenge_every_proposal, counter_case_when_unanimous, own_gray_area]
+    focus: "Risks, weak evidence and assumptions: where each framework could be the wrong choice."
+    never: [stay_silent_on_unanimous]
+  fact_checker:
+    name: Vera
+    role: Fact checker
+    specialty: "Evidence: checking that every cited fact and source really supports the claim made with it, without giving an opinion on the decision."
+    works_on: "R3 fact check, and the checks on every challenge (R4) and rebuttal (R5)"
+    votes: false
+    model: ollama_chat/gemma4:31b   # only the "does this evidence support the claim" judge; free on Ollama cloud
+    fallback_model: ollama_chat/nemotron-3-super   # same verdicts on S1, about 2.5x slower
+    duties: [resolve_citations, match_quotes, judge_support, run_production_gate, assign_weights]
+    never: [give_opinion_on_decision]
+# Model names are starting points: check each provider's current model list before the first run.

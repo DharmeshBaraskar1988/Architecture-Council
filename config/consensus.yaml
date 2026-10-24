@@ -1,0 +1,12 @@
+# Agreement A = vote_weight * V + evidence_weight * E  (both 0..1, shown as %)
+vote_weight: 0.6
+evidence_weight: 0.4
+stance_values: {adopt: 1.0, adopt_with_condition: 0.5, reject: 0.0}
+thresholds:            # lower bounds, in percent
+  selected: 75
+  selected_with_condition: 60
+  reviewer_decides: 40 # below this: rejected
+caps:
+  challenge_rebuttal_cycles: 2
+  revotes: 1
+  turns_per_stage: 40

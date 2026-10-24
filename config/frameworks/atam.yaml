@@ -1,0 +1,8 @@
+id: atam
+name: ATAM trade-off analysis
+kind: method
+summary: Architecture Tradeoff Analysis Method from the SEI; evaluates options against quality attributes.
+applies_when: {always: true}
+team_cost: medium
+sources:
+  - {url: "https://www.sei.cmu.edu/library/architecture-tradeoff-analysis-method-collection/", title: "ATAM collection (SEI)", kind: official_docs, verified: false}

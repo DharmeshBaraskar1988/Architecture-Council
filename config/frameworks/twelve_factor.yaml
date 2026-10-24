@@ -1,0 +1,8 @@
+id: twelve_factor
+name: Twelve-Factor App
+kind: practice
+summary: Practices for portable, scalable services (config in environment, stateless processes, backing services as attached resources).
+applies_when: {any: [{fact: containerised, equals: true}, {fact: ci_cd, equals: true}]}
+team_cost: low
+sources:
+  - {url: "https://12factor.net/", title: "The Twelve-Factor App", kind: official_docs, verified: false}

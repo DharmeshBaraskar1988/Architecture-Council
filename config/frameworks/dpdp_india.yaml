@@ -1,0 +1,9 @@
+id: dpdp_india
+name: India Digital Personal Data Protection Act
+kind: compliance
+summary: India's DPDP Act 2023 for digital personal data of people in India.
+applies_when: {all: [{fact: personal_data, equals: true}, {fact: users_in_india, equals: true}]}
+binding_when: {all: [{fact: personal_data, equals: true, status: confirmed}, {fact: users_in_india, equals: true, status: confirmed}]}
+team_cost: medium
+sources:
+  - {url: "https://www.meity.gov.in/data-protection-framework", title: "MeitY data protection framework", kind: official_docs, verified: false}

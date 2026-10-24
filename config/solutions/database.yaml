@@ -1,0 +1,70 @@
+capability: database
+description: Relational database for the product's records
+candidates:
+  - id: azure_postgresql_flexible
+    name: Azure Database for PostgreSQL flexible server
+    type: cloud_managed
+    provider: azure
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/overview
+      pricing: https://azure.microsoft.com/en-us/pricing/details/postgresql/flexible-server/
+      terms: https://learn.microsoft.com/en-us/azure/security/fundamentals/protection-customer-data
+      sla: https://www.microsoft.com/licensing/docs/view/Service-Level-Agreements-SLA-for-Online-Services
+  - id: amazon_rds_postgresql
+    name: Amazon RDS for PostgreSQL
+    type: cloud_managed
+    provider: aws
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html
+      pricing: https://aws.amazon.com/rds/postgresql/pricing/
+      terms: https://aws.amazon.com/service-terms/
+      sla: https://aws.amazon.com/rds/sla/
+  - id: google_cloud_sql_postgresql
+    name: Cloud SQL for PostgreSQL
+    type: cloud_managed
+    provider: gcp
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://cloud.google.com/sql/docs/postgres
+      pricing: https://cloud.google.com/sql/pricing
+      terms: https://cloud.google.com/terms/data-processing-addendum
+      sla: https://cloud.google.com/sql/sla
+  - id: neon
+    name: Neon (serverless PostgreSQL)
+    type: saas
+    provider: neon
+    licence: proprietary
+    lifecycle: ga
+    sla: contract
+    official_api: true
+    data_terms: ok
+    note: "Uptime SLA on higher plans."
+    pages:
+      official: https://neon.com/docs/introduction
+      pricing: https://neon.com/pricing
+      terms: https://neon.com/terms-of-service
+  - id: postgresql
+    name: PostgreSQL (self-hosted)
+    type: open_source
+    licence: PostgreSQL
+    lifecycle: ga
+    official_api: true
+    data_terms: ok
+    repo: postgres/postgres
+    pages:
+      official: https://www.postgresql.org/about/
+      terms: https://www.postgresql.org/about/licence/

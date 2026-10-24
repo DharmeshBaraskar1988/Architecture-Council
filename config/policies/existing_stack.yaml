@@ -1,0 +1,14 @@
+# Tools, cloud accounts and licences the company already has. Reuse is preferred (task 1.13).
+# Each item becomes an "owned" candidate in the solution gate for every capability it lists, so the
+# panel sees it as a reuse option next to the catalog candidates.
+# capabilities use the ids of config/solutions/*.yaml: document_extraction, llm, embeddings,
+# vector_search, text_to_speech, avatar_video, content_safety, queue, database, hosting.
+# Fill in; examples are commented out.
+owned: []
+#  - name: Azure subscription (enterprise agreement)
+#    provider: azure
+#    capabilities: [hosting, database, queue, llm, text_to_speech]
+#    note: "Enterprise agreement until 2028; Central India region enabled"
+#  - name: Microsoft 365 E5
+#    provider: microsoft
+#    capabilities: [document_extraction]

@@ -1,0 +1,82 @@
+capability: vector_search
+description: Store vectors and find the nearest ones, with filters
+candidates:
+  - id: azure_ai_search
+    name: Azure AI Search
+    type: cloud_managed
+    provider: azure
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search
+      pricing: https://azure.microsoft.com/en-us/pricing/details/search/
+      terms: https://learn.microsoft.com/en-us/azure/security/fundamentals/protection-customer-data
+      sla: https://www.microsoft.com/licensing/docs/view/Service-Level-Agreements-SLA-for-Online-Services
+  - id: amazon_opensearch
+    name: Amazon OpenSearch Service (vector engine)
+    type: cloud_managed
+    provider: aws
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html
+      pricing: https://aws.amazon.com/opensearch-service/pricing/
+      terms: https://aws.amazon.com/service-terms/
+      sla: https://aws.amazon.com/opensearch-service/sla/
+  - id: vertex_vector_search
+    name: Vertex AI Vector Search
+    type: cloud_managed
+    provider: gcp
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://cloud.google.com/vertex-ai/docs/vector-search/overview
+      pricing: https://cloud.google.com/vertex-ai/pricing
+      terms: https://cloud.google.com/terms/data-processing-addendum
+      sla: https://cloud.google.com/vertex-ai/sla
+  - id: pinecone
+    name: Pinecone
+    type: saas
+    provider: pinecone
+    licence: proprietary
+    lifecycle: ga
+    sla: contract
+    official_api: true
+    data_terms: ok
+    note: "Uptime SLA on the Enterprise plan."
+    pages:
+      official: https://docs.pinecone.io/guides/get-started/overview
+      pricing: https://www.pinecone.io/pricing/
+      terms: https://www.pinecone.io/legal/master-subscription-agreement/
+  - id: pgvector
+    name: pgvector (PostgreSQL extension)
+    type: open_source
+    licence: PostgreSQL
+    lifecycle: ga
+    official_api: true
+    data_terms: ok
+    repo: pgvector/pgvector
+    note: "Runs inside the PostgreSQL the product already needs; also offered on Azure, AWS and Google managed PostgreSQL."
+    pages:
+      official: https://github.com/pgvector/pgvector
+      terms: https://github.com/pgvector/pgvector/blob/master/LICENSE
+  - id: qdrant
+    name: Qdrant
+    type: open_source
+    licence: Apache-2.0
+    lifecycle: ga
+    official_api: true
+    data_terms: ok
+    repo: qdrant/qdrant
+    pages:
+      official: https://qdrant.tech/documentation/
+      terms: https://github.com/qdrant/qdrant/blob/master/LICENSE

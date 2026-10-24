@@ -1,0 +1,46 @@
+capability: avatar_video
+description: Generate a talking-avatar video from a script
+candidates:
+  - id: azure_tts_avatar
+    name: Azure text to speech avatar
+    type: cloud_managed
+    provider: azure
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    note: "Available in a limited set of Azure regions; custom avatars need an approved application."
+    pages:
+      official: https://learn.microsoft.com/en-us/azure/ai-services/speech-service/text-to-speech-avatar/what-is-text-to-speech-avatar
+      pricing: https://azure.microsoft.com/en-us/pricing/details/cognitive-services/speech-services/
+      terms: https://learn.microsoft.com/en-us/azure/ai-foundry/responsible-ai/speech-service/text-to-speech/data-privacy-security
+      sla: https://www.microsoft.com/licensing/docs/view/Service-Level-Agreements-SLA-for-Online-Services
+  - {id: aws_avatar, name: "No native avatar video service", type: none, provider: aws}
+  - {id: gcp_avatar, name: "No native avatar video service", type: none, provider: gcp}
+  - id: heygen_api
+    name: HeyGen API
+    type: saas
+    provider: heygen
+    licence: proprietary
+    lifecycle: ga
+    sla: contract
+    official_api: true
+    data_terms: review
+    note: "Uptime commitments only on enterprise plans; check how uploaded footage and voices may be used."
+    pages:
+      official: https://docs.heygen.com/
+      pricing: https://www.heygen.com/pricing
+      terms: https://www.heygen.com/terms
+  - id: musetalk
+    name: MuseTalk 1.5
+    type: open_source
+    licence: MIT
+    lifecycle: ga
+    official_api: true
+    data_terms: ok
+    repo: TMElyralab/MuseTalk
+    note: "Code is MIT; it also needs third-party weights (sd-vae under CreativeML OpenRAIL-M, Whisper, DWPose, face parsing), each with its own licence. Needs a GPU."
+    pages:
+      official: https://github.com/TMElyralab/MuseTalk
+      terms: https://github.com/TMElyralab/MuseTalk/blob/main/LICENSE

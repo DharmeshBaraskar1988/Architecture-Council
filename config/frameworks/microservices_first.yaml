@@ -1,0 +1,9 @@
+id: microservices_first
+name: Microservices from day one
+kind: pattern
+summary: Independently deployable services per business capability from the start.
+applies_when: {any: [{fact: independent_scaling_need, equals: true}, {fact: team_size, gte: 20}]}
+conflicts_with: [evolutionary_architecture]
+team_cost: high
+sources:
+  - {url: "https://martinfowler.com/articles/microservices.html", title: "Microservices", kind: official_docs, verified: false}

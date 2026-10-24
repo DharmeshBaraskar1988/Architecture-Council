@@ -1,0 +1,81 @@
+capability: document_extraction
+description: Extract text, tables and layout from PDF and Office documents, with page numbers
+candidates:
+  - id: azure_document_intelligence
+    name: Azure AI Document Intelligence
+    type: cloud_managed
+    provider: azure
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/overview
+      pricing: https://azure.microsoft.com/en-us/pricing/details/ai-document-intelligence/
+      terms: https://learn.microsoft.com/en-us/azure/ai-foundry/responsible-ai/document-intelligence/data-privacy-security
+      sla: https://www.microsoft.com/licensing/docs/view/Service-Level-Agreements-SLA-for-Online-Services
+  - id: amazon_textract
+    name: Amazon Textract
+    type: cloud_managed
+    provider: aws
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: review
+    note: "AWS may use content processed by Textract to improve the service unless the organisation sets an AI services opt-out policy."
+    pages:
+      official: https://docs.aws.amazon.com/textract/latest/dg/what-is.html
+      pricing: https://aws.amazon.com/textract/pricing/
+      terms: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html
+      sla: https://aws.amazon.com/textract/sla/
+  - id: google_document_ai
+    name: Google Document AI
+    type: cloud_managed
+    provider: gcp
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://cloud.google.com/document-ai/docs/overview
+      pricing: https://cloud.google.com/document-ai/pricing
+      terms: https://cloud.google.com/terms/data-processing-addendum
+      sla: https://cloud.google.com/document-ai/sla
+  - id: docling
+    name: Docling
+    type: open_source
+    licence: MIT
+    lifecycle: ga
+    official_api: true
+    data_terms: ok
+    repo: docling-project/docling
+    pages:
+      official: https://github.com/docling-project/docling
+      terms: https://github.com/docling-project/docling/blob/main/LICENSE
+  - id: pypdf
+    name: pypdf
+    type: open_source
+    licence: BSD-3-Clause
+    lifecycle: ga
+    official_api: true
+    data_terms: ok
+    repo: py-pdf/pypdf
+    note: "Text only: no layout or table structure."
+    pages:
+      official: https://github.com/py-pdf/pypdf
+      terms: https://github.com/py-pdf/pypdf/blob/main/LICENSE
+  - id: pymupdf
+    name: PyMuPDF
+    type: open_source
+    licence: AGPL-3.0-only
+    lifecycle: ga
+    official_api: true
+    data_terms: ok
+    repo: pymupdf/PyMuPDF
+    note: "AGPL, or a paid commercial licence from Artifex."
+    pages:
+      official: https://pymupdf.readthedocs.io/en/latest/
+      terms: https://github.com/pymupdf/PyMuPDF/blob/main/COPYING

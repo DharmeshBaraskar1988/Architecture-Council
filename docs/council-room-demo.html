@@ -1,0 +1,1227 @@
+<title>Architecture Council Room</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Schibsted+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: goals bar on top (build target + priority weights), then the session room: speakers + transcript left; fit-to-goals gauge, live architecture and ledger right; the document assembles below. Drafting-paper ground, cobalt ink. */
+:root{
+  --bg:#EDF0F3; --surface:#FFFFFF; --sunk:#F5F7F9; --ink:#16202E; --muted:#5B6676; --line:#D5DBE3; --grid:#E1E6EC;
+  --accent:#2647D9; --accent-soft:rgba(38,71,217,.10);
+  --c-mod:#5B6676; --c-arch:#2647D9; --c-cloud:#B8730C; --c-critic:#C2362B; --c-you:#1F8A5B;
+  --good:#1F8A5B; --warn:#B8730C; --bad:#C2362B; --on-accent:#FFFFFF;
+  --f-display:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+  --f-body:'Schibsted Grotesk',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F141C; --surface:#171E29; --sunk:#131922; --ink:#E6EAF0; --muted:#95A0B0; --line:#2A3341; --grid:#1B2330;
+  --accent:#7C93FF; --accent-soft:rgba(124,147,255,.14);
+  --c-mod:#95A0B0; --c-arch:#7C93FF; --c-cloud:#E4A84A; --c-critic:#EF6B5E; --c-you:#4CC38A;
+  --good:#4CC38A; --warn:#E4A84A; --bad:#EF6B5E; --on-accent:#0F141C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F141C; --surface:#171E29; --sunk:#131922; --ink:#E6EAF0; --muted:#95A0B0; --line:#2A3341; --grid:#1B2330;
+  --accent:#7C93FF; --accent-soft:rgba(124,147,255,.14);
+  --c-mod:#95A0B0; --c-arch:#7C93FF; --c-cloud:#E4A84A; --c-critic:#EF6B5E; --c-you:#4CC38A;
+  --good:#4CC38A; --warn:#E4A84A; --bad:#EF6B5E; --on-accent:#0F141C; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+.wrap{max-width:1320px;margin:0 auto;padding-block:20px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:16px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:26px;line-height:1.15} h2{font-size:17px}
+.eyebrow{font:500 11px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--f-mono)}
+button{font:600 14px/1 var(--f-body);cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px 14px;display:inline-flex;align-items:center;gap:8px}
+button:hover{border-color:var(--muted)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+button.good{border-color:var(--good);color:var(--good)} button.bad{border-color:var(--bad);color:var(--bad)}
+button:disabled{opacity:.45;cursor:not-allowed}
+select{font:500 13px var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
+.top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
+.title{display:grid;gap:8px;min-width:0}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:13px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 10px;font-size:12.5px;color:var(--ink)}
+.chip .tag{font:500 10px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--warn)}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.toggle{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;min-width:0}
+.panel-h{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line)}
+
+/* goals */
+.goals{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px 24px;padding:14px 16px;align-items:start}
+@media (max-width:800px){.goals{grid-template-columns:minmax(0,1fr)}}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:10px 14px;background:var(--surface);display:grid;gap:3px;text-align:left;justify-items:start}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button small{font:400 11.5px var(--f-body);color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 0 -3px 0 var(--accent)}
+.sliders{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px 16px}
+.sl{display:grid;gap:2px}
+.sl label{display:flex;justify-content:space-between;font-size:13px;font-weight:600}
+.sl label span{font:500 11px var(--f-mono);color:var(--muted)}
+.sl input{width:100%;accent-color:var(--accent)}
+.goalnote{font-size:12.5px;color:var(--muted);margin:6px 0 0;max-width:40ch}
+
+.agenda{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.step{flex:1 0 140px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;display:grid;gap:2px}
+.step .n{font:500 11px var(--f-mono);color:var(--muted)} .step .t{font-weight:600;font-size:13.5px} .step .s{font:500 11px var(--f-mono);color:var(--muted)}
+.step.current{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}
+.step.done .s{color:var(--good)} .step.wait .s{color:var(--warn)}
+
+.room{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:960px){.room{grid-template-columns:minmax(0,1fr)}}
+.col{display:grid;gap:16px;min-width:0}
+
+/* stage */
+.stage{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:16px}
+@media (max-width:560px){.stage{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.seat{display:grid;justify-items:center;gap:4px;text-align:center;padding:8px 4px;border-radius:10px;border:1px solid transparent;transition:background .2s,border-color .2s}
+.seat svg{width:64px;height:64px;max-width:100%}
+.seat .nm{font-weight:600;font-size:14px} .seat .rl{font-size:11.5px;color:var(--muted);line-height:1.3}
+.seat .badge{font:500 10px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);min-height:14px}
+.seat .pts{font:500 10.5px var(--f-mono);color:var(--muted)}
+.seat.speaking{background:var(--sunk);border-color:var(--line)} .seat.speaking .badge{color:var(--accent)}
+.seat.speaking .ring{stroke-width:4}
+.seat.speaking .mouth{animation:talk .28s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+.seat.star .badge{color:var(--warn)}
+@keyframes talk{from{transform:scaleY(.3)}to{transform:scaleY(1.4)}}
+.status{padding:0 16px 14px;font-size:13px;color:var(--muted);min-height:20px} .status b{color:var(--ink);font-weight:600}
+
+/* transcript */
+.transcript{height:420px;overflow-y:auto;padding:12px 16px;display:grid;gap:12px;align-content:start}
+.msg{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;animation:in .25s ease-out}
+@keyframes in{from{opacity:.2;transform:translateY(4px)}to{opacity:1;transform:none}}
+.dot{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font:600 12px var(--f-body)}
+.msg .who{font-size:13px;font-weight:600;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.msg .who span{font-weight:400;color:var(--muted);font-size:12px}
+.msg p{margin:2px 0 0;max-width:65ch}
+.msg.you p{color:var(--c-you)}
+.strongtag{font:500 10px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--warn);border:1px solid var(--warn);border-radius:999px;padding:2px 7px}
+.ev{margin-top:6px;border-left:3px solid var(--warn);background:var(--sunk);border-radius:0 8px 8px 0;padding:6px 10px;font-size:13px;max-width:65ch}
+.ev .k{font:500 10px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--warn)}
+.ev .src{color:var(--muted);font-size:12px}
+.box{margin-top:6px;border:1px dashed var(--accent);background:var(--accent-soft);border-radius:8px;padding:8px 10px;font-size:13.5px}
+.alert{margin-top:6px;border:1px solid var(--bad);color:var(--ink);border-radius:8px;padding:8px 10px;font-size:13.5px}
+.alert.warn{border-color:var(--warn)}
+.empty{color:var(--muted);font-size:14px;padding:24px 4px;max-width:52ch}
+
+/* approval */
+.approve{display:grid;gap:10px;padding:14px 16px;border-top:1px solid var(--line);background:var(--accent-soft)}
+.approve .head{font-size:14px}
+.opts{display:grid;gap:8px}
+.opt{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.opt:has(input:checked){border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.opt input{accent-color:var(--accent);margin:0}
+.opt .nm{font-weight:600;font-size:14px}
+.opt .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.opt .tg{font:500 10px var(--f-mono);letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:2px 7px;border:1px solid var(--line);color:var(--muted)}
+.opt .tg.best{border-color:var(--good);color:var(--good)} .opt .tg.panel{border-color:var(--accent);color:var(--accent)}
+.opt .sc{font:600 16px var(--f-mono);font-variant-numeric:tabular-nums}
+.opt .bar{grid-column:2/4;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.opt .bar i{display:block;height:100%;background:var(--accent);border-radius:3px}
+.approve .acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.approve .acts input{flex:1 1 220px;min-width:0;font:14px var(--f-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 12px}
+.composer{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
+.composer input{flex:1;min-width:0;font:15px var(--f-body);color:var(--ink);background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+
+/* fit */
+.fit{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:12px;padding:12px 16px 16px;align-items:center}
+@media (max-width:480px){.fit{grid-template-columns:minmax(0,1fr)}}
+.fit svg{width:100%;height:auto;display:block}
+.radar-ring{fill:none;stroke:var(--line)}
+.radar-axis{stroke:var(--line)}
+.radar-target{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:5 4}
+.radar-now{fill:var(--accent);fill-opacity:.18;stroke:var(--accent);stroke-width:2}
+.radar-lbl{fill:var(--muted);font:500 10.5px var(--f-mono)}
+.radar-lbl.gap{fill:var(--bad)}
+.score{display:grid;gap:6px}
+.big{font:700 44px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.big small{font-size:18px;color:var(--muted)}
+.st{font:500 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 9px;border:1px solid currentColor;justify-self:start}
+.st.ok{color:var(--good)} .st.drift{color:var(--warn)} .st.off{color:var(--bad)} .st.none{color:var(--muted)}
+.gaps{margin:0;padding:0;list-style:none;font-size:12.5px;display:grid;gap:2px}
+.gaps b{font-weight:600}
+.spark .lbl{fill:var(--muted);font:400 10px var(--f-mono)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;padding:0 16px 12px;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:0;border-top:2px solid var(--accent);vertical-align:3px;margin-right:4px}
+.legend i.t{border-top:2px dashed var(--muted)}
+.legend i.n{width:12px;height:12px;border:2px solid var(--accent);background:var(--accent-soft);border-radius:3px;vertical-align:-2px}
+.legend i.x{width:12px;height:12px;border:1.5px dashed var(--muted);border-radius:3px;vertical-align:-2px}
+
+.diagram{padding:8px 12px 12px;overflow-x:auto}
+.diagram svg{width:100%;min-width:420px;height:auto;display:block}
+.node rect{fill:var(--surface);stroke:var(--muted);stroke-width:1.25}
+.node text{fill:var(--ink);font:500 12.5px var(--f-body)} .node .sub{fill:var(--muted);font:400 10.5px var(--f-mono)}
+.node.ext rect{stroke-dasharray:4 3}
+.node.new rect{stroke:var(--accent);stroke-width:2;fill:var(--accent-soft)}
+.node{animation:pop .4s ease-out}
+@keyframes pop{from{opacity:0}to{opacity:1}}
+.edge{stroke:var(--muted);stroke-width:1.2;fill:none}
+.ghost rect{fill:none;stroke:var(--line);stroke-dasharray:3 4} .ghost text{fill:var(--muted);font:400 11px var(--f-mono)}
+
+.ledger{display:grid;gap:10px;padding:12px 16px 16px}
+.entry{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:4px;background:var(--sunk)}
+.entry .row{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.entry h3{font-size:14.5px}
+.entry dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;font-size:13px}
+.entry dt{color:var(--muted);font:500 11px/1.9 var(--f-mono);text-transform:uppercase;letter-spacing:.05em}
+.entry dd{margin:0}
+.pill{font:500 10.5px var(--f-mono);letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:3px 8px;border:1px solid currentColor;white-space:nowrap}
+.pill.pending{color:var(--warn)} .pill.approved{color:var(--good)} .pill.reviewer{color:var(--accent)}
+
+/* strategy */
+.strats{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;padding:14px 16px 16px}
+.strat{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:4px;background:var(--sunk);transition:border-color .3s,background .3s,opacity .3s}
+.strat.found{border-color:var(--accent);background:var(--surface)}
+.strat.off{opacity:.5}
+.strat .r1{display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+.strat label{display:flex;gap:8px;align-items:flex-start;font-weight:600;font-size:14px;cursor:pointer}
+.strat input{accent-color:var(--accent);margin-top:3px}
+.strat .kind{font:500 10.5px var(--f-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.strat .why{font-size:12.5px;margin:0;color:var(--muted)}
+.strat.found .why{color:var(--ink)}
+.strat .app{font:400 11.5px var(--f-mono);color:var(--muted)}
+.strat .app b{color:var(--accent);font-weight:500}
+.strat select{font-size:12px;padding:4px 6px}
+.tags2{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.ftag{font:500 10.5px var(--f-mono);border:1px solid var(--accent);color:var(--accent);border-radius:6px;padding:2px 6px}
+.votes{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
+.vchip{font:500 10.5px var(--f-mono);border-radius:6px;padding:2px 6px;border:1px solid var(--good);color:var(--good)}
+.vchip.no{border-color:var(--bad);color:var(--bad)}
+.vstat{font:500 10.5px var(--f-mono);letter-spacing:.05em;text-transform:uppercase}
+.vstat.agree{color:var(--good)} .vstat.split{color:var(--warn)} .vstat.dropped{color:var(--bad)}
+.contest{background:var(--surface);border:1px solid var(--warn);border-radius:10px;padding:10px 12px;display:grid;gap:6px}
+.contest .args{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;font-size:13px}
+@media (max-width:520px){.contest .args{grid-template-columns:minmax(0,1fr)}}
+.contest .args div{border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.contest .choice{display:flex;gap:14px;font-size:14px;font-weight:600}
+.contest .choice label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.agreed{display:flex;flex-wrap:wrap;gap:6px}
+/* requirements */
+.reqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;padding:14px 16px 16px}
+.rcard{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--sunk);display:grid;gap:8px;align-content:start;min-width:0}
+.rcard h3{font-size:14.5px}
+.rlist{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:13px}
+.rlist li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:baseline}
+.rid{font:500 11px var(--f-mono);color:var(--muted)}
+.chipst{font:500 10px var(--f-mono);letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:2px 7px;border:1px solid currentColor;white-space:nowrap}
+.chipst.green{color:var(--good)} .chipst.gray{color:var(--muted)} .chipst.open{color:var(--warn)}
+.zone{border-radius:8px;padding:8px 10px;display:grid;gap:6px;font-size:13px}
+.zone.g{border:1px solid var(--good)} .zone.y{border:1px dashed var(--muted)}
+.zone .zt{font:500 10.5px var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
+.zone.g .zt{color:var(--good)} .zone.y .zt{color:var(--muted)}
+.gitem{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;align-items:center}
+.gitem .as{grid-column:1/2;font-size:12px;color:var(--muted)}
+.gitem button{padding:5px 8px;font-size:12px;grid-row:1/3;grid-column:2}
+.mini{border-collapse:collapse;width:100%;font-size:12.5px}
+.mini th,.mini td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.mini th{font:500 10px var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.mini td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.mini tr.total td{font-weight:600;border-top:1px solid var(--muted)}
+.scope2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;font-size:12.5px}
+.scope2 ul{margin:2px 0 0;padding-left:16px}
+.waiting{color:var(--muted);font-size:13px}
+.price{padding:12px 16px 16px;display:grid;gap:10px}
+.budget{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px}
+.budget input{width:130px;font:500 13px var(--f-mono);color:var(--ink);background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.opt .pr{font:500 11.5px var(--f-mono);color:var(--muted)}
+.gconfirm{display:grid;gap:6px;background:var(--surface);border:1px dashed var(--muted);border-radius:10px;padding:10px 12px}
+.gconfirm label{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 8px;font-size:13.5px;cursor:pointer}
+.gconfirm label span.as{grid-column:2;font-size:12.5px;color:var(--muted)}
+/* knowledge base */
+.kb{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px;padding:14px 16px 16px}
+@media (max-width:860px){.kb{grid-template-columns:minmax(0,1fr)}}
+.kb h3{font-size:14.5px;margin-bottom:4px}
+.kb .sub{font-size:12.5px;color:var(--muted);margin:0 0 8px}
+.sites{display:grid;gap:6px}
+.site{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:var(--sunk);transition:border-color .3s,background .3s}
+.site .d{font:500 13px var(--f-mono);overflow-wrap:anywhere}
+.site .ty{font-size:12px;color:var(--muted)}
+.site .stt{font:500 10.5px var(--f-mono);letter-spacing:.05em;text-transform:uppercase;text-align:right;color:var(--muted)}
+.site .stt.indexed{color:var(--good)} .site .stt.crawling{color:var(--accent)} .site .stt.cited{color:var(--warn)}
+.site.flash{border-color:var(--warn);background:var(--surface)}
+.addsite{display:flex;gap:8px;margin-top:8px}
+.addsite input{flex:1;min-width:0;font:13px var(--f-mono);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.dbwrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+.dbt{border-collapse:collapse;width:100%;font-size:13px}
+.dbt th,.dbt td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.dbt th{font:500 10.5px var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:var(--sunk)}
+.dbt td.dt{font:400 12px var(--f-mono);white-space:nowrap;color:var(--muted)}
+.dbt tr.new td{background:var(--accent-soft)}
+.dbt tr.flash td{background:var(--sunk);box-shadow:inset 3px 0 0 var(--warn)}
+.newtag{font:500 9.5px var(--f-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:1px 6px;margin-left:6px}
+.doc{padding:20px 24px 24px;display:grid;gap:14px}
+.doc article{max-width:76ch;display:grid;gap:12px}
+.doc h3{font-size:20px} .doc h4{font:600 15px var(--f-display);margin:6px 0 0}
+.doc p{margin:0} .doc ul{margin:0;padding-left:20px}
+.doc table{border-collapse:collapse;font-size:13.5px;width:100%}
+.doc th,.doc td{text-align:left;border-bottom:1px solid var(--line);padding:6px 8px;vertical-align:top}
+.doc th{font:500 11px var(--f-mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.doc td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+.signed{color:var(--good);font-weight:600}
+.note{font-size:12.5px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="title">
+      <span class="eyebrow">Architecture Council · live session demo</span>
+      <h1>ShopSphere marketplace review</h1>
+      <div class="meta">
+        <span class="chip">ShopSphere_PRD.pdf <span class="tag">sample</span></span>
+        <span>3 AI agents · 1 moderator · you as reviewer · evidence-backed arguments</span>
+      </div>
+    </div>
+    <div class="controls">
+      <label class="toggle" for="voice"><input type="checkbox" id="voice" checked> Voices</label>
+      <label class="toggle" for="speed">Speed
+        <select id="speed"><option value="1">1×</option><option value="1.5" selected>1.5×</option><option value="2">2×</option><option value="3">3×</option></select>
+      </label>
+      <button id="reset" type="button">Restart</button>
+      <button id="play" class="primary" type="button">▶ Start session</button>
+    </div>
+  </header>
+
+  <section class="panel" aria-label="Build target and priorities">
+    <div class="panel-h"><h2>Build target and priorities</h2><span class="eyebrow">Change any time · options re-score live</span></div>
+    <div class="goals">
+      <div>
+        <div class="eyebrow" style="margin-bottom:6px">Build target</div>
+        <div class="seg" id="mode">
+          <button type="button" data-mode="poc" aria-pressed="false">POC<small>Prove it fast and cheap</small></button>
+          <button type="button" data-mode="prod" aria-pressed="true">Production<small>Reliable, secure, scalable</small></button>
+        </div>
+        <p class="goalnote" id="modenote"></p>
+      </div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:6px">How much each matters · 0 ignore · 5 critical</div>
+        <div class="sliders" id="sliders"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" aria-label="Architecture strategy">
+    <div class="panel-h"><h2>Architecture strategy</h2><span class="eyebrow" id="stratnote">Agents propose frameworks and vote when the session starts</span></div>
+    <div class="strats" id="strats"></div>
+  </section>
+
+  <section class="panel" aria-label="Requirements and scope">
+    <div class="panel-h"><h2>Requirements, scope and KPIs</h2><span class="eyebrow" id="reqnote">Agents extract these from the PRD in step 1</span></div>
+    <div class="reqs" id="reqs"></div>
+  </section>
+
+  <nav class="agenda" id="agenda" aria-label="Agenda"></nav>
+
+  <main class="room">
+    <section class="col">
+      <div class="panel">
+        <div class="stage" id="stage"></div>
+        <div class="status" id="status">Set your build target and priorities, then press <b>Start session</b>.</div>
+      </div>
+      <div class="panel">
+        <div class="panel-h"><h2>Transcript</h2><span class="eyebrow" id="turns">0 turns</span></div>
+        <div class="transcript" id="log" aria-live="polite"></div>
+        <div class="approve" id="approve" hidden></div>
+        <form class="composer" id="composer">
+          <input id="say" autocomplete="off" placeholder="Interject, e.g. “Can this handle a Diwali sale spike?”" aria-label="Your message to the council">
+          <button class="primary" type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="col">
+      <div class="panel">
+        <div class="panel-h"><h2>Fit to your goals</h2><span class="st none" id="fitpill">No decisions yet</span></div>
+        <div class="fit">
+          <div id="radar"></div>
+          <div class="score">
+            <div class="big" id="fitnum">–<small> /100</small></div>
+            <ul class="gaps" id="gaps"><li class="note">The score compares approved decisions with what your priorities require.</li></ul>
+            <div id="spark"></div>
+          </div>
+        </div>
+        <div class="legend"><span><i class="t"></i>what your priorities need</span><span><i></i>what the decisions deliver</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-h"><h2>Resources and price</h2><span class="st none" id="budgetpill">No resources yet</span></div>
+        <div class="price" id="price"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-h"><h2>Architecture, live</h2><span class="eyebrow" id="nodecount">0 components</span></div>
+        <div class="diagram" id="diagram"></div>
+        <div class="legend"><span><i class="n"></i>added this topic</span><span><i class="x"></i>external service</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-h"><h2>Decision ledger</h2><span class="eyebrow" id="ledgercount">0 / 5</span></div>
+        <div class="ledger" id="ledger"></div>
+      </div>
+    </section>
+  </main>
+
+  <section class="panel" aria-label="Knowledge base">
+    <div class="panel-h"><h2>Knowledge base</h2><span class="eyebrow">Crawled web sources + decisions approved in past sessions</span></div>
+    <div class="kb">
+      <div>
+        <h3>Trusted web sources</h3>
+        <p class="sub">Crawled and indexed so agents can cite real pages. Highlighted when cited.</p>
+        <div class="sites" id="sites"></div>
+        <form class="addsite" id="addsite">
+          <input id="newsite" placeholder="Add a site, e.g. netflixtechblog.com" aria-label="Site to crawl" autocomplete="off">
+          <button type="submit">Crawl</button>
+        </form>
+      </div>
+      <div>
+        <h3>Decision database <span class="eyebrow" id="dbcount"></span></h3>
+        <p class="sub">Every approved decision is saved here as a precedent. Agents cite these in later sessions.</p>
+        <div class="dbwrap"><table class="dbt"><thead><tr><th>Approved</th><th>Project</th><th>Topic</th><th>Decision</th><th>By</th></tr></thead><tbody id="dbrows"></tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-h">
+      <h2>Architecture document</h2>
+      <div class="controls">
+        <button id="copy" type="button">Copy as Markdown</button>
+        <button id="sign" class="good" type="button" disabled>Sign off</button>
+      </div>
+    </div>
+    <div class="doc" id="doc"></div>
+  </section>
+</div>
+
+<script>
+const AGENTS = {
+  mod:   {name:'Mira',  role:'Moderator',   model:'Claude Haiku',     color:'var(--c-mod)',    lang:'en-US', pitch:1.05},
+  arch:  {name:'Ada',   role:'Architect',   model:'Claude',           color:'var(--c-arch)',   lang:'en-GB', pitch:1.15},
+  cloud: {name:'Kabir', role:'Cloud & Cost',model:'GPT',              color:'var(--c-cloud)',  lang:'en-IN', pitch:0.95},
+  critic:{name:'Rex',   role:'Critic',      model:'Llama · free tier',color:'var(--c-critic)', lang:'en-AU', pitch:0.8},
+  you:   {name:'You',   role:'Reviewer',    model:'Human',            color:'var(--c-you)'}
+};
+
+const CRIT = [
+  {k:'perf', l:'Performance',    s:'Perf'},
+  {k:'cost', l:'Low cost',       s:'Cost'},
+  {k:'scale',l:'Scalability',    s:'Scale'},
+  {k:'rel',  l:'Reliability',    s:'Reliability'},
+  {k:'sec',  l:'Security',       s:'Security'},
+  {k:'speed',l:'Time to market', s:'Speed'},
+  {k:'ops',  l:'Lean resources', s:'Lean ops'}
+];
+const MODE = {
+  poc: {name:'POC', mult:{perf:.8,cost:1.4,scale:.5,rel:.5,sec:.7,speed:1.6,ops:1.3},
+        note:'POC boosts time to market, cost and lean resources; scale and reliability count for less.'},
+  prod:{name:'production', mult:{perf:1.1,cost:1,scale:1.3,rel:1.4,sec:1.4,speed:.8,ops:1},
+        note:'Production boosts reliability, security and scalability; speed to ship counts for less.'}
+};
+const sc = (perf,cost,scale,rel,sec,speed,ops) => ({perf,cost,scale,rel,sec,speed,ops});
+
+/* each topic: script lines (ev = evidence → strong point), options with scores, panel's preferred option */
+const TOPICS = [
+ {title:'Architecture', nodes:['clients','gateway','api','queue','worker'], panel:0,
+  refs:[['evo','Start as a modular monolith; split services later with the strangler fig pattern'],['c4','C4 container view: clients, gateway, API, queue, worker'],['atam','Trade-off: modifiability vs independent deployment']],
+  dissent:'Rex: microservices would let payments scale on its own.',
+  lines:[
+  ['mod','Requirements are set. First topic: overall architecture. Ada, start us off.'],
+  ['arch','From the PRD, I would start with a modular monolith: one backend with clear modules for catalog, orders, payments and users, behind one API gateway.'],
+  ['critic','Why not microservices from day one? Payments and catalog scale very differently.'],
+  ['arch','Because a six-engineer team pays for microservices in network calls, deployments and tracing before demand is proven. Shopify runs one of the largest commerce platforms on a modular monolith and splits along module boundaries only when needed.',
+    {k:'Web · crawled', site:'shopify.engineering', src:'Shopify Engineering, “Deconstructing the Monolith” (2019)', note:'Shopify kept a monolith and enforced component boundaries instead of moving to microservices.'}],
+  ['cloud','And there is a cost story. Amazon Prime Video moved a monitoring service from distributed microservices back to a single process and cut that service\'s infrastructure cost by about ninety percent.',
+    {k:'Web · crawled', site:'primevideotech.com', src:'Prime Video Tech blog (2023)', note:'Consolidating a serverless/microservice pipeline into one process reduced cost ~90% for that workload.'}],
+ ],
+  options:[
+   {name:'Modular monolith + gateway + queue worker', s:sc(70,80,65,65,70,85,85), cost:[['Queue','Service Bus',500,1500]]},
+   {name:'Microservices from day one',               s:sc(80,45,90,80,70,45,40), cost:[['Queue + extra services','Service Bus Std + 4 more apps',1500,14000]]},
+   {name:'Serverless functions',                      s:sc(55,75,85,70,70,70,70), cost:[['Functions + queue','Consumption plan',800,6000]]}
+  ]},
+ {title:'Software stack', nodes:['db','cache'], panel:0,
+  refs:[['f12','Backing services (Postgres, Redis) attached through config'],['waf','Performance efficiency: add OpenSearch only when search load demands it']],
+  dissent:'Rex: search will need OpenSearch sooner than planned.',
+  lines:[
+  ['mod','Next topic: the software stack.'],
+  ['arch','Backend in TypeScript with NestJS, so web and backend share one language. PostgreSQL as the main database, with product search on Postgres full-text for now.'],
+  ['critic','That will not hold. Our decision database has a precedent: on Project Atlas, Postgres full-text search hit 1.8 second p95 at about four hundred thousand products, and that review approved a move to OpenSearch.',
+    {k:'Decision DB', db:'atlas', src:'Approved decision · Project Atlas review, 12 Aug 2026 (sample)', note:'p95 search latency 1.8 s at ~400k SKUs with filters; approved move of search to OpenSearch.'}],
+  ['cloud','Fair, but ShopSphere launches with about twenty thousand products. OpenSearch would be the most expensive box in the diagram on day one. Plan it for later.'],
+  ['arch','Agreed. Redis for sessions and the cart cache. Add a search trigger to the roadmap at two hundred thousand products.'],
+ ],
+  options:[
+   {name:'NestJS + PostgreSQL + Redis (search later)', s:sc(70,75,70,75,75,80,75), cost:[['PostgreSQL','Flexible Server 2 vCore',4000,22000],['Redis','Cache Basic C0 / Std C1',1500,8000]]},
+   {name:'NestJS + PostgreSQL + Redis + OpenSearch now', s:sc(90,45,90,75,75,55,50), cost:[['PostgreSQL','Flexible Server 2 vCore',4000,22000],['Redis','Cache Basic C0 / Std C1',1500,8000],['OpenSearch','3-node cluster',12000,45000]]},
+   {name:'Supabase (managed Postgres + auth)', s:sc(65,90,50,65,70,95,90), cost:[['Supabase','Free / Pro plan',0,2100]], relabel:{db:['Supabase','Postgres + auth']}}
+  ]},
+ {title:'Cloud & deployment', nodes:['cdn','blob'], panel:0,
+  refs:[['waf','Reliability: at least 2 API replicas, no single instance'],['f12','Build, release and run kept separate in CI/CD'],['waf','Operational excellence: staging gate before production']],
+  dissent:'Rex: watch cold-start latency on the worker.',
+  lines:[
+  ['mod','Cloud and deployment. Kabir?'],
+  ['cloud','The team already uses Azure for identity. I would run the API and worker on Azure Container Apps, with managed Postgres, Azure Cache for Redis, and Blob Storage behind a CDN for images.'],
+  ['critic','Container Apps cold starts could hurt checkout latency.'],
+  ['cloud','Not if we configure it. Microsoft\'s own guidance: apps scaled to zero pay a cold start, so we keep a minimum of two API replicas. Only the worker scales to zero.',
+    {k:'Web · crawled', site:'learn.microsoft.com', src:'Microsoft Learn, Azure Container Apps scaling rules', note:'Scale-to-zero apps incur cold starts; setting minimum replicas ≥ 1 avoids them.'}],
+  ['arch','CI/CD with GitHub Actions: build, test, deploy to staging, then a manual promote to production.'],
+ ],
+  options:[
+   {name:'Azure Container Apps + managed data services', s:sc(75,70,80,80,80,70,80), cost:[['API + worker','Container Apps, min 2 API replicas',2500,18000],['Blob + CDN','Storage + Front Door',800,6000]]},
+   {name:'AKS (Kubernetes)', s:sc(85,50,95,90,85,40,35), cost:[['Kubernetes','AKS, 3 nodes',15000,55000],['Blob + CDN','Storage + Front Door',800,6000]]},
+   {name:'Single VM + Docker Compose', s:sc(60,98,30,40,60,95,75), cost:[['Single VM','B2s VM + Docker',3000,6000],['Blob + CDN','Storage + Front Door',800,6000]], relabel:{api:['Modular API','Docker on 1 VM']}}
+  ]},
+ {title:'Cost & scaling', nodes:['replica'], panel:0,
+  refs:[['waf','Cost optimization: replica caps and budget alerts'],['waf','Performance efficiency: caching and read replicas'],['atam','Trade-off: read freshness vs throughput']],
+  dissent:'Rex: read replicas lag; catalog reads may be slightly stale.',
+  lines:[
+  ['mod','Cost and scaling.'],
+  ['cloud','At launch the bill is mostly the database and Redis. At ten times the traffic, compute grows, but the database becomes the first bottleneck.'],
+  ['critic','So what happens when Postgres hits its limit? Sharding is painful to add later.'],
+  ['arch','Sharding is the last resort. Stack Overflow served billions of page views a month from a handful of database servers by leaning on caching and read replicas. We do the same: replicas for catalog reads, CDN for hot product pages.',
+    {k:'Web · crawled', site:'nickcraver.com', src:'Nick Craver, “Stack Overflow: The Architecture” (2016)', note:'High traffic served by few SQL servers using heavy caching and replicas rather than sharding.'}],
+  ['cloud','Autoscale the API on CPU and requests, cap max replicas to protect the budget, and alert at eighty percent of monthly spend.'],
+ ],
+  options:[
+   {name:'Autoscale + read replicas + CDN cache + budget caps', s:sc(85,65,85,85,75,65,70), cost:[['Read replica','Postgres replica',0,22000],['Monitoring','Azure Monitor + alerts',500,4000]]},
+   {name:'Bigger database server (scale up)', s:sc(75,55,50,60,75,90,90), cost:[['Database upgrade','Flexible Server 8 vCore (extra)',0,45000],['Monitoring','Azure Monitor + alerts',500,4000]]},
+   {name:'Shard the database', s:sc(90,40,95,75,70,30,30), cost:[['Shards','2 extra Postgres servers',0,44000],['Monitoring','Azure Monitor + alerts',500,4000]]}
+  ]},
+ {title:'Security', nodes:['auth','pay','vault'], panel:0,
+  refs:[['waf','Security: managed identities and least privilege'],['pci','Hosted checkout keeps PCI scope at SAQ A'],['adr','Audit trail of admin actions recorded']],
+  dissent:'None recorded.',
+  lines:[
+  ['mod','Last topic: security and governance.'],
+  ['critic','Payments are the biggest risk. We must never store card data ourselves. With a hosted checkout, card data never touches our servers, and PCI DSS scope drops to the short self-assessment.',
+    {k:'Web · crawled', site:'pcisecuritystandards.org', src:'PCI SSC, SAQ A guidance; Stripe Checkout docs', note:'Fully hosted payment pages keep merchants eligible for SAQ A, the lightest PCI questionnaire.'}],
+  ['arch','Agreed. Users sign in with OAuth through a managed identity service, so we store no passwords.'],
+  ['cloud','Secrets in Key Vault, managed identities between services, and a web application firewall in front of the gateway.'],
+  ['critic','Add audit logs for admin actions, and a flow for data deletion requests.'],
+ ],
+  options:[
+   {name:'Hosted checkout + managed identity + Key Vault + WAF', s:sc(75,65,80,80,95,70,80), cost:[['WAF','Front Door WAF policy',0,25000],['Key Vault + identity','Key Vault + Entra External ID',300,3000]], relabel:{gateway:['API gateway','+ WAF']}},
+   {name:'Own card vault + custom auth', s:sc(75,50,70,65,55,40,40), cost:[['Card vault + auth','Self-hosted + PCI audit',5000,90000]]},
+   {name:'Hosted checkout + managed identity (WAF later)', s:sc(78,85,80,72,72,85,85), cost:[['Key Vault + identity','Key Vault + Entra External ID',300,3000]]}
+  ]}
+];
+
+/* diagram model */
+const NODES = {
+  clients:{x:210,y:20, w:140,l:'Web + mobile',s:'React · React Native'},
+  cdn:    {x:400,y:20, w:140,l:'CDN',s:'cached pages'},
+  auth:   {x:20, y:110,w:140,l:'Sign-in',s:'OAuth',ext:true},
+  gateway:{x:210,y:110,w:140,l:'API gateway',s:'routing'},
+  blob:   {x:400,y:110,w:140,l:'Blob storage',s:'product images'},
+  pay:    {x:20, y:200,w:140,l:'Payment provider',s:'hosted checkout',ext:true},
+  api:    {x:210,y:200,w:140,l:'Modular API',s:'NestJS'},
+  queue:  {x:400,y:200,w:140,l:'Queue',s:'order events'},
+  db:     {x:110,y:290,w:130,l:'PostgreSQL',s:'primary'},
+  cache:  {x:255,y:290,w:125,l:'Redis',s:'sessions · cart'},
+  worker: {x:400,y:290,w:140,l:'Worker',s:'emails · jobs'},
+  replica:{x:110,y:380,w:130,l:'Read replica',s:'catalog reads'},
+  vault:  {x:400,y:380,w:140,l:'Key Vault',s:'secrets'}
+};
+const EDGES = [['clients','gateway'],['clients','cdn'],['cdn','blob'],['gateway','auth'],['gateway','api'],['api','queue'],['queue','worker'],['api','db'],['api','cache'],['api','pay'],['db','replica'],['worker','vault']];
+const H = 44;
+
+/* knowledge base: crawled sites + decision database built from approvals (sample data) */
+const SITES = [
+  {d:'shopify.engineering',      ty:'Engineering blog', pages:412},
+  {d:'primevideotech.com',       ty:'Engineering blog', pages:96},
+  {d:'learn.microsoft.com',      ty:'Vendor docs · Azure', pages:5120},
+  {d:'nickcraver.com',           ty:'Practitioner blog', pages:58},
+  {d:'pcisecuritystandards.org', ty:'Standards body', pages:230},
+  {d:'docs.aws.amazon.com',      ty:'Vendor docs · AWS', pages:7340},
+  {d:'martinfowler.com',         ty:'Architecture articles', pages:640},
+  {d:'12factor.net',             ty:'Methodology', pages:14},
+  {d:'sei.cmu.edu',              ty:'Research · ATAM', pages:310},
+  {d:'c4model.com',              ty:'Diagram standard', pages:22},
+  {d:'adr.github.io',            ty:'Decision records', pages:35}
+].map(x => ({...x, st:'queued', cited:0}));
+const DB = [
+  {id:'atlas', date:'12 Aug 2026', proj:'Project Atlas', topic:'Search', decision:'Move product search to OpenSearch at ~400k SKUs (Postgres p95 was 1.8 s)', by:'R. Iyer'},
+  {id:'fleet', date:'21 Mar 2026', proj:'FleetTrack', topic:'Deployment', decision:'Container Apps with min 2 replicas after cold-start incidents', by:'S. Menon'},
+  {id:'paylite', date:'3 Jun 2026', proj:'PayLite', topic:'Payments', decision:'Hosted checkout to stay in PCI SAQ A scope', by:'A. Khan'}
+];
+const CLOUDS = {azure:{name:'Azure Well-Architected Framework', short:'Azure WAF', site:'learn.microsoft.com'},
+  aws:{name:'AWS Well-Architected Framework', short:'AWS WAF', site:'docs.aws.amazon.com'},
+  gcp:{name:'Google Cloud Architecture Framework', short:'GCP AF', site:'cloud.google.com'}};
+let CLOUD = 'azure';
+const STRATS = [
+  {id:'waf', by:'cloud', kind:'Cloud framework · pillars', why:'The PRD says the team already runs on Azure'},
+  {id:'atam', by:'arch', name:'ATAM trade-off analysis', kind:'Decision method', why:'Options are scored against your quality priorities', site:'sei.cmu.edu'},
+  {id:'c4', by:'arch', name:'C4 model', kind:'Diagram standard', why:'The live diagram is drawn at C4 container level', site:'c4model.com'},
+  {id:'adr', by:'arch', name:'Architecture decision records', kind:'Document format', why:'Each ledger entry becomes one ADR', site:'adr.github.io'},
+  {id:'evo', by:'arch', name:'Evolutionary architecture', kind:'Pattern · strangler fig', why:'Six-person team: start simple, split later', site:'martinfowler.com'},
+  {id:'f12', by:'critic', name:'Twelve-Factor App', kind:'Deployment practice', why:'Containerised services with CI/CD are in scope', site:'12factor.net'},
+  {id:'pci', by:'critic', name:'PCI DSS', kind:'Compliance', why:'The PRD includes card payments', site:'pcisecuritystandards.org'}
+].map(x => ({...x, on:true}));
+let FOUND = new Set();
+const VOTERS = ['mod','arch','cloud','critic'];
+const VOTES = {evo:{mod:1,arch:1,cloud:1,critic:0}};
+const voteOf = (id,k) => VOTES[id] ? VOTES[id][k] : 1;
+const isSplit = id => VOTERS.some(k => !voteOf(id,k));
+const STRAT_ARGS = {evo:{for:'Ada: hosted checkout keeps card data off our servers, so isolating payments can wait. Splitting later is cheaper than running services we do not need yet.', against:'Rex: payments may need isolation earlier than planned; designing services from day one avoids a painful split.'}};
+const STRAT_LINES = [
+ ['mod','Welcome. We are reviewing ShopSphere, a marketplace expecting fifty thousand daily users at launch. Before any topic, the panel agrees on the architecture strategy. Each of you proposes frameworks from the PRD, then we vote. We adopt only what everyone agrees on; anything split goes to the reviewer.'],
+ ['cloud','The PRD says the team already runs on Azure, so I propose the Azure Well-Architected Framework. Every decision gets checked against its five pillars.',
+   {k:'Web · crawled', site:'learn.microsoft.com', src:'Microsoft Learn, Azure Well-Architected Framework', note:'Five pillars: reliability, security, cost optimization, operational excellence, performance efficiency.'}, ['waf']],
+ ['arch','I propose ATAM-style trade-off analysis to score options, the C4 model for diagrams, decision records for the document, and evolutionary architecture: start as one deployable and split services out later with the strangler fig pattern.',
+   {k:'Web · crawled', site:'martinfowler.com', src:'Martin Fowler, “Strangler Fig Application”', note:'Replace parts of a system gradually by routing features to new services built around the old one.'}, ['atam','c4','adr','evo']],
+ ['critic','I propose PCI DSS, since the PRD includes card payments, and the Twelve-Factor rules for config and deployment. But I object to evolutionary architecture. Payments may need isolation earlier than we think.',
+   {k:'Web · crawled', site:'12factor.net', src:'The Twelve-Factor App', note:'Methodology for portable, scalable services: config in the environment, stateless processes, backing services as attached resources.'}, ['pci','f12']],
+ ['arch','Hosted checkout keeps card data off our servers, so payments isolation can wait. Splitting later is cheaper than running services we do not need yet.'],
+ ['cloud','I agree with Ada. One deployable is also cheaper to run while traffic is unproven.'],
+ ['mod','Votes are in. Six frameworks are agreed by all four of us and are adopted. Evolutionary architecture is split three to one, with Rex against, so that one is your call.', null, ['votes']]
+];
+const stratName = st => st.id==='waf' ? CLOUDS[CLOUD].name : st.name;
+const stratOn = id => STRATS.find(x => x.id===id).on;
+const tagText = ([id, t]) => `${id==='waf' ? CLOUDS[CLOUD].short : STRATS.find(x=>x.id===id).name.split(' ')[0]==='Architecture' ? 'ADR' : id==='atam' ? 'ATAM' : id==='c4' ? 'C4' : id==='evo' ? 'Evolutionary' : id==='f12' ? '12-Factor' : 'PCI DSS'}: ${t}`;
+const topicRefs = t => (t.refs||[]).filter(r => stratOn(r[0]));
+function renderStrats(){
+  const applied = {};
+  S.ledger.filter(e => e && e.status!=='pending').forEach(e => topicRefs(TOPICS[e.i]).forEach(([id]) => applied[id] = (applied[id]||0)+1));
+  $('strats').innerHTML = STRATS.map(st => {
+    const found = FOUND.has(st.id), n = applied[st.id]||0;
+    return `<div class="strat ${found?'found':''} ${st.on?'':'off'}"><div class="r1">
+      <label for="st-${st.id}"><input type="checkbox" id="st-${st.id}" ${st.on?'checked':''}> <span>${esc(stratName(st))}</span></label></div>
+      <span class="kind">${esc(st.kind)}</span>
+      ${st.id==='waf'?`<select id="cloudsel" aria-label="Cloud framework">${Object.entries(CLOUDS).map(([k,c])=>`<option value="${k}" ${k===CLOUD?'selected':''}>${c.short}</option>`).join('')}</select>`:''}
+      <p class="why">${found ? `Proposed by ${AGENTS[st.by].name}: ${esc(st.why)}` : 'Not proposed yet'}</p>
+      ${found && S.votesShown ? `<div class="votes">${VOTERS.map(k => `<span class="vchip ${voteOf(st.id,k)?'':'no'}" title="${AGENTS[k].name} ${voteOf(st.id,k)?'agrees':'disagrees'}">${AGENTS[k].name} ${voteOf(st.id,k)?'✓':'✗'}</span>`).join('')}</div>
+        <span class="vstat ${!isSplit(st.id)?'agree':S.stratDecided?(st.on?'agree':'dropped'):'split'}">${!isSplit(st.id)?'Agreed by all 4 · adopted':S.stratDecided?(st.on?'Split 3–1 · you chose to follow':'Split 3–1 · you dropped it'):'Split 3–1 · needs your decision'}</span>`:''}
+      <span class="app">${st.on ? `Applied in <b>${n}</b> decision${n===1?'':'s'}` : 'Switched off'} · ${esc(st.id==='waf'?CLOUDS[CLOUD].site:st.site)}</span></div>`;
+  }).join('');
+  STRATS.forEach(st => $('st-'+st.id).onchange = e => { st.on = e.target.checked; renderStrats(); renderLedger(); renderDoc();
+    if(S.started && !S.finished){ S.inserts.push(['mod', `${stratName(st)} ${st.on?'is back in':'is switched off for'} this review.`]); kick(); } });
+  $('cloudsel').onchange = e => { CLOUD = e.target.value; renderStrats(); renderLedger(); renderDoc(); };
+  $('stratnote').textContent = !FOUND.size ? 'Agents propose frameworks and vote when the session starts' : !S.votesShown ? 'Agents are proposing…' : S.stratDecided ? `${[...FOUND].filter(stratOn).length} of ${STRATS.length} frameworks adopted` : 'Votes in · waiting for your decision';
+}
+/* requirements data (extracted from the sample PRD) */
+const FR = [['FR-1','Browse and search the product catalog'],['FR-2','Cart and wishlist'],['FR-3','Checkout with online payment'],['FR-4','Order tracking and notifications'],['FR-5','Seller onboarding and listings'],['FR-6','Admin console with audit log']];
+const NFR = [{l:'Availability', t:'99.9% monthly', by:[2,3]}, {l:'API latency', t:'p95 < 300 ms', by:[1,3]}, {l:'Load', t:'50k daily users, sale peaks', by:[3], g:'peak'},
+  {l:'Security', t:'PCI DSS SAQ A, OAuth sign-in', by:[4]}, {l:'Recovery', t:'RPO / RTO', by:[2], g:'rpo'}, {l:'Cost', t:'Within monthly budget', by:[3]}];
+const SCOPE_IN = ['Responsive web storefront','Seller portal','Admin console','Hosted checkout payments','Email and SMS notifications'];
+const SCOPE_OUT = ['Native mobile apps','Own delivery fleet','Multi-currency and international shipping','Recommendation engine'];
+const KPIS = [['Checkout success rate','≥ 99.5%','Payment and order logs'],['p95 API latency','< 300 ms','Application Insights'],['Uptime','99.9% / month','Azure Monitor'],['Cloud cost','≤ monthly budget','Cost Management'],['Deploy frequency','Weekly or better','GitHub Actions'],['Conversion rate','+10% in 6 months','Product analytics']];
+const GREEN = ['All six functional requirements','Team of six engineers','Azure is the cloud','Card data handled by a hosted checkout','Launch at 50k daily users'];
+const GRAY = [{id:'peak', q:'Peak traffic on sale days', a:'Assume 5× normal load for up to 6 hours'},
+  {id:'region', q:'Data residency', a:'Assume Azure Central India; no cross-border data'},
+  {id:'mobile', q:'Mobile app in version 1?', a:'Assume responsive web in v1, native apps in v2'},
+  {id:'rpo', q:'Recovery targets', a:'Assume RPO 15 minutes, RTO 1 hour'},
+  {id:'psp', q:'Payment provider', a:'Assume Razorpay hosted checkout, Stripe as fallback'}];
+const TEAM = {poc:[['Full-stack engineers',2],['Duration','6 weeks']], prod:[['Backend engineers',2],['Frontend engineer',1],['Mobile engineer',1],['DevOps engineer',1],['QA engineer',1]]};
+const BUDGET = {poc:15000, prod:150000};
+const REQ_LINES = [
+ ['mod','Strategy is set. Step one: requirements. Pull the functional and non-functional requirements, scope and KPIs from the PRD, and flag anything unclear.'],
+ ['arch','Six functional requirements: catalog browse and search, cart, checkout with online payment, order tracking, seller onboarding, and an admin console with an audit log. All six are clear in the PRD.', null, ['fr','green']],
+ ['cloud','Non-functional targets: 99.9 percent uptime, p95 API latency under 300 milliseconds, fifty thousand daily users, and a production cloud budget of one and a half lakh rupees a month. I have set KPIs to measure each, plus checkout success and conversion.', null, ['nfr','kpi','scope']],
+ ['critic','Five gray areas. Peak traffic on sale days, data residency, whether the mobile app is in version one, recovery targets, and which payment provider. I have written an assumption for each. The reviewer should confirm them before we design.', null, ['gray']],
+ ['mod','The green area is six requirements and the core constraints. The gray area has five open items with assumptions. Reviewer, confirm the ones you agree with. Anything unconfirmed stays an open question in the document.']
+];
+const inr = n => '₹' + Math.round(n).toLocaleString('en-IN');
+function costOf(o){ return (o.cost||[]).reduce((a,c) => a + (S.mode==='poc'?c[2]:c[3]), 0); }
+function costRows(){
+  const rows = [];
+  S.ledger.filter(Boolean).forEach(e => (TOPICS[e.i].options[e.choice].cost||[]).forEach(c => rows.push({c:c[0], r:c[1], v:S.mode==='poc'?c[2]:c[3], topic:e.topic})));
+  return rows;
+}
+function nfrStatus(n){
+  const done = n.by.every(i => S.ledger[i] && S.ledger[i].status!=='pending');
+  return done ? `Addressed · ${n.by.map(i=>TOPICS[i].title).join(', ')}` : 'Open';
+}
+function renderReqs(){
+  const R = S.reqShown, gl = GRAY.filter(g => S.grayClear.has(g.id)), gy = GRAY.filter(g => !S.grayClear.has(g.id));
+  const wait = t => `<p class="waiting">${t}</p>`;
+  $('reqs').innerHTML = `
+  <div class="rcard"><h3>Functional requirements</h3>${R.has('fr') ? `<ul class="rlist">${FR.map(([id,t])=>`<li><span class="rid">${id}</span><span>${t}</span><span class="chipst green">clear</span></li>`).join('')}</ul>` : wait('Ada extracts these from the PRD.')}</div>
+  <div class="rcard"><h3>Non-functional requirements</h3>${R.has('nfr') ? `<table class="mini"><thead><tr><th>Quality</th><th>Target</th><th>Status</th></tr></thead><tbody>${NFR.map(n => {
+      const g = n.g && GRAY.find(x=>x.id===n.g); const tgt = g ? `${n.t}: ${g.a.replace(/^Assume /,'')}${S.grayClear.has(g.id)?'':' (assumed)'}` : n.t;
+      const st = nfrStatus(n); return `<tr><td>${n.l}</td><td>${esc(tgt)}</td><td><span class="chipst ${st==='Open'?'open':'green'}">${esc(st)}</span></td></tr>`; }).join('')}</tbody></table>` : wait('Kabir sets measurable targets.')}</div>
+  <div class="rcard"><h3>Scope and KPIs</h3>${R.has('scope') ? `<div class="scope2"><div><span class="eyebrow">In scope</span><ul>${SCOPE_IN.map(x=>`<li>${x}</li>`).join('')}</ul></div><div><span class="eyebrow">Out of scope</span><ul>${SCOPE_OUT.map(x=>`<li>${x}${x==='Native mobile apps'?(S.grayClear.has('mobile')?' (v2, confirmed)':' (v2, assumed)'):''}</li>`).join('')}</ul></div></div>
+      <table class="mini"><thead><tr><th>KPI</th><th>Target</th><th>Measured by</th></tr></thead><tbody>${KPIS.map(k=>`<tr><td>${k[0]}</td><td>${esc(k[1])}</td><td>${k[2]}</td></tr>`).join('')}</tbody></table>` : wait('Scope and KPIs appear with the targets.')}</div>
+  <div class="rcard"><h3>Green area and gray area</h3>${R.has('green') ? `
+    <div class="zone g"><span class="zt">Green area · clear and agreed</span>${GREEN.map(x=>`<div>${x}</div>`).join('')}${gl.map(g=>`<div>${esc(g.q)}: ${esc(g.a.replace(/^Assume /,''))} <span class="chipst green">confirmed</span></div>`).join('')}</div>
+    ${R.has('gray') ? `<div class="zone y"><span class="zt">Gray area · unclear, needs an answer</span>${gy.length ? gy.map(g=>`<div class="gitem"><b>${esc(g.q)}</b><span class="as">${esc(g.a)}</span><button type="button" data-clear="${g.id}">Confirm</button></div>`).join('') : '<div class="note">Nothing left in the gray area.</div>'}</div>` : wait('Rex flags what is unclear.')}` : wait('Clear items go green; unclear items go gray with an assumption.')}</div>`;
+  document.querySelectorAll('[data-clear]').forEach(b => b.onclick = () => { S.grayClear.add(b.dataset.clear); renderReqs(); renderDoc(); if(S.phase==='reqs' && S.waiting) renderReqApproval(); });
+  $('reqnote').textContent = !R.size ? 'Agents extract these from the PRD in step 1' : `${FR.length} functional · ${NFR.length} non-functional · ${gy.length} in gray area`;
+}
+function renderPrice(){
+  const rows = costRows(), total = rows.reduce((a,r)=>a+r.v,0), b = S.budget[S.mode];
+  const pill = $('budgetpill');
+  if(!rows.length){ pill.className='st none'; pill.textContent='No resources yet'; }
+  else if(total > b){ pill.className='st off'; pill.textContent='Over budget'; }
+  else if(total > 0.85*b){ pill.className='st drift'; pill.textContent='Near budget'; }
+  else { pill.className='st ok'; pill.textContent='Within budget'; }
+  $('price').innerHTML = `
+   <div class="budget"><label for="budgetin">Monthly budget (${S.mode==='poc'?'POC':'production'})</label><input id="budgetin" inputmode="numeric" value="${b}"><span class="note">${rows.length?`${Math.round(total/b*100)}% used`:''}</span></div>
+   <div class="tablewrap"><table class="mini"><thead><tr><th>Component</th><th>Resource</th><th style="text-align:right">Per month</th></tr></thead><tbody>
+   ${rows.length ? rows.map(r=>`<tr><td>${esc(r.c)}</td><td>${esc(r.r)}</td><td class="num">${inr(r.v)}</td></tr>`).join('') : '<tr><td colspan="3" class="note">Resources are added as decisions are proposed.</td></tr>'}
+   ${rows.length?`<tr class="total"><td>Total</td><td>${S.mode==='poc'?'POC sizing':'Production sizing'}</td><td class="num">${inr(total)}</td></tr>`:''}</tbody></table></div>
+   <div><span class="eyebrow">Team resources · ${S.mode==='poc'?'POC':'production'}</span>
+   <table class="mini">${TEAM[S.mode].map(t=>`<tr><td>${t[0]}</td><td class="num">${t[1]}</td></tr>`).join('')}</table></div>
+   <p class="note">Rough illustrative estimates; verify in the Azure pricing calculator. Payment provider fees are per transaction and excluded.</p>`;
+  $('budgetin').onchange = e => { const v = parseInt(String(e.target.value).replace(/[^0-9]/g,''),10); if(v>0){ S.budget[S.mode]=v; } renderPrice(); };
+}
+function renderReqApproval(){
+  const gy = GRAY.filter(g => !S.grayClear.has(g.id));
+  $('approve').hidden = false;
+  $('approve').innerHTML = `<div class="head"><b>Requirements for you.</b> ${FR.length} functional and ${NFR.length} non-functional requirements are in the green area. Tick the gray-area assumptions you confirm.</div>
+   <div class="gconfirm">${gy.length ? gy.map(g=>`<label><input type="checkbox" data-g="${g.id}" checked> <b>${esc(g.q)}</b><span class="as">${esc(g.a)}</span></label>`).join('') : '<span class="note">All gray items confirmed.</span>'}</div>
+   <div class="acts"><button class="good" type="button" id="reqBtn">Confirm requirements and start design</button></div>`;
+  $('reqBtn').onclick = confirmReqs;
+}
+function confirmReqs(){
+  if(S.phase!=='reqs' || !S.waiting) return;
+  document.querySelectorAll('[data-g]').forEach(c => { if(c.checked) S.grayClear.add(c.dataset.g); });
+  const left = GRAY.filter(g => !S.grayClear.has(g.id));
+  S.reqDecided = true; S.phase='topics'; S.waiting=false; $('approve').hidden = true;
+  addMsg('you', `Requirements confirmed.${left.length ? ` Still open: ${left.map(g=>g.q).join(', ')}.` : ' Gray area cleared.'}`);
+  saveToDB('Requirements', `${FR.length} FRs, ${NFR.length} NFRs; ${GRAY.length-left.length} assumptions confirmed`);
+  renderAll(); kick();
+}
+let crawling = false;
+function renderSites(){
+  $('sites').innerHTML = SITES.map((s,i) => `<div class="site" id="site-${i}"><span class="d">${esc(s.d)}</span>
+    <span class="stt ${s.cited?'cited':s.st}">${s.cited?`cited ×${s.cited}`:s.st==='indexed'?'indexed':s.st==='crawling'?'crawling…':'queued'}</span>
+    <span class="ty">${esc(s.ty)}</span><span class="ty mono" style="text-align:right">${s.st==='indexed'?s.pages.toLocaleString()+' pages':'–'}</span></div>`).join('');
+}
+function renderDB(){
+  $('dbcount').textContent = `· ${DB.length} records`;
+  $('dbrows').innerHTML = DB.map(r => `<tr id="db-${r.id}" class="${r.isNew?'new':''}"><td class="dt">${r.date}</td><td>${esc(r.proj)}</td><td>${esc(r.topic)}</td>
+    <td>${esc(r.decision)}${r.isNew?'<span class="newtag">saved now</span>':''}</td><td>${esc(r.by)}</td></tr>`).join('');
+}
+function crawlAll(){
+  if(crawling) return;
+  const next = SITES.findIndex(s => s.st==='queued');
+  if(next<0) return;
+  crawling = true;
+  SITES[next].st = 'crawling'; renderSites();
+  setTimeout(() => { SITES[next].st = 'indexed'; crawling = false; renderSites(); crawlAll(); }, 700);
+}
+function cite(ev){
+  if(ev.site){
+    const i = SITES.findIndex(s => s.d===ev.site);
+    if(i<0) return;
+    SITES[i].st = 'indexed'; SITES[i].cited++; renderSites();
+    const el = $('site-'+i); el.classList.add('flash'); setTimeout(() => el && el.classList.remove('flash'), 2500);
+  } else if(ev.db){
+    const el = $('db-'+ev.db); if(!el) return;
+    el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 3000);
+  }
+}
+function saveToDB(topic, decision){
+  DB.unshift({id:'ss-'+Date.now(), date:'23 Oct 2026', proj:'ShopSphere', topic, decision, by:'You', isNew:true});
+  renderDB();
+}
+
+/* state */
+let S;
+function fresh(keepGoals){
+  const goals = keepGoals && S ? {mode:S.mode, w:S.w} : {mode:'prod', w:{perf:3,cost:3,scale:3,rel:3,sec:3,speed:3,ops:3}};
+  S = {...goals, started:false, playing:false, t:0, line:0, waiting:false, finished:false, signed:false,
+       inserts:[], turns:0, ledger:[], visible:new Set(), newN:new Set(), labels:{}, token:0, timer:null,
+       notes:[], strong:{}, history:[], lastStatus:null, sel:null, topicStrong:[], phase:'strategy', sline:0, votesShown:false, stratDecided:false, rline:0, reqShown:new Set(), grayClear:new Set(), reqDecided:false, budget:{poc:15000, prod:150000}};
+}
+fresh();
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- scoring ---------- */
+const effW = c => S.w[c] * MODE[S.mode].mult[c];
+function optScore(o){
+  let n=0,d=0; CRIT.forEach(({k}) => { n += effW(k)*o.s[k]; d += effW(k); });
+  return d ? Math.round(n/d) : 0;
+}
+function bestIdx(topic){
+  let b=0; topic.options.forEach((o,i) => { if(optScore(o) > optScore(topic.options[b])) b=i; }); return b;
+}
+function target(c){ return Math.min(95, Math.round(35 + 12*effW(c))); }
+function fitCalc(){
+  const chosen = S.ledger.filter(Boolean).map(e => TOPICS[e.i].options[e.choice]);
+  if(!chosen.length) return null;
+  const ach = {}, tgt = {};
+  CRIT.forEach(({k}) => { ach[k] = Math.round(chosen.reduce((a,o)=>a+o.s[k],0)/chosen.length); tgt[k] = target(k); });
+  let n=0,d=0; const gaps=[];
+  CRIT.forEach(c => { const g = Math.max(0, tgt[c.k]-ach[c.k]); n += effW(c.k)*g; d += effW(c.k); if(g>0) gaps.push({...c, g, t:tgt[c.k], a:ach[c.k], w:effW(c.k)*g}); });
+  const fit = Math.max(0, Math.min(100, Math.round(100 - 2*(d? n/d : 0))));
+  gaps.sort((a,b)=>b.w-a.w);
+  const status = fit>=75 ? 'ok' : fit>=60 ? 'drift' : 'off';
+  return {ach, tgt, fit, gaps, status};
+}
+const STATUS_TXT = {ok:'On track', drift:'Drifting', off:'Off track'};
+
+/* ---------- avatars ---------- */
+function face(key){
+  const c = AGENTS[key].color;
+  const extra = {
+    mod:   `<path d="M14 32a18 18 0 0 1 36 0" fill="none" stroke="${c}" stroke-width="3"/><rect x="11" y="30" width="6" height="10" rx="3" fill="${c}"/><path d="M14 40q0 8 10 9" fill="none" stroke="${c}" stroke-width="2"/>`,
+    arch:  `<circle cx="25" cy="31" r="5.5" fill="none" stroke="var(--ink)" stroke-width="1.8"/><circle cx="39" cy="31" r="5.5" fill="none" stroke="var(--ink)" stroke-width="1.8"/><path d="M30.5 31h3" stroke="var(--ink)" stroke-width="1.8"/>`,
+    cloud: `<path d="M18 22a7 7 0 0 1 11-5 8 8 0 0 1 14 2 6 6 0 0 1 4 9H17a5 5 0 0 1 1-6z" fill="${c}" opacity=".85"/>`,
+    critic:`<path d="M20 25l9 2M44 23l-9 3" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/>`,
+    you:   `<path d="M18 24q14-12 28 0" fill="none" stroke="${c}" stroke-width="3" stroke-linecap="round"/>`
+  }[key];
+  return `<svg viewBox="0 0 64 64" aria-hidden="true"><circle class="ring" cx="32" cy="34" r="27" fill="none" stroke="${c}" stroke-width="1.5"/>
+    <circle cx="32" cy="34" r="22" fill="${c}" fill-opacity=".16"/><circle cx="25" cy="31" r="2.2" fill="var(--ink)"/><circle cx="39" cy="31" r="2.2" fill="var(--ink)"/>
+    <rect class="mouth" x="27" y="41" width="10" height="3" rx="1.5" fill="var(--ink)"/>${extra}</svg>`;
+}
+function renderStage(){
+  $('stage').innerHTML = Object.keys(AGENTS).map(k => `<div class="seat" id="seat-${k}">${face(k)}
+    <div class="nm" style="color:${AGENTS[k].color}">${AGENTS[k].name}</div>
+    <div class="rl">${AGENTS[k].role}<br><span class="mono">${AGENTS[k].model}</span></div>
+    <div class="pts" id="pts-${k}">${k==='you'?'&nbsp;':'0 strong points'}</div>
+    <div class="badge"></div></div>`).join('');
+}
+function setSpeaker(k, strong){
+  document.querySelectorAll('.seat').forEach(s => {s.classList.remove('speaking','star'); s.querySelector('.badge').textContent='';});
+  if(!k) return;
+  const s = $('seat-'+k); s.classList.add('speaking'); if(strong) s.classList.add('star');
+  s.querySelector('.badge').textContent = strong ? 'strong point' : 'speaking';
+}
+function bumpStrong(k){
+  S.strong[k] = (S.strong[k]||0)+1;
+  const el = $('pts-'+k); if(el) el.textContent = S.strong[k] + (S.strong[k]===1?' strong point':' strong points');
+}
+
+/* ---------- goals UI ---------- */
+function renderGoals(){
+  document.querySelectorAll('#mode button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode===S.mode));
+  $('modenote').textContent = MODE[S.mode].note;
+  $('sliders').innerHTML = CRIT.map(c => `<div class="sl"><label for="w-${c.k}">${c.l}<span id="wv-${c.k}">${S.w[c.k]}</span></label>
+    <input type="range" id="w-${c.k}" min="0" max="5" step="1" value="${S.w[c.k]}"></div>`).join('');
+  CRIT.forEach(c => $('w-'+c.k).addEventListener('input', e => {
+    S.w[c.k] = +e.target.value; $('wv-'+c.k).textContent = e.target.value; goalsChanged();
+  }));
+}
+function goalsChanged(){
+  if(S.waiting) renderApproval(true);
+  renderFit(); renderPrice(); renderLedger(); renderDoc();
+}
+document.querySelectorAll('#mode button').forEach(b => b.onclick = () => {
+  if(S.mode===b.dataset.mode) return;
+  S.mode = b.dataset.mode;
+  document.querySelectorAll('#mode button').forEach(x => x.setAttribute('aria-pressed', x.dataset.mode===S.mode));
+  $('modenote').textContent = MODE[S.mode].note;
+  if(S.started && !S.finished){ S.inserts.push(['mod', `Build target switched to ${MODE[S.mode].name}. I have re-scored the options against that.`]); kick(); }
+  goalsChanged();
+});
+
+/* ---------- agenda ---------- */
+function renderAgenda(){
+  const sCls = S.stratDecided ? 'done' : S.phase==='strategy' && S.waiting ? 'wait current' : S.started ? 'current' : '';
+  const sSt = S.stratDecided ? 'Agreed' : S.phase==='strategy' && S.waiting ? 'Awaiting you' : S.started ? 'Agents voting' : 'Upcoming';
+  const rCls = S.reqDecided ? 'done' : S.phase==='reqs' && S.waiting ? 'wait current' : S.phase==='reqs' ? 'current' : '';
+  const rSt = S.reqDecided ? 'Confirmed' : S.phase==='reqs' && S.waiting ? 'Awaiting you' : S.phase==='reqs' ? 'Extracting' : 'Upcoming';
+  $('agenda').innerHTML = `<div class="step ${sCls}"><span class="n">Step 0</span><span class="t">Strategy</span><span class="s">${sSt}</span></div><div class="step ${rCls}"><span class="n">Step 1</span><span class="t">Requirements</span><span class="s">${rSt}</span></div>` + TOPICS.map((t,i) => {
+    const e = S.ledger[i]; let cls='', st='Upcoming';
+    if(e && e.status!=='pending'){cls='done'; st='Decided';}
+    else if(e){cls='wait current'; st='Awaiting you';}
+    else if(i===S.t && S.started && !S.finished && S.phase==='topics'){cls='current'; st='In discussion';}
+    return `<div class="step ${cls}"><span class="n">Topic ${i+1}</span><span class="t">${t.title}</span><span class="s">${st}</span></div>`;
+  }).join('');
+}
+
+/* ---------- transcript ---------- */
+function emptyLog(){
+  $('log').innerHTML = '<p class="empty">The discussion appears here. Arguments backed by a web source, a past project or vendor docs are marked as strong points. Each topic ends with scored options for you to choose from.</p>';
+}
+function addMsg(k, text, extra){
+  const log = $('log');
+  if(S.turns===0) log.innerHTML='';
+  S.turns++; $('turns').textContent = S.turns+' turns';
+  const a = AGENTS[k], ev = extra && extra.ev;
+  const div = document.createElement('div');
+  div.className = 'msg'+(k==='you'?' you':'');
+  div.innerHTML = `<div class="dot" style="background:${a.color}">${a.name[0]}</div>
+    <div><div class="who">${a.name}<span>${a.role}</span>${ev?'<em class="strongtag">Strong point</em>':''}</div><p>${esc(text)}</p>
+    ${ev?`<div class="ev"><span class="k">Evidence · ${esc(ev.k)}</span><br>${esc(ev.note)}<br><span class="src">${esc(ev.src)}${ev.site?` · ${esc(ev.site)} (knowledge base)`:''}</span></div>`:''}
+    ${extra && extra.box ? `<div class="box">${extra.box}</div>`:''}
+    ${extra && extra.alert ? `<div class="alert ${extra.level==='drift'?'warn':''}">${extra.alert}</div>`:''}</div>`;
+  log.appendChild(div); log.scrollTop = log.scrollHeight;
+}
+
+/* ---------- voice ---------- */
+let voices = [];
+function loadVoices(){ try{ voices = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang)); }catch(e){ voices=[]; } }
+if('speechSynthesis' in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+function pickVoice(k){
+  if(!voices.length) return null;
+  const exact = voices.filter(v => v.lang.replace('_','-').toLowerCase()===AGENTS[k].lang.toLowerCase());
+  return exact[0] || voices[['mod','arch','cloud','critic'].indexOf(k) % voices.length];
+}
+const speed = () => parseFloat($('speed').value);
+function say(k, text, done, strong){
+  const tok = ++S.token;
+  const finish = () => { if(tok!==S.token) return; clearTimeout(S.timer); setSpeaker(null); done(); };
+  setSpeaker(k, strong);
+  const words = text.split(/\s+/).length;
+  if($('voice').checked && 'speechSynthesis' in window && k!=='you'){
+    try{
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      const v = pickVoice(k); if(v) u.voice = v;
+      u.pitch = AGENTS[k].pitch||1; u.rate = Math.min(1+(speed()-1)*0.6, 2);
+      u.onend = () => setTimeout(finish, 250); u.onerror = () => setTimeout(finish, 250);
+      speechSynthesis.speak(u);
+      S.timer = setTimeout(finish, (words*520+4000)/Math.max(1,(speed()+1)/2));
+      return;
+    }catch(e){}
+  }
+  S.timer = setTimeout(finish, Math.max(1600, words*300)/speed());
+}
+const status = h => $('status').innerHTML = h;
+
+/* ---------- engine ---------- */
+function kick(){
+  if(!S.started) return;
+  if(!S.playing){ S.playing = true; updatePlay(); }
+  clearTimeout(S.timer); S.token++; try{ speechSynthesis.cancel(); }catch(e){}
+  step();
+}
+function step(){
+  if(!S.playing) return;
+  if(S.inserts.length){
+    const [k, text, extra] = S.inserts.shift();
+    addMsg(k, text, extra);
+    status(`<b>${AGENTS[k].name}</b> is speaking…`);
+    say(k, text, step);
+    return;
+  }
+  if(S.waiting || S.finished){
+    setSpeaker(null);
+    status(S.finished ? 'Session complete. Review the document below and sign off.' : (S.phase==='strategy' ? '<b>Waiting for you</b>: the agents agree on six frameworks and are split on one. Decide it to continue.' : S.phase==='reqs' ? '<b>Waiting for you</b>: confirm the gray-area assumptions to start design.' : '<b>Waiting for you</b>: pick an option and approve, or send it back with a reason.'));
+    return;
+  }
+  if(S.phase==='strategy'){
+    if(S.sline < STRAT_LINES.length){
+      const [k, text, ev, detect] = STRAT_LINES[S.sline++];
+      addMsg(k, text, {ev: ev||undefined});
+      if(ev){ bumpStrong(k); cite(ev); }
+      if(detect){ detect.forEach(id => id==='votes' ? (S.votesShown = true) : FOUND.add(id)); renderStrats(); }
+      status(`<b>${AGENTS[k].name}</b> (${AGENTS[k].role}) · Agreeing the architecture strategy`);
+      renderAgenda();
+      say(k, text, step, !!ev);
+    } else {
+      S.waiting = true; renderStratApproval(); renderAll(); step();
+    }
+    return;
+  }
+  if(S.phase==='reqs'){
+    if(S.rline < REQ_LINES.length){
+      const [k, text, ev, detect] = REQ_LINES[S.rline++];
+      addMsg(k, text);
+      if(detect){ detect.forEach(id => S.reqShown.add(id)); renderReqs(); }
+      status(`<b>${AGENTS[k].name}</b> (${AGENTS[k].role}) · Extracting requirements`);
+      renderAgenda();
+      say(k, text, step);
+    } else { S.waiting = true; renderReqApproval(); renderAll(); step(); }
+    return;
+  }
+  const topic = TOPICS[S.t];
+  if(S.line < topic.lines.length){
+    const [k, text, ev, detect] = topic.lines[S.line++];
+    if(detect){ detect.forEach(id => FOUND.add(id)); renderStrats(); }
+    addMsg(k, text, {ev});
+    if(ev){ bumpStrong(k); cite(ev); (S.topicStrong[S.t] = S.topicStrong[S.t] || []).push({k, ev}); }
+    status(`<b>${AGENTS[k].name}</b> (${AGENTS[k].role})${ev?' makes an evidence-backed point':' is speaking'} · Topic ${S.t+1}: ${topic.title}`);
+    renderAgenda();
+    say(k, text, step, !!ev);
+  } else {
+    const b = bestIdx(topic), best = topic.options[b], panel = topic.options[topic.panel];
+    const strongest = (S.topicStrong[S.t]||[]).slice(-1)[0];
+    const text = `Weighing the options for a ${MODE[S.mode].name} build against your priorities, ${best.name} scores highest at ${optScore(best)}. ` +
+      (b===topic.panel ? 'The panel agrees.' : `The panel preferred ${panel.name}, so this one is your call.`);
+    const fr = topicRefs(topic);
+    const box = (fr.length?`<span class="eyebrow">Checked against</span><div class="tags2">${fr.map(r=>`<span class="ftag">${esc(tagText(r))}</span>`).join('')}</div><br>`:'') + `<span class="eyebrow">Strongest argument</span><br>${strongest ? `${AGENTS[strongest.k].name}: ${esc(strongest.ev.note)} <span class="note">(${esc(strongest.ev.src)})</span>` : 'No evidence-backed point raised.'}`;
+    addMsg('mod', text, {box});
+    S.ledger[S.t] = {i:S.t, topic:topic.title, choice:b, status:'pending', questions:S.notes.splice(0), constraints:[]};
+    S.sel = b; S.waiting = true;
+    showNodes(topic, b);
+    renderAll(); renderApproval();
+    say('mod', text, step);
+  }
+}
+function showNodes(topic, choice){
+  topic.nodes.forEach(n => S.visible.add(n));
+  S.newN = new Set(topic.nodes);
+  TOPICS.forEach(t => t.options.forEach(o => o.relabel && Object.keys(o.relabel).forEach(n => {
+    if(t===topic) delete S.labels[n];
+  })));
+  const o = topic.options[choice];
+  if(o.relabel) Object.assign(S.labels, o.relabel);
+}
+
+/* ---------- approval ---------- */
+function renderApproval(keep){
+  const topic = TOPICS[S.t], b = bestIdx(topic);
+  if(!keep || S.sel==null) S.sel = b;
+  $('approve').hidden = false;
+  $('approve').innerHTML = `<div class="head"><b>Decision for you · ${topic.title}.</b> Scores weigh each option against your priorities for a ${MODE[S.mode].name} build.</div>
+   <div class="opts" role="radiogroup" aria-label="Options">
+   ${topic.options.map((o,i) => { const s = optScore(o); return `<label class="opt"><input type="radio" name="opt" value="${i}" ${i===S.sel?'checked':''}>
+     <div><div class="nm">${esc(o.name)}</div><div class="tags">${i===b?'<span class="tg best">Best fit for your priorities</span>':''}${i===topic.panel?'<span class="tg panel">Panel\'s pick</span>':''}</div></div>
+     <span class="sc">${s}<br><span class="pr">${inr(costOf(o))}/mo</span></span><div class="bar"><i style="width:${s}%"></i></div></label>`; }).join('')}
+   </div>
+   <div class="acts"><input id="reason" placeholder="Reason, needed to send back (e.g. budget under ₹50k/month)" aria-label="Reason for sending back">
+     <button class="bad" type="button" id="sendback">Send back</button><button class="good" type="button" id="approveBtn">Approve selected</button></div>`;
+  document.querySelectorAll('input[name="opt"]').forEach(r => r.onchange = () => {
+    S.sel = +r.value; const e = S.ledger[S.t]; e.choice = S.sel; showNodes(topic, S.sel); renderAll();
+  });
+  $('approveBtn').onclick = approve;
+  $('sendback').onclick = () => {
+    const v = $('reason').value.trim();
+    if(!v){ $('reason').focus(); $('reason').placeholder = 'Type a reason first, then Send back'; return; }
+    sendBack(v);
+  };
+}
+function renderStratApproval(){
+  const split = STRATS.filter(x => FOUND.has(x.id) && isSplit(x.id));
+  const agreed = STRATS.filter(x => FOUND.has(x.id) && !isSplit(x.id));
+  $('approve').hidden = false;
+  $('approve').innerHTML = `<div class="head"><b>Strategy for you.</b> ${agreed.length} frameworks are agreed by all four agents and adopted. ${split.length} ${split.length===1?'is':'are'} split; your decision is final.</div>
+   ${split.map(x => { const a = STRAT_ARGS[x.id]||{}; const yes = VOTERS.filter(k=>voteOf(x.id,k)).length;
+     return `<div class="contest"><div><b>${esc(stratName(x))}</b> <span class="vstat split">· ${yes}–${VOTERS.length-yes} split</span></div>
+      <div class="votes">${VOTERS.map(k => `<span class="vchip ${voteOf(x.id,k)?'':'no'}">${AGENTS[k].name} ${voteOf(x.id,k)?'✓':'✗'}</span>`).join('')}</div>
+      <div class="args"><div><span class="eyebrow">For</span><br>${esc(a.for||'')}</div><div><span class="eyebrow">Against</span><br>${esc(a.against||'')}</div></div>
+      <div class="choice" role="radiogroup" aria-label="Decision for ${esc(stratName(x))}">
+        <label><input type="radio" name="sc-${x.id}" value="1" checked> Follow it</label>
+        <label><input type="radio" name="sc-${x.id}" value="0"> Drop it</label></div></div>`; }).join('')}
+   <div><span class="eyebrow">Agreed by all</span><div class="agreed" style="margin-top:4px">${agreed.map(x=>`<span class="ftag">${esc(stratName(x))}</span>`).join('')}</div></div>
+   <div class="acts"><button class="good" type="button" id="adoptBtn">Adopt strategy and continue</button></div>`;
+  $('adoptBtn').onclick = adoptStrategy;
+}
+function adoptStrategy(){
+  if(S.phase!=='strategy' || !S.waiting) return;
+  const split = STRATS.filter(x => FOUND.has(x.id) && isSplit(x.id));
+  const picks = split.map(x => { const v = document.querySelector(`input[name="sc-${x.id}"]:checked`); x.on = !v || v.value==='1'; return `${stratName(x)}: ${x.on?'follow':'drop'}`; });
+  S.stratDecided = true; S.phase = 'reqs'; S.waiting = false; $('approve').hidden = true;
+  addMsg('you', `Strategy adopted. ${picks.join('. ')}.`);
+  saveToDB('Strategy', `Adopted ${STRATS.filter(x=>x.on && FOUND.has(x.id)).map(stratName).join(', ')}`);
+  renderAll(); kick();
+}
+function approve(){
+  if(!S.waiting) return;
+  const topic = TOPICS[S.t], e = S.ledger[S.t];
+  e.choice = S.sel; e.status = e.choice===topic.panel ? 'approved' : 'reviewer';
+  e.score = optScore(topic.options[e.choice]);
+  S.waiting = false; $('approve').hidden = true;
+  addMsg('you', `Approved: ${topic.options[e.choice].name}. Saved to the decision database.`);
+  saveToDB(topic.title, topic.options[e.choice].name);
+  S.newN = new Set();
+  const f = fitCalc();
+  S.history.push(f.fit);
+  if(f.status!=='ok'){
+    const g = f.gaps.slice(0,2).map(x => `${x.l} (needs ${x.t}, has ${x.a})`).join(' and ');
+    S.inserts.push(['mod', `Heads up: fit to your goals is ${f.fit} out of 100, which is ${STATUS_TXT[f.status].toLowerCase()}. The biggest gaps are ${g.replace(/\(needs (\d+), has (\d+)\)/g,'')}.`,
+      {alert:`<b>${STATUS_TXT[f.status]} · fit ${f.fit}/100.</b> Biggest gaps: ${esc(g)}. Consider revisiting a decision or adjusting priorities.`, level:f.status}]);
+  } else if(S.lastStatus && S.lastStatus!=='ok'){
+    S.inserts.push(['mod', `Good. We are back on track at ${f.fit} out of 100.`]);
+  }
+  S.lastStatus = f.status;
+  const tot = costRows().reduce((a,r)=>a+r.v,0), bud = S.budget[S.mode];
+  if(tot > bud) S.inserts.push(['mod', `Cost check: the estimate is now ${inr(tot)} a month, over the ${inr(bud)} budget.`, {alert:`<b>Over budget.</b> Estimated ${inr(tot)}/month vs budget ${inr(bud)}. Revisit a decision, raise the budget, or switch to POC sizing.`, level:'off'}]);
+  S.t++; S.line = 0;
+  if(S.t >= TOPICS.length){
+    S.finished = true;
+    S.inserts.push(['mod', `All topics are decided. Final fit is ${f.fit} out of 100. I have drafted the architecture document from the ledger. Please review it and sign off.`]);
+  }
+  renderAll(); kick();
+}
+function sendBack(reason){
+  const topic = TOPICS[S.t], e = S.ledger[S.t];
+  e.constraints.push(reason);
+  addMsg('you', `Sending back: ${reason}`);
+  const k = /cost|budget|₹|\$|cheap|price|resource/i.test(reason) ? 'cloud' : /secur|risk|data|compliance/i.test(reason) ? 'critic' : 'arch';
+  S.inserts.push(['mod', `Understood. I am treating that as a hard constraint and re-scoring. ${AGENTS[k].name}, does the recommendation change?`]);
+  S.inserts.push([k, `With that constraint, I would lean toward whichever option scores best on it. I have noted the trade-off in the ledger. You can raise that priority above and the scores will update.`]);
+  renderLedger(); kick();
+}
+function interject(text){
+  addMsg('you', text);
+  const t = text.toLowerCase();
+  let k = 'arch';
+  if(/cost|price|budget|cheap|expens|scale|scaling|spike|sale|traffic|cloud|azure|aws|gcp|server/.test(t)) k='cloud';
+  else if(/secur|auth|login|data|privacy|gdpr|risk|fail|why|wrong|evidence|proof/.test(t)) k='critic';
+  const replies = {
+    arch:  'Good point. I will reflect that in the design and record the trade-off so it shows in the document.',
+    cloud: 'Fair question. I will add a capacity and cost note for it, with figures to verify in the cloud pricing calculator and a load test before launch.',
+    critic:'That is a real risk. I am logging it as an open question that needs evidence, such as a load test or a reference case, before sign-off.'
+  };
+  const cur = S.ledger[S.t];
+  if(cur && cur.status==='pending') cur.questions.push(text); else S.notes.push(text);
+  S.inserts.push(['mod', `Thanks. Logging that as an open question. ${AGENTS[k].name}, can you respond?`]);
+  S.inserts.push([k, replies[k]]);
+  renderLedger(); renderDoc();
+  if(!S.started){ start(); return; }
+  kick();
+}
+
+/* ---------- fit visuals ---------- */
+function renderFit(){
+  const f = fitCalc();
+  const cx=160, cy=128, R=92, n=CRIT.length;
+  const pt = (v,i) => { const a = -Math.PI/2 + i*2*Math.PI/n; return [cx + R*(v/100)*Math.cos(a), cy + R*(v/100)*Math.sin(a)]; };
+  const poly = vals => vals.map((v,i)=>pt(v,i).map(x=>x.toFixed(1)).join(',')).join(' ');
+  let svg = `<svg viewBox="0 0 320 256" role="img" aria-label="Radar of target versus delivered scores per criterion">`;
+  [25,50,75,100].forEach(r => svg += `<polygon class="radar-ring" points="${poly(CRIT.map(()=>r))}"/>`);
+  CRIT.forEach((c,i) => { const [x,y] = pt(100,i); svg += `<line class="radar-axis" x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`; });
+  const tg = CRIT.map(c => target(c.k));
+  svg += `<polygon class="radar-target" points="${poly(tg)}"/>`;
+  if(f) svg += `<polygon class="radar-now" points="${poly(CRIT.map(c=>f.ach[c.k]))}"/>`;
+  const gapKeys = f ? new Set(f.gaps.slice(0,2).map(g=>g.k)) : new Set();
+  CRIT.forEach((c,i) => {
+    const [x,y] = pt(118,i);
+    const anchor = Math.abs(x-cx)<8 ? 'middle' : x>cx ? 'start' : 'end';
+    svg += `<text class="radar-lbl${gapKeys.has(c.k)?' gap':''}" x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="${anchor}">${c.s}</text>`;
+  });
+  $('radar').innerHTML = svg + '</svg>';
+
+  const pill = $('fitpill');
+  if(!f){
+    pill.className='st none'; pill.textContent='No decisions yet';
+    $('fitnum').innerHTML = '–<small> /100</small>';
+    $('gaps').innerHTML = '<li class="note">The dashed shape is what your priorities need. The filled shape appears as decisions are made.</li>';
+  } else {
+    pill.className = 'st '+f.status; pill.textContent = STATUS_TXT[f.status];
+    $('fitnum').innerHTML = `${f.fit}<small> /100</small>`;
+    $('gaps').innerHTML = f.gaps.length ? f.gaps.slice(0,3).map(g => `<li><b>${g.l}</b>: needs ${g.t}, has ${g.a}</li>`).join('') : '<li>Every criterion meets its target.</li>';
+  }
+  // sparkline of fit after each approved topic
+  const hs = S.history, W=200, Hh=64;
+  let sp = `<svg class="spark" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Fit score after each decision">`;
+  const yv = v => (Hh-14) - (v/100)*(Hh-22) + 4;
+  sp += `<line x1="0" x2="${W}" y1="${yv(75).toFixed(1)}" y2="${yv(75).toFixed(1)}" stroke="var(--good)" stroke-dasharray="3 3" stroke-width="1"/>`;
+  sp += `<line x1="0" x2="${W}" y1="${yv(60).toFixed(1)}" y2="${yv(60).toFixed(1)}" stroke="var(--bad)" stroke-dasharray="3 3" stroke-width="1"/>`;
+  sp += `<text class="lbl" x="${W}" y="${(yv(75)-3).toFixed(1)}" text-anchor="end">on track 75</text>`;
+  sp += `<text class="lbl" x="${W}" y="${(yv(60)+11).toFixed(1)}" text-anchor="end">off track 60</text>`;
+  if(hs.length){
+    const xs = i => hs.length===1 ? 10 : 10 + i*((W-60)/(TOPICS.length-1));
+    if(hs.length>1) sp += `<polyline fill="none" stroke="var(--accent)" stroke-width="2" points="${hs.map((v,i)=>`${xs(i).toFixed(1)},${yv(v).toFixed(1)}`).join(' ')}"/>`;
+    hs.forEach((v,i) => sp += `<circle cx="${xs(i).toFixed(1)}" cy="${yv(v).toFixed(1)}" r="${i===hs.length-1?4:2.5}" fill="var(--accent)"/>`);
+  }
+  sp += `<text class="lbl" x="0" y="${Hh-1}">fit after each decision</text>`;
+  $('spark').innerHTML = sp + '</svg>';
+}
+
+/* ---------- diagram ---------- */
+function clip(a,b){
+  const ax=a.x+a.w/2, ay=a.y+H/2, bx=b.x+b.w/2, by=b.y+H/2, dx=bx-ax, dy=by-ay;
+  const t1=Math.min(Math.abs((a.w/2)/(dx||1e-9)),Math.abs((H/2)/(dy||1e-9))), t2=Math.min(Math.abs((b.w/2)/(dx||1e-9)),Math.abs((H/2)/(dy||1e-9)));
+  return [ax+dx*t1, ay+dy*t1, bx-dx*t2, by-dy*t2];
+}
+function renderDiagram(){
+  const vis = S.visible;
+  let out = `<svg viewBox="0 0 560 440" role="img" aria-label="Architecture diagram built from decisions"><defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>`;
+  if(!vis.size) out += `<g class="ghost"><rect x="140" y="170" width="280" height="90" rx="10"/><text x="280" y="210" text-anchor="middle">Components appear here</text><text x="280" y="230" text-anchor="middle">as each decision is proposed</text></g>`;
+  EDGES.forEach(([a,b]) => { if(!vis.has(a)||!vis.has(b)) return; const [x1,y1,x2,y2]=clip(NODES[a],NODES[b]);
+    out += `<path class="edge" d="M${x1.toFixed(1)} ${y1.toFixed(1)}L${x2.toFixed(1)} ${y2.toFixed(1)}" marker-end="url(#arr)"/>`; });
+  Object.keys(NODES).forEach(k => { if(!vis.has(k)) return; const n=NODES[k], lab=S.labels[k];
+    out += `<g class="node${n.ext?' ext':''}${S.newN.has(k)?' new':''}"><rect x="${n.x}" y="${n.y}" width="${n.w}" height="${H}" rx="8"/>
+      <text x="${n.x+n.w/2}" y="${n.y+19}" text-anchor="middle">${lab?lab[0]:n.l}</text><text class="sub" x="${n.x+n.w/2}" y="${n.y+34}" text-anchor="middle">${lab?lab[1]:n.s}</text></g>`; });
+  $('diagram').innerHTML = out + '</svg>';
+  $('nodecount').textContent = vis.size + ' components';
+}
+
+/* ---------- ledger + doc ---------- */
+const stLabel = s => s==='pending'?'Awaiting you':s==='approved'?'Approved':'Reviewer’s choice';
+function entryDetail(e){
+  const t = TOPICS[e.i], o = t.options[e.choice], strongest = (S.topicStrong[e.i]||[]).slice(-1)[0];
+  return {t, o, strongest, score: optScore(o),
+    dissent: e.choice===t.panel ? t.dissent : `Panel recommended ${t.options[t.panel].name}; reviewer chose this option for the stated priorities.`};
+}
+function renderLedger(){
+  const es = S.ledger.filter(Boolean);
+  $('ledgercount').textContent = es.filter(e=>e.status!=='pending').length + ' / ' + TOPICS.length + ' decided';
+  if(!es.length){ $('ledger').innerHTML = '<p class="empty" style="padding:4px 0">One entry per topic: the chosen option, its score, the strongest evidence and any dissent.</p>'; return; }
+  $('ledger').innerHTML = es.slice().reverse().map(e => { const d = entryDetail(e); return `
+    <div class="entry"><div class="row"><h3>${e.topic}</h3><span class="pill ${e.status}">${stLabel(e.status)}</span></div>
+    <dl><dt>Decision</dt><dd>${esc(d.o.name)} <span class="mono note">· ${d.score}/100</span></dd>
+    <dt>Follows</dt><dd>${topicRefs(d.t).map(r=>esc(tagText(r))).join('<br>')||'—'}</dd>
+    <dt>Evidence</dt><dd>${d.strongest?esc(d.strongest.ev.src):'None cited'}</dd>
+    <dt>Dissent</dt><dd>${esc(d.dissent)}</dd>
+    ${e.constraints.length?`<dt>Constraint</dt><dd>${e.constraints.map(esc).join('<br>')}</dd>`:''}
+    ${e.questions.length?`<dt>Open</dt><dd>${e.questions.map(esc).join('<br>')}</dd>`:''}</dl></div>`; }).join('');
+}
+function renderDoc(){
+  const es = S.ledger.filter(Boolean), f = fitCalc();
+  $('sign').disabled = !S.finished || S.signed;
+  const state = S.signed ? '<span class="signed">Signed off by reviewer</span>' : S.finished ? 'Draft · ready for review' : 'Draft · assembling as topics close';
+  const pri = CRIT.map(c => `${c.l} ${S.w[c.k]}`).join(' · ');
+  if(!es.length){ $('doc').innerHTML = `<article><h3>ShopSphere architecture decision record</h3><p class="note">Target: ${MODE[S.mode].name} · Priorities: ${pri}</p><p class="note">Sections are written from the decision ledger as each topic closes, not from the raw transcript.</p></article>`; return; }
+  const refs = []; es.forEach(e => (S.topicStrong[e.i]||[]).forEach(s => refs.push(`<li><b>${esc(s.ev.k)}:</b> ${esc(s.ev.src)} <span class="note">· cited by ${AGENTS[s.k].name} on ${e.topic}</span></li>`)));
+  const open = es.flatMap(e => e.questions.map(q => `<li>${esc(q)} <span class="note">(${e.topic})</span></li>`));
+  $('doc').innerHTML = `<article>
+    <h3>ShopSphere architecture decision record</h3>
+    <p class="note">Session 23 Oct 2026 · Source: ShopSphere_PRD.pdf (sample) · ${state}</p>
+    <p><b>Build target:</b> ${MODE[S.mode].name === 'POC' ? 'Proof of concept' : 'Production-grade'}. <b>Priorities:</b> ${pri}. ${f?`<b>Fit to goals:</b> ${f.fit}/100 (${STATUS_TXT[f.status].toLowerCase()}).`:''}</p>
+    <h4>Scope</h4><p><b>In:</b> ${SCOPE_IN.join(', ')}. <b>Out:</b> ${SCOPE_OUT.join(', ')}.</p>
+    <h4>Functional requirements</h4><ul>${FR.map(([id,t])=>`<li>${id}: ${t}</li>`).join('')}</ul>
+    <h4>Non-functional requirements</h4><div class="tablewrap"><table><thead><tr><th>Quality</th><th>Target</th><th>Status</th></tr></thead><tbody>${NFR.map(n=>`<tr><td>${n.l}</td><td>${esc(n.t)}</td><td>${esc(nfrStatus(n))}</td></tr>`).join('')}</tbody></table></div>
+    <h4>KPIs</h4><div class="tablewrap"><table><thead><tr><th>KPI</th><th>Target</th><th>Measured by</th></tr></thead><tbody>${KPIS.map(k=>`<tr><td>${k[0]}</td><td>${esc(k[1])}</td><td>${k[2]}</td></tr>`).join('')}</tbody></table></div>
+    <h4>Green area and gray area</h4><p><b>Green:</b> ${GREEN.join('; ')}${GRAY.filter(g=>S.grayClear.has(g.id)).map(g=>`; ${esc(g.q)} (${esc(g.a.replace(/^Assume /,''))}, confirmed)`).join('')}.</p>
+    <p><b>Gray (open):</b> ${GRAY.filter(g=>!S.grayClear.has(g.id)).map(g=>`${esc(g.q)}, assumed: ${esc(g.a.replace(/^Assume /,''))}`).join('; ')||'none'}.</p>
+    <h4>Resources and monthly price</h4>${(() => { const rows = costRows(); const tot = rows.reduce((a,r)=>a+r.v,0);
+      return rows.length ? `<div class="tablewrap"><table><thead><tr><th>Component</th><th>Resource</th><th>Per month</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r.c)}</td><td>${esc(r.r)}</td><td class="num">${inr(r.v)}</td></tr>`).join('')}<tr><td><b>Total</b></td><td>Budget ${inr(S.budget[S.mode])}</td><td class="num"><b>${inr(tot)}</b></td></tr></tbody></table></div><p class="note">Team: ${TEAM[S.mode].map(t=>`${t[0]} ${t[1]}`).join(', ')}. Estimates are illustrative.</p>` : '<p class="note">Added as decisions are made.</p>'; })()}
+    <h4>Strategy followed</h4><ul>${STRATS.filter(x=>x.on && FOUND.has(x.id)).map(x=>`<li><b>${esc(stratName(x))}</b> · ${esc(x.kind)}. ${esc(x.why)}. <span class="note">${isSplit(x.id)?'Split vote; reviewer chose to follow.':'Agreed by all agents.'}</span></li>`).join('')||'<li class="note">Not identified yet.</li>'}</ul>
+    <div class="tablewrap"><table><thead><tr><th>Topic</th><th>Decision</th><th>Score</th><th>Status</th></tr></thead><tbody>
+    ${es.map(e=>{const d=entryDetail(e);return `<tr><td>${e.topic}</td><td>${esc(d.o.name)}</td><td class="num">${d.score}</td><td><span class="pill ${e.status}">${stLabel(e.status)}</span></td></tr>`;}).join('')}
+    </tbody></table></div>
+    ${es.map((e,i)=>{const d=entryDetail(e);return `<h4>${i+1}. ${e.topic}</h4>
+      <p><b>Decision.</b> ${esc(d.o.name)} (score ${d.score}/100).</p>
+      <p><b>Options considered.</b> ${d.t.options.map(o=>`${esc(o.name)} (${optScore(o)})`).join('; ')}.</p>
+      <p><b>Strongest evidence.</b> ${d.strongest?`${esc(d.strongest.ev.note)} <span class="note">${esc(d.strongest.ev.src)}</span>`:'None cited.'}</p>
+      <p><b>Follows.</b> ${topicRefs(d.t).map(r=>esc(tagText(r))).join('; ')||'—'}.</p>
+      <p><b>Dissent.</b> ${esc(d.dissent)}</p>
+      ${e.constraints.length?`<p><b>Reviewer constraints.</b> ${e.constraints.map(esc).join('; ')}</p>`:''}`;}).join('')}
+    <h4>Gaps against goals</h4>${f&&f.gaps.length?`<ul>${f.gaps.map(g=>`<li>${g.l}: needs ${g.t}, delivers ${g.a}</li>`).join('')}</ul>`:'<p class="note">No gaps.</p>'}
+    <h4>Open questions</h4>${open.length?`<ul>${open.join('')}</ul>`:'<p class="note">None raised. Type into the transcript box to add one.</p>'}
+    <h4>References</h4>${refs.length?`<ul>${refs.join('')}</ul>`:'<p class="note">None yet.</p>'}
+  </article>`;
+}
+function docMarkdown(){
+  const es = S.ledger.filter(Boolean), f = fitCalc();
+  let md = `# ShopSphere architecture decision record\n\nTarget: ${MODE[S.mode].name} · Fit: ${f?f.fit+'/100':'n/a'} · Status: ${S.signed?'Signed off':'Draft'}\n\nPriorities: ${CRIT.map(c=>`${c.l} ${S.w[c.k]}`).join(', ')}\n\nStrategy: ${STRATS.filter(x=>x.on && FOUND.has(x.id)).map(stratName).join(', ')}\n\n## Scope\n\nIn: ${SCOPE_IN.join(', ')}\nOut: ${SCOPE_OUT.join(', ')}\n\n## Functional requirements\n\n${FR.map(([i,t])=>`- ${i}: ${t}`).join('\n')}\n\n## Non-functional requirements\n\n${NFR.map(n=>`- ${n.l}: ${n.t} (${nfrStatus(n)})`).join('\n')}\n\n## KPIs\n\n${KPIS.map(k=>`- ${k[0]}: ${k[1]} (${k[2]})`).join('\n')}\n\n## Gray area (open)\n\n${GRAY.filter(g=>!S.grayClear.has(g.id)).map(g=>`- ${g.q}: ${g.a}`).join('\n')||'- none'}\n\n## Monthly price\n\n${costRows().map(r=>`- ${r.c} (${r.r}): ${inr(r.v)}`).join('\n')}\n- Total: ${inr(costRows().reduce((a,r)=>a+r.v,0))} vs budget ${inr(S.budget[S.mode])}\n\n| Topic | Decision | Score | Status |\n|---|---|---|---|\n`;
+  es.forEach(e => { const d=entryDetail(e); md += `| ${e.topic} | ${d.o.name} | ${d.score} | ${stLabel(e.status)} |\n`; });
+  es.forEach((e,i) => { const d=entryDetail(e); md += `\n## ${i+1}. ${e.topic}\n\n- **Decision:** ${d.o.name} (${d.score}/100)\n- **Options:** ${d.t.options.map(o=>`${o.name} (${optScore(o)})`).join('; ')}\n- **Evidence:** ${d.strongest?`${d.strongest.ev.note} — ${d.strongest.ev.src}`:'none'}\n- **Follows:** ${topicRefs(d.t).map(tagText).join('; ')}\n- **Dissent:** ${d.dissent}\n`; if(e.constraints.length) md += `- **Constraints:** ${e.constraints.join('; ')}\n`; });
+  const open = es.flatMap(e => e.questions.map(q => `- ${q} (${e.topic})`));
+  md += `\n## Open questions\n\n${open.length?open.join('\n'):'- None'}\n`;
+  return md;
+}
+
+/* ---------- controls ---------- */
+function renderAll(){ renderStrats(); renderReqs(); renderPrice(); renderAgenda(); renderFit(); renderDiagram(); renderLedger(); renderDoc(); }
+function updatePlay(){ $('play').textContent = !S.started ? '▶ Start session' : S.playing ? '❚❚ Pause' : '▶ Resume'; }
+function start(){ crawlAll(); S.started = true; S.playing = true; updatePlay(); renderAgenda(); step(); }
+$('play').onclick = () => {
+  if(!S.started){ start(); return; }
+  S.playing = !S.playing; updatePlay();
+  if(S.playing) step();
+  else { clearTimeout(S.timer); S.token++; try{speechSynthesis.cancel();}catch(e){} setSpeaker(null); status('Paused. Press <b>Resume</b> or type a question.'); }
+};
+$('reset').onclick = () => {
+  clearTimeout(S.timer); try{speechSynthesis.cancel();}catch(e){}
+  fresh(true); FOUND = new Set(); STRATS.forEach(x => x.on = true); $('approve').hidden = true; emptyLog(); $('turns').textContent='0 turns';
+  renderStage(); updatePlay(); renderAll();
+  status('Set your build target and priorities, then press <b>Start session</b>.');
+};
+$('composer').addEventListener('submit', e => { e.preventDefault(); const v=$('say').value.trim(); if(!v) return; $('say').value=''; interject(v); });
+$('voice').addEventListener('change', () => { if(!$('voice').checked){ try{speechSynthesis.cancel();}catch(e){} } });
+$('sign').onclick = () => { S.signed = true; addMsg('you','Signed off the architecture document.'); renderDoc(); status('Document signed off. In the real app this exports to Markdown, PDF or Word.'); };
+$('copy').onclick = async () => {
+  const md = docMarkdown(), b = $('copy');
+  try{ await navigator.clipboard.writeText(md); b.textContent='Copied'; }
+  catch(e){ const old=$('mdfallback'); if(old) old.remove(); const ta=document.createElement('textarea'); ta.id='mdfallback'; ta.value=md; ta.rows=10; ta.style.width='100%'; $('doc').appendChild(ta); ta.select(); b.textContent='Select and copy below'; }
+  setTimeout(() => b.textContent='Copy as Markdown', 2500);
+};
+
+$('addsite').addEventListener('submit', e => {
+  e.preventDefault();
+  let v = $('newsite').value.trim().replace(/^https?:\/\//,'').replace(/\/.*$/,'');
+  if(!v || !/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(v)){ $('newsite').value=''; $('newsite').placeholder='Enter a domain like example.com'; return; }
+  if(!SITES.some(s => s.d===v)) SITES.push({d:v, ty:'Added by you', pages:40+Math.floor(v.length*17), st:'queued', cited:0});
+  $('newsite').value=''; renderSites(); crawlAll();
+});
+renderGoals(); renderStage(); emptyLog(); renderSites(); renderDB(); renderAll();
+</script>

@@ -1,0 +1,9 @@
+id: evolutionary_architecture
+name: Evolutionary architecture (strangler fig)
+kind: pattern
+summary: Start with one well-modularised deployable; extract services gradually when a real need appears.
+applies_when: {fact: team_size, lte: 12}
+conflicts_with: [microservices_first]
+team_cost: low
+sources:
+  - {url: "https://martinfowler.com/bliki/StranglerFigApplication.html", title: "Strangler Fig Application", kind: official_docs, verified: false}

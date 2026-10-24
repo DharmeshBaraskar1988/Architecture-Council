@@ -1,0 +1,65 @@
+# SAMPLE precedents for demos and tests. They are invented, not real decisions.
+# Loaded with `council ledger seed`; stored with is_sample = 1, shown as SAMPLE, and never weighted
+# as evidence. Real precedents come only from runs a reviewer signed (`council ledger record`).
+# team_size and expected_daily_users are stored as bands (see BANDS in backend/app/ledger/store.py).
+decisions:
+  - id: dec-sample-01-azure_waf
+    project: "SAMPLE: invoice summariser for an Indian bank (fictional)"
+    stage: strategy
+    subject: azure_waf
+    subject_name: Azure Well-Architected Framework
+    outcome: selected
+    agreement: 82
+    rationale: "Azure was the stated cloud; the reliability and cost pillars matched the review needs."
+    conditions: ""
+    context: {cloud_provider: azure, personal_data: true, users_in_india: true, financial_documents: true, team_size: 1, async_workflows: true}
+  - id: dec-sample-02-microservices_first
+    project: "SAMPLE: invoice summariser for an Indian bank (fictional)"
+    stage: strategy
+    subject: microservices_first
+    subject_name: Microservices from day one
+    outcome: rejected
+    agreement: 31
+    rationale: "Team of eight; a modular monolith with one async worker was enough for the first year."
+    conditions: ""
+    context: {cloud_provider: azure, personal_data: true, users_in_india: true, financial_documents: true, team_size: 1, async_workflows: true}
+  - id: dec-sample-03-event_driven
+    project: "SAMPLE: podcast generator for a media start-up (fictional)"
+    stage: strategy
+    subject: event_driven
+    subject_name: Event-driven architecture
+    outcome: selected_with_condition
+    agreement: 68
+    rationale: "Audio rendering runs for minutes; queue-based jobs kept the web app responsive."
+    conditions: "Only for rendering and publishing jobs; the web app stays request-response."
+    context: {cloud_provider: aws, ai_generated_content: true, audio_or_video_output: true, async_workflows: true, independent_scaling_need: true, team_size: 0}
+  - id: dec-sample-04-pci_dss
+    project: "SAMPLE: online shop for a retail chain (fictional)"
+    stage: strategy
+    subject: pci_dss
+    subject_name: PCI DSS
+    outcome: selected
+    agreement: 100
+    rationale: "Binding: the shop takes card payments."
+    conditions: "Use a hosted payment page to keep card data out of scope."
+    context: {cloud_provider: gcp, card_payments: true, personal_data: true, users_in_eu: true, public_web_app: true, expected_daily_users: 2}
+  - id: dec-sample-05-twelve_factor
+    project: "SAMPLE: online shop for a retail chain (fictional)"
+    stage: strategy
+    subject: twelve_factor
+    subject_name: Twelve-Factor App
+    outcome: selected
+    agreement: 77
+    rationale: "Containerised services on a managed platform; config in the environment was already the practice."
+    conditions: ""
+    context: {cloud_provider: gcp, card_payments: true, personal_data: true, users_in_eu: true, public_web_app: true, containerised: true, expected_daily_users: 2}
+  - id: dec-sample-06-c4_model
+    project: "SAMPLE: podcast generator for a media start-up (fictional)"
+    stage: strategy
+    subject: c4_model
+    subject_name: C4 model
+    outcome: selected
+    agreement: 80
+    rationale: "Context and container diagrams were enough for reviews; component diagrams only on request."
+    conditions: ""
+    context: {cloud_provider: aws, ai_generated_content: true, audio_or_video_output: true, async_workflows: true, team_size: 0}

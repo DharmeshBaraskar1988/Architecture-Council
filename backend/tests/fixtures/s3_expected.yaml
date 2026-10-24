@@ -1,0 +1,11 @@
+# Expected Stage 0 results for S3 (MoveWell clinics, a messy Word PRD). Used by evals.
+fact_sheet:
+  must_confirm: [cloud_provider, card_payments, personal_data, health_data, users_in_eu, users_in_india, team_size,
+                 containerised, ci_cd, public_web_app, async_workflows, ai_generated_content]
+  values: {cloud_provider: aws, card_payments: true, users_in_eu: true, users_in_india: true, team_size: 9}
+  must_not_be_true: [independent_scaling_need]     # the CTO says separate scaling is probably not needed
+shortlist:
+  binding: [pci_dss, gdpr, dpdp_india]
+  candidate: [aws_waf, c4_model, adr, atam, evolutionary_architecture, event_driven, owasp_asvs, twelve_factor]
+  not_applicable: [azure_waf, gcp_af, microservices_first]
+decisions: {}

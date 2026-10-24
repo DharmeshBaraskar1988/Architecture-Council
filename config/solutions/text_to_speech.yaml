@@ -1,0 +1,84 @@
+capability: text_to_speech
+description: Convert scripts to natural speech audio
+candidates:
+  - id: azure_ai_speech
+    name: Azure AI Speech
+    type: cloud_managed
+    provider: azure
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview
+      pricing: https://azure.microsoft.com/en-us/pricing/details/cognitive-services/speech-services/
+      terms: https://learn.microsoft.com/en-us/azure/ai-foundry/responsible-ai/speech-service/text-to-speech/data-privacy-security
+      sla: https://www.microsoft.com/licensing/docs/view/Service-Level-Agreements-SLA-for-Online-Services
+  - id: amazon_polly
+    name: Amazon Polly
+    type: cloud_managed
+    provider: aws
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: review
+    note: "AWS may use content processed by Polly to improve the service unless the organisation sets an AI services opt-out policy."
+    pages:
+      official: https://docs.aws.amazon.com/polly/latest/dg/what-is.html
+      pricing: https://aws.amazon.com/polly/pricing/
+      terms: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html
+      sla: https://aws.amazon.com/machine-learning/language/sla/
+  - id: google_cloud_tts
+    name: Google Cloud Text-to-Speech
+    type: cloud_managed
+    provider: gcp
+    licence: proprietary
+    lifecycle: ga
+    sla: true
+    official_api: true
+    data_terms: ok
+    pages:
+      official: https://cloud.google.com/text-to-speech/docs
+      pricing: https://cloud.google.com/text-to-speech/pricing
+      terms: https://cloud.google.com/terms/data-processing-addendum
+      sla: https://cloud.google.com/text-to-speech/sla
+  - id: elevenlabs
+    name: ElevenLabs API
+    type: saas
+    provider: elevenlabs
+    licence: proprietary
+    lifecycle: ga
+    sla: contract
+    official_api: true
+    data_terms: review
+    note: "Uptime commitments and zero-retention mode are offered on enterprise plans."
+    pages:
+      official: https://elevenlabs.io/docs/overview
+      pricing: https://elevenlabs.io/pricing
+      terms: https://elevenlabs.io/terms-of-use
+  - id: kokoro_82m
+    name: Kokoro-82M
+    type: open_source
+    licence: Apache-2.0
+    lifecycle: ga
+    official_api: true
+    data_terms: ok
+    model: hexgrad/Kokoro-82M
+    repo: hexgrad/kokoro
+    pages:
+      official: https://huggingface.co/hexgrad/Kokoro-82M
+      terms: https://github.com/hexgrad/kokoro/blob/main/LICENSE
+  - id: edge_tts
+    name: edge-tts
+    type: open_source
+    licence: LGPL-3.0-only
+    lifecycle: ga
+    official_api: false
+    data_terms: review
+    repo: rany2/edge-tts
+    note: "The client library is open source, but it calls Microsoft Edge's Read Aloud service without an official API agreement; text goes to Microsoft."
+    pages:
+      official: https://github.com/rany2/edge-tts
+      terms: https://github.com/rany2/edge-tts/blob/master/LICENSE

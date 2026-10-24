@@ -1,0 +1,11 @@
+# Licences by SPDX id. Used by the production gate.
+allowed:        [MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, PostgreSQL, Zlib, MPL-2.0, PSF-2.0, Unlicense, CC0-1.0]
+review_needed:  [LGPL-2.1-only, LGPL-3.0-only, GPL-2.0-only, GPL-3.0-only, GPL-3.0-or-later, AGPL-3.0-only, AGPL-3.0-or-later, EPL-2.0, SSPL-1.0, BUSL-1.1,
+                 # older SPDX ids, still returned by the GitHub licence API
+                 LGPL-2.1, LGPL-3.0, GPL-2.0, GPL-3.0, AGPL-3.0,
+                 # custom model licences that allow commercial use with conditions
+                 llama3.1, llama3.2, llama3.3, llama4]
+blocked:        []
+non_commercial_markers: [CC-BY-NC-4.0, CC-BY-NC-SA-4.0, research-only, non-commercial]
+# Model weights often use custom licences (e.g. "llama3.3"): treated as review_needed unless listed here.
+model_licences_allowed: [Apache-2.0, MIT]

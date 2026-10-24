@@ -1,0 +1,13 @@
+# Expected Stage 0 results for S1 (financial briefing). Used by tests and evals.
+fact_sheet:
+  must_confirm: [cloud_provider, team_size, users_in_india, personal_data, async_workflows, containerised, ci_cd, data_residency]
+  must_assume: [card_payments]
+shortlist:
+  binding: [dpdp_india]
+  candidate: [azure_waf, twelve_factor, c4_model, adr, atam, evolutionary_architecture, event_driven]
+  not_applicable: [aws_waf, gcp_af, microservices_first, pci_dss, gdpr, owasp_asvs]
+# The PRD only says jobs run in the background. If the model still reads that as a scaling need, the fact
+# becomes an assumption, and a framework resting on an assumption must be parked for the reviewer.
+parked_if_assumed: [microservices_first]
+# Filled in Week 4 once the debate runs:
+decisions: {}

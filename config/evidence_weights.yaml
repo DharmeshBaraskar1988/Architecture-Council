@@ -1,0 +1,14 @@
+# Strength of each source type. Weight of one argument = strength * relevance * verified_factor.
+strength:
+  org_policy: binding
+  compliance_fact_confirmed: binding
+  prd_fact: 3
+  decision_precedent: 3      # multiplied by context match (0..1)
+  official_docs: 3
+  case_study: 2              # multiplied by context match (0..1)
+  reasoning_only: 0
+verified_factor:
+  verified: 1.0
+  partly_supports: 0.5
+  unverified: 0.0
+  contradicted: remove       # argument removed and flagged
