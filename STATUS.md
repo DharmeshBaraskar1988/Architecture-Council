@@ -51,9 +51,11 @@ Phase 1 tasks: **17 of 19 done**, 2 partly done (1.1 Docker not run by choice; 1
   Selected: Azure WAF, Twelve-Factor, DPDP India (binding). With condition: event-driven (async/background only),
   build approach, delivery path. Reviewer decides: ADR, evolutionary architecture. Rejected: ATAM, C4.
   Parked: microservices-first (depends on an assumed fact). **Not signed**: waits for sign-off in the council room.
-- **Uncommitted changes:** in `avatar\`, the room UI (`frontend\app\runs\[id]\room\`), `frontend\lib\voice.ts`,
-  `globals.css` and `.gitignore`. These belong to the avatar work done in a **separate session**; leave them alone
-  unless asked. Setup files, launchers, STATUS.md and CLAUDE.md are committed (`a54547b`) and pushed.
+- **Git:** everything committed and pushed; working tree clean. `a54547b` setup files, launchers, STATUS.md and
+  CLAUDE.md; `b63578c` the avatar session's change (room shows still 3D portraits; MuseTalk talking clips removed).
+  The avatar work belongs to a **separate session**; leave `avatar\` and the room UI alone unless asked.
+- **Loose end:** `avatar\portraits\options\` is now in `.gitignore` but its 25 PNGs are still tracked in git
+  (`git rm -r --cached avatar/portraits/options` would untrack them, keeping the files on disk).
 
 ## 4. Pending (needs you)
 
