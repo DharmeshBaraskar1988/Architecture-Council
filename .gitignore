@@ -22,9 +22,7 @@ data/catalog/
 data/evals/
 data/*.db
 
-# Avatar work: tool environments, the MuseTalk checkout and its model weights (several GB)
+# Portrait tool environments (avatar/README.md; several GB when installed) and unchosen portrait options
 avatar/.tools/
 avatar/.venv/
-avatar/MuseTalk/
-# Avatar caches and rendered clips (generated, large)
-data/avatars/
+avatar/portraits/options/

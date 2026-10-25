@@ -1,3 +1,5 @@
+import { promises as fs } from "fs";
+import path from "path";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { loadRun, readDocument, readNotes, sessionState } from "@/lib/runs";
@@ -14,6 +16,9 @@ export default async function RoomPage({ params, searchParams }: {
   const run = await loadRun(id);
   if (!run) notFound();
   const [state, notes, document] = await Promise.all([sessionState(id), readNotes(id), readDocument(id)]);
+  // 3D portraits made by avatar/make_portraits.py; members without one keep the illustrated face
+  const photos = (await fs.readdir(path.join(/*turbopackIgnore: true*/ process.cwd(), "public", "avatars")).catch(() => [] as string[]))
+    .filter((f) => f.endsWith(".png")).map((f) => f.slice(0, -4));
   return (
     <main className="wrap wide">
       <div className="topbar">
@@ -22,7 +27,7 @@ export default async function RoomPage({ params, searchParams }: {
         <span className="muted">{run.document ?? state.prd ?? "starting…"}</span>
       </div>
       <Room id={id} initial={run.log} names={run.names} decision={run.decision} notes={notes} running={state.running}
-            document={document}
+            document={document} photos={photos}
             startTurn={turn === "end" ? Number.MAX_SAFE_INTEGER : turn ? Math.max(0, Number(turn) - 1) : -1} />
     </main>
   );

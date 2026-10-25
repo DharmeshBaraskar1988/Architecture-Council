@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import { createContext, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from "react";
-import type { AvatarStatus } from "@/lib/avatars";
 import type { CouncilEvent, Decision } from "@/lib/types";
 import { buildScript, sayModel, type Intro, type Line, type Speaker, type TableCard } from "@/lib/script";
 import { ROUND_TITLES, ROUNDS, type Round } from "@/lib/replay";
 import { useStored } from "@/lib/useStored";
-import { clipId, EDGE_VOICE, speakable, spokenText } from "@/lib/voice";
+import { EDGE_VOICE, speakable, spokenText } from "@/lib/voice";
 
 interface Note { text: string; afterSeq: number; at: string }
 interface DocSection { number: number; title: string | null; text: string }
@@ -110,21 +109,17 @@ function shade(hex: string, t: number): string {
 const FACE = "M20 28.5c0-8.3 5.4-14 12-14s12 5.7 12 14c0 4.2-.7 7.6-2.2 10.3-2.2 3.9-5.6 5.9-9.8 5.9s-7.6-2-9.8-5.9C20.7 36.1 20 32.7 20 28.5z";
 const MIRROR = "translate(64 0) scale(-1 1)";       // the right half of the face is the left half, flipped
 
-/** What faces need from the room: which members have a 3D portrait, and the talking video playing right now. */
-interface Stage { photos: Set<string>; talk: { who: Speaker; clip: string } | null; rate: number; time: () => number }
-const StageCtx = createContext<Stage>({ photos: new Set(), talk: null, rate: 1, time: () => 0 });
+/** Members with a 3D portrait in public/avatars (made by avatar/make_portraits.py). */
+const PhotosCtx = createContext<Set<string>>(new Set());
 
-/** A member's face: their 3D portrait (talking video while they speak, once rendered) or the illustrated one. */
+/** A member's face: their 3D portrait, which moves with their voice while they speak, or the illustrated one. */
 function Face({ id, speaking }: { id: Speaker; speaking: boolean }) {
-  const stage = useContext(StageCtx);
-  if (!stage.photos.has(id)) return <Cartoon id={id} speaking={speaking} />;
-  const clip = speaking && stage.talk?.who === id ? stage.talk.clip : null;
+  const photos = useContext(PhotosCtx);
+  if (!photos.has(id)) return <Cartoon id={id} speaking={speaking} />;
   return (
     <span className={`portrait ${speaking ? "talking" : ""}`} style={{ ["--who" as string]: SEAT[id].color }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={`/avatars/${id}.png`} alt="" />
-      {clip && <video key={clip} src={`/api/avatars/${clip}`} autoPlay muted playsInline
-                      onLoadedMetadata={(e) => { e.currentTarget.playbackRate = stage.rate; e.currentTarget.currentTime = stage.time(); }} />}
     </span>
   );
 }
@@ -281,18 +276,15 @@ class Speech {
     } catch { /* no Web Audio: the mouth uses the plain animation */ }
   }
 
-  play(url: string, rate: number, onEnd: () => void, onFail: () => void, onStart?: () => void) {
+  play(url: string, rate: number, onEnd: () => void, onFail: () => void) {
     this.unlock();
     const a = this.audio!;
     a.src = url;
     a.playbackRate = rate;                         // browsers keep the pitch when speeding up
     a.onended = () => { this.still(); onEnd(); };
     a.onerror = () => { this.still(); onFail(); };
-    a.play().then(() => { this.lipSync(); onStart?.(); }).catch(() => { this.still(); onFail(); });
+    a.play().then(() => this.lipSync()).catch(() => { this.still(); onFail(); });
   }
-
-  /** Seconds into the clip now playing (a talking video starts here, so it matches the voice). */
-  time() { return this.audio && !this.audio.paused ? this.audio.currentTime : 0; }
 
   stop() { if (this.audio) { this.audio.onended = this.audio.onerror = null; this.audio.pause(); } this.still(); }
 
@@ -367,9 +359,9 @@ function useVoices() {
 
 
 export default function Room({ id, initial, names: initialNames, decision: initialDecision, notes: initialNotes,
-                               running: initiallyRunning, startTurn = -1, document: initialDoc }: {
+                               running: initiallyRunning, startTurn = -1, document: initialDoc, photos = [] }: {
   id: string; initial: CouncilEvent[]; names: Record<string, string>; decision: Decision | null; notes: Note[];
-  running: boolean; startTurn?: number; document: Doc | null;
+  running: boolean; startTurn?: number; document: Doc | null; photos?: string[];
 }) {
   const [log, setLog] = useState(initial);
   const [names, setNames] = useState(initialNames);
@@ -439,58 +431,18 @@ export default function Room({ id, initial, names: initialNames, decision: initi
     return () => clearInterval(t);
   }, [running, id]);
 
-  // Talking-head videos (avatar/render.py, MuseTalk): progress, and which video belongs to which line.
-  const [avatars, setAvatars] = useState<AvatarStatus | null>(null);
-  const [clipOf, setClipOf] = useState<Record<string, string>>({});      // line key → clip id
-  const [talk, setTalk] = useState<{ who: Speaker; clip: string } | null>(null);
-  const ready = useMemo(() => new Set(avatars?.ready ?? []), [avatars]);
-  useEffect(() => {
-    let stop = false;
-    const load = async () => {
-      const r = await fetch(`/api/runs/${id}/avatars`, { cache: "no-store" }).then((x) => x.json()).catch(() => null);
-      if (!stop && r && !r.error) setAvatars(r);
-    };
-    load();
-    const t = setInterval(load, avatars?.rendering || avatars?.queued ? 8000 : 60000);
-    return () => { stop = true; clearInterval(t); };
-  }, [id, avatars?.rendering, avatars?.queued]);
-  useEffect(() => {
-    let stop = false;
-    Promise.all(lines.filter((l) => l.speaker !== "you").map(async (l) =>
-      [l.key, await clipId(EDGE_VOICE[l.speaker as Exclude<Speaker, "you">], spokenText(l.text))] as const))
-      .then((pairs) => { if (!stop) setClipOf(Object.fromEntries(pairs)); });
-    return () => { stop = true; };
-  }, [lines]);
-  // Once the session is over, hand every spoken line to the renderer (it skips lines already made).
-  const queuedFor = useRef(0);
-  useEffect(() => {
-    if (running || !avatars?.installed || !avatars.portraits.length || !lines.length || queuedFor.current === lines.length) return;
-    queuedFor.current = lines.length;
-    const body = lines.filter((l) => l.speaker !== "you" && avatars.portraits.includes(l.speaker)).map((l) => {
-      const voice = EDGE_VOICE[l.speaker as Exclude<Speaker, "you">];
-      return { speaker: l.speaker, voice, text: spokenText(l.text) };
-    });
-    fetch(`/api/runs/${id}/avatars`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ lines: body }) })
-      .then((x) => x.json()).then((r) => { if (r && !r.error) setAvatars(r); }).catch(() => {});
-  }, [running, avatars, lines, id]);
-
-  const stopVoice = () => { speech.current?.stop(); setTalk(null); try { speechSynthesis.cancel(); } catch { /* no speech support */ } };
+  const stopVoice = () => { speech.current?.stop(); try { speechSynthesis.cancel(); } catch { /* no speech support */ } };
   useEffect(() => stopVoice, []);                  // leaving the room silences it; the position is kept for your return
 
-  // Make the next turns' clips while this one plays, so there is no gap between speakers (videos too, into the cache).
+  // Make the next turns' clips while this one plays, so there is no gap between speakers.
   useEffect(() => {
     if (!voiceOn || engine !== "edge" || idx < 0) return;
-    for (const l of lines.slice(idx, idx + 3)) {
-      if (l.speaker === "you") continue;
-      speech.current?.clip(l.speaker, spokenText(l.text));
-      const clip = clipOf[l.key];
-      if (clip && ready.has(clip)) fetch(`/api/avatars/${clip}`).catch(() => {});
-    }
-  }, [voiceOn, engine, idx, lines, clipOf, ready]);
+    for (const l of lines.slice(idx, idx + 3)) if (l.speaker !== "you") speech.current?.clip(l.speaker, spokenText(l.text));
+  }, [voiceOn, engine, idx, lines]);
 
-  const say = useCallback((who: Speaker, text: string, done: () => void, clip?: string) => {
+  const say = useCallback((who: Speaker, text: string, done: () => void) => {
     const my = ++token.current;
-    const finish = () => { if (my !== token.current) return; if (timer.current) clearTimeout(timer.current); setSpeaking(null); setPhase(null); setTalk(null); done(); };
+    const finish = () => { if (my !== token.current) return; if (timer.current) clearTimeout(timer.current); setSpeaking(null); setPhase(null); done(); };
     setSpeaking(who); setPhase("speak");
     const words = text.split(/\s+/).length;
     const parts = speakable(text);
@@ -500,8 +452,7 @@ export default function Room({ id, initial, names: initialNames, decision: initi
       speech.current.clip(who, parts.join(" ")).then((url) => {
         if (my !== token.current) return;
         if (!url) { browserSay(); return; }
-        speech.current!.play(url, rate, () => setTimeout(finish, 300), browserSay,
-                             () => { if (clip && my === token.current) setTalk({ who, clip }); });
+        speech.current!.play(url, rate, () => setTimeout(finish, 300), browserSay);
       });
       timer.current = setTimeout(finish, (words * 650 + 12000) / speed);   // safety net: generating plus speaking
     } else {
@@ -510,8 +461,7 @@ export default function Room({ id, initial, names: initialNames, decision: initi
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voiceOn, casting, speed, engine]);
   const rate = Math.min(0.95 + (speed - 1) * 0.45, 1.6);
-  const stage = useMemo<Stage>(() => ({ photos: new Set(avatars?.portraits ?? []), talk, rate, time: () => speech.current?.time() ?? 0 }),
-                               [avatars?.portraits, talk, rate]);
+  const photoSet = useMemo(() => new Set(photos), [photos]);
 
   /** The browser's own voices, sentence by sentence (fallback, or chosen in the controls). */
   const sayInBrowser = (my: number, who: Speaker, parts: string[], words: number, finish: () => void) => {
@@ -540,12 +490,11 @@ export default function Room({ id, initial, names: initialNames, decision: initi
     if (idx >= lines.length) { if (!running) setPlaying(false); return; }
     const l = lines[idx];
     const my = ++token.current;
-    const clip = clipOf[l.key] && ready.has(clipOf[l.key]) ? clipOf[l.key] : undefined;   // talking video, if rendered
     if (l.thoughts?.[l.speaker] && l.speaker !== "moderator") {
       setSpeaking(l.speaker); setPhase("think");
-      timer.current = setTimeout(() => { if (my === token.current) say(l.speaker, l.text, () => setIdx((i) => i + 1), clip); }, THINK_MS / speed);
+      timer.current = setTimeout(() => { if (my === token.current) say(l.speaker, l.text, () => setIdx((i) => i + 1)); }, THINK_MS / speed);
     } else {
-      say(l.speaker, l.text, () => setIdx((i) => i + 1), clip);
+      say(l.speaker, l.text, () => setIdx((i) => i + 1));
     }
     return () => { token.current++; if (timer.current) clearTimeout(timer.current); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -674,7 +623,7 @@ export default function Room({ id, initial, names: initialNames, decision: initi
     : playing ? "…" : "Paused.";
 
   return (
-    <StageCtx.Provider value={stage}>
+    <PhotosCtx.Provider value={photoSet}>
       <div className="topicbar">
         <div className="tb-round">
           <span className="mono">{working?.round ?? round ?? "—"}</span>
@@ -763,12 +712,6 @@ export default function Room({ id, initial, names: initialNames, decision: initi
                 <option value="edge">Neural voices</option>
                 <option value="browser">Browser voices</option>
               </select>
-              {avatars?.installed && avatars.total > 0 && (
-                <span className="muted" style={{ fontSize: 12.5 }}
-                      title={`Talking faces made by MuseTalk on this computer's GPU after the session.${avatars.failed ? ` ${avatars.failed} failed: ${avatars.errors.join("; ")}` : ""}`}>
-                  Talking faces {ready.size}/{avatars.total}{avatars.rendering ? " · rendering…" : avatars.queued ? " · waiting" : ""}
-                </span>
-              )}
               <label className="toggle">Pace
                 <input type="range" min={0.75} max={2} step={0.25} value={speed} onChange={(e) => setSpeed(Number(e.target.value))} />
               </label>
@@ -839,7 +782,7 @@ export default function Room({ id, initial, names: initialNames, decision: initi
           </div>
         </aside>
       </div>
-    </StageCtx.Provider>
+    </PhotosCtx.Provider>
   );
 }
 

@@ -506,11 +506,20 @@ kbd { font: 500 10.5px var(--f-mono); border: 1px solid var(--line); border-bott
   .output { border: 0; padding: 0; max-width: none; }
 }
 
-/* 3D portraits (avatar/make_portraits.py); while a member speaks, their MuseTalk video plays over the portrait */
+/* 3D portraits (avatar/make_portraits.py); while a member speaks the portrait bobs and its glow follows the voice */
 .portrait { position: relative; display: block; width: 72px; height: 72px; border-radius: 50%; overflow: hidden; flex: none;
   background: color-mix(in srgb, var(--who) 14%, var(--surface)); box-shadow: 0 0 0 1.5px var(--who); transition: box-shadow .2s, filter .25s; }
-.portrait img, .portrait video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-.portrait.talking { box-shadow: 0 0 0 3px var(--who), 0 0 14px color-mix(in srgb, var(--who) 55%, transparent); }
+.portrait img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.portrait.talking { box-shadow: 0 0 0 3px var(--who), 0 0 14px color-mix(in srgb, var(--who) 55%, transparent);
+  animation: speak-bob 1.3s ease-in-out infinite alternate; }
+.portrait.talking img { transform-origin: 50% 85%; animation: speak-tilt 2.1s ease-in-out infinite alternate; }
+/* with neural voices --mouth is the voice level every frame (0.15 quiet to 1.35 loud) */
+html[data-lipsync] .portrait.talking { box-shadow: 0 0 0 calc(2px + var(--mouth, .3) * 2.5px) var(--who),
+  0 0 calc(8px + var(--mouth, .3) * 16px) color-mix(in srgb, var(--who) 60%, transparent); transition: box-shadow 60ms linear; }
+html[data-lipsync] .portrait.talking img { scale: calc(1 + var(--mouth, .3) * .025); transition: scale 60ms linear; }
+@keyframes speak-bob { from { translate: 0 0; } to { translate: 0 -2px; } }
+@keyframes speak-tilt { from { rotate: -1.2deg; } to { rotate: 1.2deg; } }
+@media (prefers-reduced-motion: reduce) { .portrait.talking, .portrait.talking img { animation: none; } }
 .seat2.thinking .portrait, .seat2.busy .portrait { animation: ponder 1.2s ease-in-out infinite alternate; }
 .caption-face .portrait { width: 88px; height: 88px; }
 .caption:has(.caption-face .portrait) { grid-template-columns: 88px minmax(0, 1fr) auto; }

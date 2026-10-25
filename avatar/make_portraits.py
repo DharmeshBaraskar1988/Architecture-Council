@@ -5,7 +5,7 @@
 
 Options go to avatar/portraits/options/<member>-<n>.png with a contact sheet (sheet.png). Without --pick, option 1
 of every member is used; --pick changes the chosen ones. Chosen portraits are copied to avatar/portraits/<member>.png
-and to the frontend (public/avatars/), where the room shows them. MuseTalk animates these images.
+and to the frontend (public/avatars/), where the room shows them.
 All characters are fictional; the prompts describe looks only.
 """
 import argparse

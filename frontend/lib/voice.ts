@@ -1,5 +1,4 @@
-// What the room says aloud and with which voice; shared by the room, /api/tts and the avatar renderer
-// (avatar/render.py reads voices.json and uses the same clip id).
+// What the room says aloud and with which voice; shared by the room and /api/tts.
 import type { Speaker } from "./script";
 import VOICES from "./voices.json";
 
@@ -25,9 +24,3 @@ export function speakable(text: string): string[] {
 
 /** The one string sent to edge-tts for a line. */
 export const spokenText = (text: string) => speakable(text).join(" ");
-
-/** Clip id: sha1 of "voice\ntext". Names both the audio (data/tts) and the talking video (data/avatars/clips). */
-export async function clipId(voice: string, text: string): Promise<string> {
-  const bytes = await crypto.subtle.digest("SHA-1", new TextEncoder().encode(`${voice}\n${text}`));
-  return Array.from(new Uint8Array(bytes), (b) => b.toString(16).padStart(2, "0")).join("");
-}
