@@ -53,7 +53,7 @@ Phase 1 tasks: **17 of 19 done**, 2 partly done (1.1 Docker not run by choice; 1
   Parked: microservices-first (depends on an assumed fact). **Not signed**: waits for sign-off in the council room.
 - **Uncommitted changes:** in `avatar\`, the room UI (`frontend\app\runs\[id]\room\`), `frontend\lib\voice.ts`,
   `globals.css` and `.gitignore`. These belong to the avatar work done in a **separate session**; leave them alone
-  unless asked. New and not committed yet: `setup.ps1`, `setup.cmd`, `council.cmd`, `start.cmd`, `STATUS.md`, `CLAUDE.md`.
+  unless asked. Setup files, launchers, STATUS.md and CLAUDE.md are committed (`a54547b`) and pushed.
 
 ## 4. Pending (needs you)
 
